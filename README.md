@@ -97,4 +97,9 @@ Detected owner is up: “Good morning, do you want to open the blinds and turn o
 - Bored — nothing much happened recently
 - Excited — lots going on
 
+## Development Constraints
+Coded in Python, with a service running on something like a Mac Mini somewhere in the house, calling out to APIs and web interfaces as needed.
+
+
+
 
