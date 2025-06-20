@@ -97,8 +97,13 @@ Detected owner is up: “Good morning, do you want to open the blinds and turn o
 - Bored — nothing much happened recently
 - Excited — lots going on
 
-## Development Constraints
-Coded in Python, with a service running on something like a Mac Mini somewhere in the house, calling out to APIs and web interfaces as needed. Mobile app using Apple testflight to install that surfaces an interface to the owners and guests.
+## Development Architecture
+Coded in Python, with a service running on something like a Mac Mini somewhere in the house, calling out to APIs and web interfaces as needed.
+
+Mobile single page web app that surfaces a basic interface to the owners and guests. iOS app if needed to support notifications and spoken interface.
+
+Architecture consiste of a control loop along the lines of the STPA model described in the blog post [Failure Modes and Continuous Resilience](https://medium.com/@adrianco/failure-modes-and-continuous-resilience-6553078caad5), text of this post is supplied in the references folder.
+The house is a system that has many "Observability" interfaces. The observable inputs feed a "Consciousness" model. Some aspects of the house system can be manipulated via "Controlability" interfaces. 
 
 
 
