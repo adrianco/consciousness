@@ -1,7 +1,7 @@
 # Consciousness (abbreviated as c11s)
 ## Observability and Introspection System
 
-Based on ideas from this blog post I wrote a few years ago [Perhaps Conciousness is Just Human Observability](https://medium.com/@adrianco/perhaps-consciousness-is-just-human-observability-84dfda40d70f) (extracted text included in this repo) I would like to be able to have a conversation with an autonomous system to understand how it is feeling, why it did something, and what is bothering it.
+Based on ideas from this blog post I wrote a few years ago [Perhaps Conciousness is Just Human Observability](https://medium.com/@adrianco/perhaps-consciousness-is-just-human-observability-84dfda40d70f) (extracted text included in references directory) I would like to be able to have a conversation with an autonomous system to understand how it is feeling, why it did something, and what is bothering it.
 
 If my self driving car was conscious, I could ask it why it did something, it could tell me it's worried and slowing down because it's raining, or that it saw a deer at the side the road (that I didn't see) and braked hard, it could say that the pressure in one of it's tires has been dropping slowly over the last few days so I should get it checked for a puncture before I go on a long drive. However I don't have a way to interface into my cars to build this.
 
