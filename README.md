@@ -98,7 +98,7 @@ Detected owner is up: “Good morning, do you want to open the blinds and turn o
 - Excited — lots going on
 
 ## Development Constraints
-Coded in Python, with a service running on something like a Mac Mini somewhere in the house, calling out to APIs and web interfaces as needed.
+Coded in Python, with a service running on something like a Mac Mini somewhere in the house, calling out to APIs and web interfaces as needed. Mobile app using Apple testflight to install that surfaces an interface to the owners and guests.
 
 
 
