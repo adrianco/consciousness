@@ -47,11 +47,25 @@ This directory contains a comprehensive series of implementation guides for buil
 
 ### Phase 5: Device Ecosystem
 **[05-device-integration-guide.md](./05-device-integration-guide.md)**
-- Multi-protocol device adapter architecture
-- HomeKit, Alexa, weather API integrations
-- Dynamic device discovery and registration
+- Conversational device interview system
+- Dynamic device discovery through natural language
+- Home Assistant integration pattern knowledge base
+- Multi-protocol automatic discovery (DHCP, mDNS, Bluetooth)
+- Device classification using LLM and confidence scoring
 - State synchronization and health monitoring
 - Security and authentication frameworks
+
+**[device-interview-system.md](./device-interview-system.md)**
+- Natural language device onboarding flows
+- AI-powered device classification
+- Interview question generation patterns
+- Discovery correlation algorithms
+
+**[dynamic-device-schema.md](./dynamic-device-schema.md)**
+- Flexible device modeling without fixed types
+- Interview session tracking
+- Integration template patterns
+- Device entity relationships
 
 ### Phase 6: Interface Layer
 **[06-api-interface-guide.md](./06-api-interface-guide.md)**
@@ -97,12 +111,12 @@ This directory contains a comprehensive series of implementation guides for buil
 
 ### For New Projects
 1. **Setup**: Follow `01-project-setup-guide.md` for environment
-2. **Foundation**: Implement database layer using `02-database-implementation-guide.md`
+2. **Foundation**: Implement database layer using `02-database-implementation-guide.md` with dynamic device schema
 3. **Core**: Build consciousness engine with `03-consciousness-engine-guide.md`
 4. **Control**: Add SAFLA loop using `04-safla-loop-guide.md`
-5. **Devices**: Integrate IoT using `05-device-integration-guide.md`
-6. **Interface**: Create APIs using `06-api-interface-guide.md`
-7. **Testing**: Validate with `07-testing-implementation-guide.md`
+5. **Devices**: Set up conversational device discovery using `device-interview-system.md` and `05-device-integration-guide.md`
+6. **Interface**: Create APIs using `06-api-interface-guide.md` including interview endpoints
+7. **Testing**: Validate with `07-testing-implementation-guide.md` including interview flows
 8. **Deploy**: Go live with `08-deployment-operations-guide.md`
 
 ### For Existing Projects
@@ -156,6 +170,24 @@ memory = {
     'lesson_learned': 'Gradual temperature adjustments are more efficient',
     'importance': 0.8,
     'related_entities': ['thermostat', 'temperature_sensors', 'occupancy']
+}
+```
+
+### 5. Conversational Device Discovery
+```python
+# Natural language device onboarding
+interview_flow = {
+    'user': "I have a Nest thermostat and some Philips Hue lights",
+    'ai': "Great! Let me help you set those up. For your Nest thermostat, 
+           do you control it through the Nest app or Google Home?",
+    'classification': {
+        'detected_devices': [
+            {'brand': 'Nest', 'type': 'thermostat', 'integration': 'nest'},
+            {'brand': 'Philips', 'type': 'lights', 'integration': 'hue'}
+        ],
+        'confidence': 0.95
+    },
+    'auto_discovery': ['Found Hue Bridge at 192.168.1.100']
 }
 ```
 
@@ -220,14 +252,18 @@ The consciousness system can exhibit different personality traits based on confi
 ### Technical Metrics
 - **Uptime**: >99.5% system availability
 - **Response Time**: <500ms for queries, <100ms for device control
-- **Device Integration**: Support for 50+ device types
+- **Device Support**: 2000+ device types through Home Assistant patterns
 - **Learning Efficiency**: Measurable improvement in decision accuracy
+- **Interview Success**: >95% device classification accuracy
+- **Discovery Coverage**: Automatic discovery for 80% of common devices
 
 ### User Experience Metrics
 - **Conversation Quality**: Natural, contextual responses
 - **Emotional Accuracy**: Correct emotional state representation
 - **Proactive Value**: Useful suggestions and optimizations
 - **Trust Level**: User confidence in system decisions
+- **Onboarding Time**: <5 minutes average device setup through interview
+- **Interview Satisfaction**: Natural language preferred over technical config
 
 ## 🔮 Future Enhancements
 

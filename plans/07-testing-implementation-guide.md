@@ -49,10 +49,14 @@ tests/
 ├── unit/                   # Unit tests
 │   ├── consciousness/
 │   ├── devices/
+│   ├── interview/          # Interview system units
+│   ├── discovery/          # Auto-discovery units
 │   ├── safla/
 │   └── utils/
 ├── integration/            # Integration tests
 │   ├── api/
+│   ├── interview/          # Interview flow tests
+│   ├── discovery/          # Discovery integration tests
 │   ├── services/
 │   └── database/
 ├── e2e/                   # End-to-end tests
@@ -411,6 +415,402 @@ describe('SAFLAOrchestrator', () => {
       
       const nextAction = orchestrator.planAction('lighting_adjustment');
       expect(nextAction.fallback).toBeDefined();
+    });
+  });
+});
+```
+
+## Interview System Testing
+
+### Device Classification Tests
+
+```javascript
+// tests/unit/interview/device-classifier.test.js
+const { DeviceClassifier } = require('../../../src/interview/device-classifier');
+const { MockLLMClient } = require('../../utils/mocks');
+
+describe('DeviceClassifier', () => {
+  let classifier;
+  let mockLLM;
+
+  beforeEach(() => {
+    mockLLM = new MockLLMClient();
+    classifier = new DeviceClassifier(mockLLM);
+  });
+
+  describe('extractDeviceMentions', () => {
+    it('should extract devices from natural language', async () => {
+      const userInput = "I have some Philips Hue lights and a Nest thermostat";
+      
+      mockLLM.setResponse(JSON.stringify([
+        {
+          description: "Philips Hue lights",
+          brand: "Philips",
+          function: "lighting",
+          keywords: ["philips", "hue", "lights"]
+        },
+        {
+          description: "Nest thermostat", 
+          brand: "Nest",
+          function: "climate",
+          keywords: ["nest", "thermostat"]
+        }
+      ]));
+
+      const mentions = await classifier.extractDeviceMentions(userInput);
+      
+      expect(mentions).toHaveLength(2);
+      expect(mentions[0]).toMatchObject({
+        brand: "Philips",
+        function: "lighting",
+        confidence: expect.any(Number)
+      });
+      expect(mentions[1]).toMatchObject({
+        brand: "Nest", 
+        function: "climate"
+      });
+    });
+
+    it('should handle ambiguous descriptions', async () => {
+      const userInput = "smart lights in the kitchen";
+      
+      mockLLM.setResponse(JSON.stringify([
+        {
+          description: "smart lights",
+          brand: null,
+          function: "lighting",
+          keywords: ["smart", "lights"]
+        }
+      ]));
+
+      const mentions = await classifier.extractDeviceMentions(userInput);
+      
+      expect(mentions[0].confidence).toBeLessThan(0.7);
+      expect(mentions[0].integrations.length).toBeGreaterThan(1);
+    });
+
+    it('should handle LLM API failures gracefully', async () => {
+      const userInput = "test input";
+      mockLLM.simulateFailure();
+
+      const mentions = await classifier.extractDeviceMentions(userInput);
+      
+      expect(mentions).toEqual([]);
+    });
+  });
+
+  describe('integration matching', () => {
+    it('should match devices to Home Assistant integrations', async () => {
+      const device = {
+        brand: "Philips",
+        function: "lighting",
+        keywords: ["hue", "bulbs"]
+      };
+
+      const integrations = await classifier._match_integrations(device);
+      
+      expect(integrations).toContainEqual(
+        expect.objectContaining({
+          integration: "hue",
+          score: expect.any(Number),
+          requires_hub: true
+        })
+      );
+    });
+  });
+});
+```
+
+### Interview Controller Tests
+
+```javascript
+// tests/unit/interview/interview-controller.test.js
+const { InterviewController } = require('../../../src/interview/interview-controller');
+const { MockAsyncSession, MockLLMClient, MockAutoDiscovery } = require('../../utils/mocks');
+
+describe('InterviewController', () => {
+  let controller;
+  let mockSession;
+  let mockLLM;
+  let mockDiscovery;
+
+  beforeEach(() => {
+    mockSession = new MockAsyncSession();
+    mockLLM = new MockLLMClient();
+    mockDiscovery = new MockAutoDiscovery();
+    
+    controller = new InterviewController(mockSession, mockLLM, mockDiscovery);
+  });
+
+  describe('start_interview', () => {
+    it('should create new interview session', async () => {
+      const houseId = 123;
+      
+      const interview = await controller.start_interview(houseId);
+      
+      expect(interview).toMatchObject({
+        house_id: houseId,
+        status: "active",
+        current_phase: "introduction"
+      });
+      
+      expect(mockSession.getLastInsert()).toMatchObject({
+        table: "interview_sessions",
+        data: expect.objectContaining({
+          house_id: houseId
+        })
+      });
+    });
+
+    it('should return existing active session', async () => {
+      const houseId = 123;
+      const existingSession = { id: 456, status: "active" };
+      
+      mockSession.setQueryResult([existingSession]);
+      
+      const interview = await controller.start_interview(houseId);
+      
+      expect(interview).toEqual(existingSession);
+    });
+  });
+
+  describe('process_user_message', () => {
+    it('should handle device discovery in introduction phase', async () => {
+      const interviewId = 456;
+      const userMessage = "I have Philips Hue lights";
+      
+      mockSession.setQueryResult([{
+        id: interviewId,
+        current_phase: "introduction"
+      }]);
+      
+      mockLLM.setResponse(JSON.stringify([{
+        description: "Philips Hue lights",
+        brand: "Philips",
+        function: "lighting",
+        confidence: 0.95
+      }]));
+
+      mockDiscovery.setResults({
+        mdns: [{
+          name: "Philips Hue Bridge",
+          address: "192.168.1.100"
+        }]
+      });
+
+      const result = await controller.process_user_message(interviewId, userMessage);
+      
+      expect(result).toMatchObject({
+        response: expect.stringContaining("Philips"),
+        candidates: expect.arrayContaining([
+          expect.objectContaining({
+            detected_brand: "Philips"
+          })
+        ]),
+        phase: "classification"
+      });
+    });
+
+    it('should correlate discovery results with user mentions', async () => {
+      const interviewId = 456;
+      const userMessage = "I have a Hue bridge";
+      
+      mockDiscovery.setResults({
+        mdns: [{
+          name: "Philips Hue Bridge", 
+          address: "192.168.1.100",
+          type: "_hue._tcp.local."
+        }]
+      });
+
+      const result = await controller.process_user_message(interviewId, userMessage);
+      
+      expect(result.candidates[0]).toMatchObject({
+        auto_discovery_successful: true,
+        auto_discovery_results: expect.objectContaining({
+          mdns: expect.arrayContaining([
+            expect.objectContaining({
+              name: "Philips Hue Bridge"
+            })
+          ])
+        })
+      });
+    });
+  });
+});
+```
+
+### Auto-Discovery Tests
+
+```javascript
+// tests/unit/discovery/auto-discovery.test.js
+const { AutoDiscoveryService } = require('../../../src/discovery/auto-discovery');
+const { MockMDNSDiscovery, MockUPnPDiscovery } = require('../../utils/mocks');
+
+describe('AutoDiscoveryService', () => {
+  let service;
+  let mockMDNS;
+  let mockUPnP;
+
+  beforeEach(() => {
+    mockMDNS = new MockMDNSDiscovery();
+    mockUPnP = new MockUPnPDiscovery();
+    
+    service = new AutoDiscoveryService();
+    service.mdns = mockMDNS;
+    service.upnp = mockUPnP;
+  });
+
+  describe('discover_all_protocols', () => {
+    it('should run discovery across all protocols in parallel', async () => {
+      mockMDNS.setResults([
+        { name: "Hue Bridge", type: "_hue._tcp.local." }
+      ]);
+      mockUPnP.setResults([
+        { name: "Ring Doorbell", type: "urn:schemas-ring-com:device" }
+      ]);
+
+      const results = await service.discover_all_protocols();
+      
+      expect(results).toMatchObject({
+        mdns: expect.arrayContaining([
+          expect.objectContaining({ name: "Hue Bridge" })
+        ]),
+        upnp: expect.arrayContaining([
+          expect.objectContaining({ name: "Ring Doorbell" })
+        ])
+      });
+    });
+
+    it('should handle discovery failures gracefully', async () => {
+      mockMDNS.simulateFailure();
+      mockUPnP.setResults([{ name: "Device" }]);
+
+      const results = await service.discover_all_protocols();
+      
+      expect(results.mdns).toEqual([]);
+      expect(results.upnp).toHaveLength(1);
+    });
+  });
+
+  describe('discover_for_integration', () => {
+    it('should run targeted discovery for specific integration', async () => {
+      mockMDNS.setResults([
+        { name: "Hue Bridge", type: "_hue._tcp.local." }
+      ]);
+
+      const results = await service.discover_for_integration("hue");
+      
+      expect(results).toContainEqual(
+        expect.objectContaining({ name: "Hue Bridge" })
+      );
+    });
+  });
+});
+```
+
+### Interview Flow Integration Tests
+
+```javascript
+// tests/integration/interview/interview-flow.test.js
+const request = require('supertest');
+const { app } = require('../../../src/app');
+const { setupTestDB, cleanupTestDB } = require('../../utils/db-setup');
+
+describe('Interview Flow Integration', () => {
+  beforeAll(async () => {
+    await setupTestDB();
+  });
+
+  afterAll(async () => {
+    await cleanupTestDB();
+  });
+
+  describe('Complete Interview Session', () => {
+    it('should complete full device discovery flow', async () => {
+      // Start interview
+      const startResponse = await request(app)
+        .post('/api/v1/interview/start')
+        .send({ house_id: 1 })
+        .expect(200);
+
+      const interviewId = startResponse.body.interview_id;
+      
+      // Send user message
+      const messageResponse = await request(app)
+        .post(`/api/v1/interview/${interviewId}/message`)
+        .send({ message: "I have Philips Hue lights and a Nest thermostat" })
+        .expect(200);
+
+      expect(messageResponse.body).toMatchObject({
+        ai_response: expect.any(String),
+        current_phase: "classification",
+        discovered_candidates: expect.arrayContaining([
+          expect.objectContaining({
+            detected_brand: "Philips"
+          })
+        ])
+      });
+
+      // Confirm devices
+      const confirmResponse = await request(app)
+        .post(`/api/v1/interview/${interviewId}/confirm`)
+        .send({
+          confirmed_candidates: [{
+            candidate_id: messageResponse.body.discovered_candidates[0].id,
+            integration_type: "hue"
+          }]
+        })
+        .expect(200);
+
+      expect(confirmResponse.body.created_devices).toHaveLength(1);
+      
+      // Verify interview status
+      const statusResponse = await request(app)
+        .get(`/api/v1/interview/${interviewId}/status`)
+        .expect(200);
+
+      expect(statusResponse.body).toMatchObject({
+        status: "active",
+        progress: expect.objectContaining({
+          devices_confirmed: 1
+        })
+      });
+    });
+  });
+
+  describe('WebSocket Integration', () => {
+    it('should send real-time updates during interview', (done) => {
+      const WebSocket = require('ws');
+      const ws = new WebSocket('ws://localhost:3000/ws');
+      
+      ws.on('open', () => {
+        ws.send(JSON.stringify({
+          type: 'init',
+          data: { subscriptions: ['interview'] }
+        }));
+      });
+
+      ws.on('message', (data) => {
+        const message = JSON.parse(data);
+        
+        if (message.type === 'interview_update') {
+          expect(message.data).toMatchObject({
+            interview_id: expect.any(String),
+            event: expect.any(String)
+          });
+          
+          ws.close();
+          done();
+        }
+      });
+
+      // Trigger interview event
+      setTimeout(async () => {
+        await request(app)
+          .post('/api/v1/interview/start')
+          .send({ house_id: 1 });
+      }, 100);
     });
   });
 });

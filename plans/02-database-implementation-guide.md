@@ -256,50 +256,101 @@ class Room(BaseModel):
     )
 
 class Device(BaseModel):
-    """Represents IoT devices and their capabilities."""
+    """Represents dynamically discovered IoT devices."""
     __tablename__ = "devices"
     
     house_id: Mapped[int] = mapped_column(ForeignKey("houses.id"))
     room_id: Mapped[Optional[int]] = mapped_column(ForeignKey("rooms.id"))
     
-    # Device identification
-    name: Mapped[str] = mapped_column(String(255))
-    device_type: Mapped[str] = mapped_column(String(100))
-    manufacturer: Mapped[Optional[str]] = mapped_column(String(100))
-    model: Mapped[Optional[str]] = mapped_column(String(100))
-    serial_number: Mapped[Optional[str]] = mapped_column(String(255))
+    # User-provided information from interview
+    user_name: Mapped[str] = mapped_column(String(255))  # "Living room lights"
+    user_description: Mapped[Optional[str]] = mapped_column(Text)  # "Philips Hue bulbs above couch"
+    location: Mapped[Optional[str]] = mapped_column(String(255))  # "Living room"
     
-    # Device status
-    status: Mapped[str] = mapped_column(String(50), default="offline")  # online, offline, error
-    is_controllable: Mapped[bool] = mapped_column(Boolean, default=False)
-    is_sensor: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Dynamic device identification (no fixed DeviceType enum)
+    detected_brand: Mapped[Optional[str]] = mapped_column(String(100))  # "Philips"
+    detected_model: Mapped[Optional[str]] = mapped_column(String(255))  # "Hue Color Bulb A19"
+    integration_type: Mapped[str] = mapped_column(String(100))  # "hue", "nest", "ring"
+    device_class: Mapped[str] = mapped_column(String(50))  # "light", "sensor", "climate"
     
-    # Technical details
-    ip_address: Mapped[Optional[str]] = mapped_column(String(45))
-    mac_address: Mapped[Optional[str]] = mapped_column(String(17))
-    protocol: Mapped[str] = mapped_column(String(50))  # homekit, alexa, mqtt, etc.
-    firmware_version: Mapped[Optional[str]] = mapped_column(String(50))
+    # Connection and capabilities
+    connection_method: Mapped[Optional[str]] = mapped_column(String(50))  # "wifi", "zigbee", "cloud"
+    requires_hub: Mapped[bool] = mapped_column(Boolean, default=False)
+    hub_id: Mapped[Optional[int]] = mapped_column(ForeignKey("devices.id"))
     
-    # Device capabilities and state
-    capabilities: Mapped[List[str]] = mapped_column(JSON, default=list)
+    # Feature support (dynamic, not predefined)
+    supported_features: Mapped[List[str]] = mapped_column(JSON, default=list)
+    capabilities: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
+    
+    # Authentication and configuration
+    requires_auth: Mapped[bool] = mapped_column(Boolean, default=False)
+    auth_method: Mapped[Optional[str]] = mapped_column(String(50))  # "oauth", "api_key", "none"
+    config_data: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
+    
+    # Status and monitoring
+    status: Mapped[str] = mapped_column(String(50), default="offline")
     current_state: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
-    configuration: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
+    last_seen: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    
+    # Discovery metadata
+    discovery_method: Mapped[str] = mapped_column(String(50))  # "interview", "auto_dhcp", "manual"
+    discovery_confidence: Mapped[float] = mapped_column(Float, default=1.0)
+    interview_session_id: Mapped[Optional[int]] = mapped_column(ForeignKey("interview_sessions.id"))
     
     # Relationships
     house: Mapped["House"] = relationship("House", back_populates="devices")
     room: Mapped[Optional["Room"]] = relationship("Room", back_populates="devices")
+    hub_devices: Mapped[List["Device"]] = relationship("Device", remote_side=[id])
+    device_entities: Mapped[List["DeviceEntity"]] = relationship(
+        "DeviceEntity", back_populates="device"
+    )
     sensor_readings: Mapped[List["SensorReading"]] = relationship(
         "SensorReading", back_populates="device"
     )
     control_actions: Mapped[List["ControlAction"]] = relationship(
         "ControlAction", back_populates="device"
     )
+    interview_session: Mapped[Optional["InterviewSession"]] = relationship(
+        "InterviewSession", back_populates="discovered_devices"
+    )
     
     __table_args__ = (
-        Index('ix_devices_house_type', 'house_id', 'device_type'),
+        Index('ix_devices_house_integration', 'house_id', 'integration_type'),
         Index('ix_devices_status', 'status'),
-        Index('ix_devices_protocol', 'protocol'),
-        Index('ix_devices_mac_address', 'mac_address'),
+        Index('ix_devices_device_class', 'device_class'),
+        Index('ix_devices_discovery_method', 'discovery_method'),
+    )
+
+class DeviceEntity(BaseModel):
+    """Individual capabilities/sensors within a device (Home Assistant pattern)."""
+    __tablename__ = "device_entities"
+    
+    device_id: Mapped[int] = mapped_column(ForeignKey("devices.id"))
+    
+    # Entity identification
+    entity_id: Mapped[str] = mapped_column(String(255), unique=True)  # "sensor.living_room_temp"
+    unique_id: Mapped[str] = mapped_column(String(255))  # Device serial + entity type
+    
+    # Entity properties
+    name: Mapped[str] = mapped_column(String(255))
+    entity_type: Mapped[str] = mapped_column(String(50))  # "sensor", "switch", "light"
+    device_class: Mapped[Optional[str]] = mapped_column(String(50))  # "temperature", "humidity"
+    
+    # Current state
+    state: Mapped[Optional[str]] = mapped_column(String(255))
+    attributes: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
+    unit_of_measurement: Mapped[Optional[str]] = mapped_column(String(50))
+    
+    # Configuration
+    icon: Mapped[Optional[str]] = mapped_column(String(100))  # "mdi:thermometer"
+    is_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    
+    # Relationships
+    device: Mapped["Device"] = relationship("Device", back_populates="device_entities")
+    
+    __table_args__ = (
+        Index('ix_device_entities_entity_type', 'entity_type'),
+        Index('ix_device_entities_device_id', 'device_id'),
     )
 
 class Person(BaseModel):
@@ -328,7 +379,131 @@ class Person(BaseModel):
     )
 ```
 
-### 1.4 Event and Sensor Models
+### 1.4 Interview System Models
+
+```python
+# consciousness/models/interview.py
+from typing import Optional, Dict, Any, List
+from sqlalchemy import (
+    String, Float, Integer, Boolean, JSON, Text,
+    ForeignKey, Index, CheckConstraint, DateTime
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .base import BaseModel
+
+class InterviewSession(BaseModel):
+    """Tracks device discovery interview sessions."""
+    __tablename__ = "interview_sessions"
+    
+    house_id: Mapped[int] = mapped_column(ForeignKey("houses.id"))
+    
+    # Session metadata
+    session_type: Mapped[str] = mapped_column(String(50), default="device_discovery")
+    status: Mapped[str] = mapped_column(String(50), default="active")  # active, completed, paused
+    
+    # Interview data
+    conversation_log: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
+    discovered_devices: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
+    
+    # Progress tracking
+    current_phase: Mapped[str] = mapped_column(String(50), default="introduction")
+    completed_steps: Mapped[List[str]] = mapped_column(JSON, default=list)
+    
+    # Session timing
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
+    
+    # Relationships
+    house: Mapped["House"] = relationship("House", back_populates="interview_sessions")
+    device_candidates: Mapped[List["DeviceCandidate"]] = relationship(
+        "DeviceCandidate", back_populates="interview_session"
+    )
+    discovered_devices: Mapped[List["Device"]] = relationship(
+        "Device", back_populates="interview_session"
+    )
+    
+    __table_args__ = (
+        Index('ix_interview_sessions_house_status', 'house_id', 'status'),
+        Index('ix_interview_sessions_started_at', 'started_at'),
+    )
+
+class DeviceCandidate(BaseModel):
+    """Potential devices identified during interview."""
+    __tablename__ = "device_candidates"
+    
+    interview_session_id: Mapped[int] = mapped_column(ForeignKey("interview_sessions.id"))
+    
+    # User input
+    user_description: Mapped[str] = mapped_column(Text)
+    extracted_keywords: Mapped[List[str]] = mapped_column(JSON, default=list)
+    
+    # AI classification
+    detected_brand: Mapped[Optional[str]] = mapped_column(String(100))
+    detected_model: Mapped[Optional[str]] = mapped_column(String(255))
+    detected_function: Mapped[Optional[str]] = mapped_column(String(100))
+    confidence_score: Mapped[float] = mapped_column(Float, default=0.0)
+    
+    # Integration matching
+    possible_integrations: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
+    recommended_integration: Mapped[Optional[str]] = mapped_column(String(100))
+    
+    # Discovery results
+    auto_discovery_results: Mapped[Dict[str, Any]] = mapped_column(JSON, default=dict)
+    auto_discovery_successful: Mapped[bool] = mapped_column(Boolean, default=False)
+    
+    # Status
+    status: Mapped[str] = mapped_column(String(50), default="pending")  # pending, confirmed, rejected
+    created_device_id: Mapped[Optional[int]] = mapped_column(ForeignKey("devices.id"))
+    
+    # Relationships
+    interview_session: Mapped["InterviewSession"] = relationship(
+        "InterviewSession", back_populates="device_candidates"
+    )
+    created_device: Mapped[Optional["Device"]] = relationship("Device")
+    
+    __table_args__ = (
+        Index('ix_device_candidates_session_status', 'interview_session_id', 'status'),
+        Index('ix_device_candidates_confidence', 'confidence_score'),
+    )
+
+class IntegrationTemplate(BaseModel):
+    """Templates for Home Assistant integration patterns."""
+    __tablename__ = "integration_templates"
+    
+    # Integration identification
+    integration_name: Mapped[str] = mapped_column(String(100), unique=True)  # "hue", "nest"
+    display_name: Mapped[str] = mapped_column(String(255))  # "Philips Hue"
+    
+    # Matching patterns
+    brand_keywords: Mapped[List[str]] = mapped_column(JSON, default=list)
+    function_keywords: Mapped[List[str]] = mapped_column(JSON, default=list)
+    model_patterns: Mapped[List[str]] = mapped_column(JSON, default=list)
+    
+    # Integration details
+    device_classes: Mapped[List[str]] = mapped_column(JSON, default=list)
+    supported_features: Mapped[Dict[str, List[str]]] = mapped_column(JSON, default=dict)
+    discovery_methods: Mapped[List[str]] = mapped_column(JSON, default=list)
+    
+    # Configuration requirements
+    requires_hub: Mapped[bool] = mapped_column(Boolean, default=False)
+    auth_required: Mapped[bool] = mapped_column(Boolean, default=False)
+    auth_methods: Mapped[List[str]] = mapped_column(JSON, default=list)
+    config_fields: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
+    
+    # Interview questions
+    interview_questions: Mapped[List[Dict[str, Any]]] = mapped_column(JSON, default=list)
+    
+    # Status
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    priority: Mapped[int] = mapped_column(Integer, default=100)
+    
+    __table_args__ = (
+        Index('ix_integration_templates_name', 'integration_name'),
+        Index('ix_integration_templates_priority', 'priority'),
+    )
+```
+
+### 1.5 Event and Sensor Models
 
 ```python
 # consciousness/models/events.py
@@ -757,6 +932,134 @@ class MemoryRepository(BaseRepository[Memory]):
             )
         )
         await self.session.commit()
+class InterviewRepository(BaseRepository[InterviewSession]):
+    """Repository for interview session management."""
+    
+    def __init__(self, session: AsyncSession):
+        super().__init__(InterviewSession, session)
+    
+    async def get_active_session(self, house_id: int) -> Optional[InterviewSession]:
+        """Get the active interview session for a house."""
+        result = await self.session.execute(
+            select(InterviewSession)
+            .where(
+                and_(
+                    InterviewSession.house_id == house_id,
+                    InterviewSession.status == "active"
+                )
+            )
+            .order_by(desc(InterviewSession.started_at))
+            .limit(1)
+        )
+        return result.scalar_one_or_none()
+    
+    async def add_conversation_turn(
+        self, 
+        session_id: int,
+        speaker: str,
+        message: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ):
+        """Add a conversation turn to the interview log."""
+        session = await self.get(session_id)
+        if session:
+            conversation_turn = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "speaker": speaker,
+                "message": message,
+                "metadata": metadata or {}
+            }
+            session.conversation_log.append(conversation_turn)
+            await self.update(session_id, conversation_log=session.conversation_log)
+
+class DeviceCandidateRepository(BaseRepository[DeviceCandidate]):
+    """Repository for device candidate management."""
+    
+    def __init__(self, session: AsyncSession):
+        super().__init__(DeviceCandidate, session)
+    
+    async def get_pending_candidates(
+        self, 
+        interview_session_id: int
+    ) -> List[DeviceCandidate]:
+        """Get pending device candidates for an interview session."""
+        result = await self.session.execute(
+            select(DeviceCandidate)
+            .where(
+                and_(
+                    DeviceCandidate.interview_session_id == interview_session_id,
+                    DeviceCandidate.status == "pending"
+                )
+            )
+            .order_by(desc(DeviceCandidate.confidence_score))
+        )
+        return result.scalars().all()
+    
+    async def confirm_candidate(
+        self,
+        candidate_id: int,
+        device_id: int
+    ) -> Optional[DeviceCandidate]:
+        """Confirm a device candidate and link to created device."""
+        return await self.update(
+            candidate_id,
+            status="confirmed",
+            created_device_id=device_id
+        )
+
+class DeviceRepository(BaseRepository[Device]):
+    """Repository for dynamic device management."""
+    
+    def __init__(self, session: AsyncSession):
+        super().__init__(Device, session)
+    
+    async def search_by_description(
+        self,
+        house_id: int,
+        search_terms: List[str],
+        limit: int = 10
+    ) -> List[Device]:
+        """Search devices by description keywords."""
+        filters = [Device.house_id == house_id]
+        
+        # Build OR conditions for search terms
+        search_conditions = []
+        for term in search_terms:
+            search_conditions.extend([
+                Device.user_name.ilike(f"%{term}%"),
+                Device.user_description.ilike(f"%{term}%"),
+                Device.detected_brand.ilike(f"%{term}%"),
+                Device.detected_model.ilike(f"%{term}%")
+            ])
+        
+        if search_conditions:
+            filters.append(or_(*search_conditions))
+        
+        result = await self.session.execute(
+            select(Device)
+            .where(and_(*filters))
+            .order_by(Device.user_name)
+            .limit(limit)
+        )
+        return result.scalars().all()
+    
+    async def get_by_integration_type(
+        self,
+        house_id: int,
+        integration_type: str
+    ) -> List[Device]:
+        """Get all devices of a specific integration type."""
+        result = await self.session.execute(
+            select(Device)
+            .where(
+                and_(
+                    Device.house_id == house_id,
+                    Device.integration_type == integration_type
+                )
+            )
+            .order_by(Device.user_name)
+        )
+        return result.scalars().all()
 ```
 
 ## Phase 3: Database Migrations with Alembic
@@ -777,6 +1080,7 @@ from consciousness.config import settings
 from consciousness.models.consciousness import *
 from consciousness.models.entities import *
 from consciousness.models.events import *
+from consciousness.models.interview import *
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
@@ -828,8 +1132,14 @@ else:
 ### 3.2 Sample Migration Scripts
 
 ```bash
-# Create initial migration
-uv run alembic revision --autogenerate -m "Initial consciousness schema"
+# Create initial migration with dynamic device schema
+uv run alembic revision --autogenerate -m "Initial consciousness schema with dynamic devices"
+
+# Migration for interview system
+uv run alembic revision --autogenerate -m "Add device interview system"
+
+# Migration for Home Assistant integration templates
+uv run alembic revision --autogenerate -m "Add integration templates"
 
 # Migration for indexes optimization
 uv run alembic revision --autogenerate -m "Add performance indexes"
@@ -848,6 +1158,12 @@ CREATE INDEX CONCURRENTLY ix_sensor_readings_value_time ON sensor_readings(value
 CREATE INDEX CONCURRENTLY ix_memories_full_text ON memories USING gin(to_tsvector('english', title || ' ' || description));
 CREATE INDEX CONCURRENTLY ix_events_severity_created ON events(severity, created_at);
 CREATE INDEX CONCURRENTLY ix_emotional_states_happiness_time ON emotional_states(happiness, created_at);
+
+-- Interview system indexes
+CREATE INDEX CONCURRENTLY ix_device_candidates_description_search ON device_candidates USING gin(to_tsvector('english', user_description));
+CREATE INDEX CONCURRENTLY ix_devices_user_description_search ON devices USING gin(to_tsvector('english', user_name || ' ' || COALESCE(user_description, '')));
+CREATE INDEX CONCURRENTLY ix_integration_templates_keywords ON integration_templates USING gin(brand_keywords || function_keywords);
+CREATE INDEX CONCURRENTLY ix_interview_sessions_house_date ON interview_sessions(house_id, started_at);
 ```
 
 ### 4.2 Database Optimization
@@ -904,6 +1220,8 @@ import pytest
 from datetime import datetime, timedelta
 from consciousness.database import get_async_session, init_db, drop_db
 from consciousness.models.consciousness import EmotionalState, Memory
+from consciousness.models.entities import House, Device
+from consciousness.models.interview import InterviewSession, DeviceCandidate
 from consciousness.repositories.consciousness import EmotionalStateRepository
 
 @pytest.fixture
@@ -913,6 +1231,18 @@ async def db_session():
     async with get_async_session() as session:
         yield session
     await drop_db()
+
+@pytest.fixture
+async def test_house(db_session):
+    """Create test house."""
+    house = House(
+        name="Test House",
+        timezone="America/New_York"
+    )
+    db_session.add(house)
+    await db_session.commit()
+    await db_session.refresh(house)
+    return house
 
 @pytest.mark.asyncio
 async def test_emotional_state_creation(db_session):
@@ -939,31 +1269,106 @@ async def test_emotional_state_creation(db_session):
     assert retrieved.id == state.id
 
 @pytest.mark.asyncio
-async def test_memory_search(db_session):
-    """Test memory search functionality."""
-    repo = MemoryRepository(db_session)
+async def test_interview_session_flow(db_session, test_house):
+    """Test interview session creation and management."""
+    from consciousness.repositories.consciousness import InterviewRepository
     
-    # Create test memories
-    await repo.create(
-        memory_type="episodic",
-        category="daily_routine",
-        importance=0.8,
-        title="Morning routine",
-        description="User's typical morning routine including coffee",
-        content={"activities": ["wake_up", "coffee", "shower"]},
-        source="sensor"
+    repo = InterviewRepository(db_session)
+    
+    # Create interview session
+    session = await repo.create(
+        house_id=test_house.id,
+        session_type="device_discovery",
+        status="active",
+        started_at=datetime.utcnow()
     )
     
-    # Search memories
-    results = await repo.search_memories("coffee", min_importance=0.5)
+    assert session.id is not None
+    assert session.status == "active"
+    
+    # Test adding conversation turns
+    await repo.add_conversation_turn(
+        session.id,
+        "user",
+        "I have some Philips Hue lights and a Nest thermostat"
+    )
+    
+    # Retrieve and verify conversation log
+    updated_session = await repo.get(session.id)
+    assert len(updated_session.conversation_log) == 1
+    assert updated_session.conversation_log[0]["speaker"] == "user"
+
+@pytest.mark.asyncio
+async def test_device_candidate_management(db_session, test_house):
+    """Test device candidate creation and confirmation."""
+    from consciousness.repositories.consciousness import DeviceCandidateRepository, InterviewRepository
+    
+    # Create interview session
+    interview_repo = InterviewRepository(db_session)
+    session = await interview_repo.create(
+        house_id=test_house.id,
+        started_at=datetime.utcnow()
+    )
+    
+    # Create device candidate
+    candidate_repo = DeviceCandidateRepository(db_session)
+    candidate = await candidate_repo.create(
+        interview_session_id=session.id,
+        user_description="Philips Hue color lights in living room",
+        detected_brand="Philips",
+        detected_function="lighting",
+        confidence_score=0.95,
+        recommended_integration="hue"
+    )
+    
+    assert candidate.confidence_score == 0.95
+    assert candidate.status == "pending"
+    
+    # Get pending candidates
+    pending = await candidate_repo.get_pending_candidates(session.id)
+    assert len(pending) == 1
+    assert pending[0].id == candidate.id
+
+@pytest.mark.asyncio
+async def test_dynamic_device_creation(db_session, test_house):
+    """Test dynamic device creation from interview."""
+    from consciousness.repositories.consciousness import DeviceRepository
+    
+    repo = DeviceRepository(db_session)
+    
+    # Create device with dynamic typing
+    device = await repo.create(
+        house_id=test_house.id,
+        user_name="Living room lights",
+        user_description="Philips Hue color bulbs above the couch",
+        detected_brand="Philips",
+        detected_model="Hue Color Bulb A19",
+        integration_type="hue",
+        device_class="light",
+        supported_features=["brightness", "color", "effects"],
+        discovery_method="interview",
+        discovery_confidence=0.95
+    )
+    
+    assert device.integration_type == "hue"
+    assert device.device_class == "light"
+    assert "brightness" in device.supported_features
+    
+    # Test search functionality
+    results = await repo.search_by_description(
+        test_house.id,
+        ["philips", "lights"]
+    )
     assert len(results) == 1
-    assert "coffee" in results[0].description
+    assert results[0].id == device.id
 ```
 
 ## Next Steps
 
 1. **Consciousness Engine**: Implement using `03-consciousness-engine-guide.md`
 2. **SAFLA Loop**: Build using `04-safla-loop-guide.md`
-3. **Device Integration**: Add adapters using `05-device-integration-guide.md`
+3. **Interview System**: Implement conversational device discovery using `device-interview-system.md`
+4. **Device Integration**: Add dynamic adapters using `05-device-integration-guide.md`
+5. **Integration Templates**: Populate Home Assistant integration patterns
 
-This database implementation provides a solid foundation for storing consciousness states, managing device data, and supporting the SAFLA loop architecture with proper indexing, relationships, and performance optimizations.
+This database implementation provides a solid foundation for storing consciousness states, managing dynamic device discovery through interviews, and supporting the SAFLA loop architecture with proper indexing, relationships, and performance optimizations. The flexible device schema allows for unlimited device types through conversational discovery.

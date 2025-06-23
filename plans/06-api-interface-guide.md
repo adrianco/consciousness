@@ -131,6 +131,297 @@ Natural language query to consciousness system.
 }
 ```
 
+### Device Interview Endpoints
+
+#### POST /api/v1/interview/start
+Start a new device discovery interview session.
+
+```json
+{
+  "endpoint": "POST /api/v1/interview/start",
+  "request": {
+    "house_id": "house_123"
+  },
+  "response": {
+    "interview_id": "int_456",
+    "status": "active",
+    "current_phase": "introduction",
+    "ai_message": "Hi! I'm here to learn about the smart devices in your home. Tell me about any connected devices you have - you can describe them however feels natural, by room, by brand, or just whatever comes to mind.",
+    "session_started_at": "2024-01-20T10:30:00Z"
+  }
+}
+```
+
+#### POST /api/v1/interview/{interview_id}/message
+Send a user message to the interview system.
+
+```json
+{
+  "endpoint": "POST /api/v1/interview/{interview_id}/message",
+  "request": {
+    "message": "I have some Philips Hue lights and a Nest thermostat"
+  },
+  "response": {
+    "ai_response": "Great! Let me ask about each device. For your Philips Hue lights, do you have a Hue Bridge? It's usually a white device connected to your router.",
+    "current_phase": "classification",
+    "discovered_candidates": [
+      {
+        "id": "cand_789",
+        "description": "Philips Hue lights",
+        "detected_brand": "Philips",
+        "detected_function": "lighting",
+        "confidence": 0.95,
+        "possible_integrations": ["hue"]
+      },
+      {
+        "id": "cand_790",
+        "description": "Nest thermostat",
+        "detected_brand": "Nest",
+        "detected_function": "climate",
+        "confidence": 0.98,
+        "possible_integrations": ["nest"]
+      }
+    ],
+    "auto_discovery_results": {
+      "mdns": [
+        {
+          "name": "Philips Hue Bridge",
+          "ip": "192.168.1.100",
+          "type": "_hue._tcp.local."
+        }
+      ]
+    }
+  }
+}
+```
+
+#### GET /api/v1/interview/{interview_id}/status
+Get the current status of an interview session.
+
+```json
+{
+  "endpoint": "GET /api/v1/interview/{interview_id}/status",
+  "response": {
+    "interview_id": "int_456",
+    "status": "active",
+    "current_phase": "classification",
+    "progress": {
+      "total_devices_mentioned": 2,
+      "devices_confirmed": 0,
+      "devices_pending": 2,
+      "completion_percentage": 30
+    },
+    "conversation_summary": {
+      "total_turns": 4,
+      "last_activity": "2024-01-20T10:35:00Z"
+    }
+  }
+}
+```
+
+#### POST /api/v1/interview/{interview_id}/confirm
+Confirm device candidates and create actual devices.
+
+```json
+{
+  "endpoint": "POST /api/v1/interview/{interview_id}/confirm",
+  "request": {
+    "confirmed_candidates": [
+      {
+        "candidate_id": "cand_789",
+        "integration_type": "hue",
+        "config": {
+          "bridge_ip": "192.168.1.100",
+          "requires_auth": true
+        }
+      }
+    ]
+  },
+  "response": {
+    "created_devices": [
+      {
+        "device_id": "dev_901",
+        "user_name": "Living room lights",
+        "integration_type": "hue",
+        "device_class": "light",
+        "status": "pending_auth"
+      }
+    ],
+    "next_steps": [
+      "Please press the button on your Hue Bridge to authorize the connection"
+    ]
+  }
+}
+```
+
+#### GET /api/v1/interview/{interview_id}/conversation
+Get the full conversation log for an interview.
+
+```json
+{
+  "endpoint": "GET /api/v1/interview/{interview_id}/conversation",
+  "response": {
+    "conversation": [
+      {
+        "timestamp": "2024-01-20T10:30:00Z",
+        "speaker": "assistant",
+        "message": "Hi! I'm here to learn about the smart devices in your home...",
+        "metadata": {
+          "phase": "introduction"
+        }
+      },
+      {
+        "timestamp": "2024-01-20T10:32:00Z",
+        "speaker": "user",
+        "message": "I have some Philips Hue lights and a Nest thermostat",
+        "metadata": {}
+      }
+    ]
+  }
+}
+```
+
+#### DELETE /api/v1/interview/{interview_id}
+Cancel an active interview session.
+
+```json
+{
+  "endpoint": "DELETE /api/v1/interview/{interview_id}",
+  "response": {
+    "message": "Interview session cancelled",
+    "status": "cancelled",
+    "cancelled_at": "2024-01-20T10:40:00Z"
+  }
+}
+```
+
+### Auto-Discovery Endpoints
+
+#### POST /api/v1/discovery/scan
+Trigger automatic device discovery across all protocols.
+
+```json
+{
+  "endpoint": "POST /api/v1/discovery/scan",
+  "request": {
+    "protocols": ["mdns", "upnp", "bluetooth"],
+    "timeout_seconds": 30
+  },
+  "response": {
+    "scan_id": "scan_123",
+    "status": "running",
+    "started_at": "2024-01-20T10:30:00Z",
+    "estimated_completion": "2024-01-20T10:30:30Z"
+  }
+}
+```
+
+#### GET /api/v1/discovery/scan/{scan_id}
+Get results from a discovery scan.
+
+```json
+{
+  "endpoint": "GET /api/v1/discovery/scan/{scan_id}",
+  "response": {
+    "scan_id": "scan_123",
+    "status": "completed",
+    "results": {
+      "mdns": [
+        {
+          "name": "Philips Hue Bridge",
+          "address": "192.168.1.100",
+          "type": "_hue._tcp.local.",
+          "properties": {
+            "bridgeid": "001788FFFE123456"
+          }
+        }
+      ],
+      "upnp": [
+        {
+          "name": "Ring Doorbell",
+          "address": "192.168.1.101",
+          "type": "urn:schemas-ring-com:device:Doorbell"
+        }
+      ],
+      "bluetooth": []
+    },
+    "total_devices_found": 2,
+    "completed_at": "2024-01-20T10:30:28Z"
+  }
+}
+```
+
+### Integration Template Endpoints
+
+#### GET /api/v1/integrations/templates
+Get available integration templates.
+
+```json
+{
+  "endpoint": "GET /api/v1/integrations/templates",
+  "query_params": {
+    "brand": "philips",
+    "device_class": "light"
+  },
+  "response": {
+    "templates": [
+      {
+        "integration_name": "hue",
+        "display_name": "Philips Hue",
+        "brand_keywords": ["philips", "hue"],
+        "function_keywords": ["light", "bulb", "lighting"],
+        "device_classes": ["light"],
+        "requires_hub": true,
+        "auth_required": false,
+        "discovery_methods": ["mdns", "upnp"],
+        "interview_questions": [
+          "Do you have a Philips Hue Bridge?",
+          "What types of Hue devices do you have?"
+        ]
+      }
+    ]
+  }
+}
+```
+
+#### POST /api/v1/integrations/classify
+Classify a device description using LLM.
+
+```json
+{
+  "endpoint": "POST /api/v1/integrations/classify",
+  "request": {
+    "description": "smart thermostat in the hallway",
+    "context": {
+      "room": "hallway",
+      "existing_devices": []
+    }
+  },
+  "response": {
+    "classifications": [
+      {
+        "brand": "unknown",
+        "function": "climate",
+        "device_class": "thermostat",
+        "confidence": 0.85,
+        "possible_integrations": [
+          {
+            "integration": "nest",
+            "score": 0.7,
+            "display_name": "Google Nest"
+          },
+          {
+            "integration": "ecobee",
+            "score": 0.6,
+            "display_name": "Ecobee"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
 ### Device Control Endpoints
 
 #### GET /api/v1/devices
@@ -443,6 +734,70 @@ Manually trigger a SAFLA loop iteration.
 }
 ```
 
+##### Interview Session Updates
+```json
+{
+  "type": "interview_update",
+  "data": {
+    "interview_id": "int_456",
+    "event": "ai_response",
+    "message": "Great! For your Philips Hue lights, do you have a Hue Bridge?",
+    "phase": "classification",
+    "timestamp": "2024-01-20T10:32:00Z"
+  }
+}
+```
+
+##### Device Discovery Results
+```json
+{
+  "type": "discovery_update",
+  "data": {
+    "interview_id": "int_456",
+    "event": "device_discovered",
+    "device": {
+      "name": "Philips Hue Bridge",
+      "address": "192.168.1.100",
+      "type": "_hue._tcp.local.",
+      "discovery_method": "mdns"
+    },
+    "correlation": {
+      "candidate_id": "cand_789",
+      "confidence": 0.95
+    }
+  }
+}
+```
+
+##### Device Candidate Updates
+```json
+{
+  "type": "candidate_update", 
+  "data": {
+    "interview_id": "int_456",
+    "candidate_id": "cand_789",
+    "event": "confirmed",
+    "device_id": "dev_901",
+    "integration_type": "hue",
+    "next_steps": ["Press button on Hue Bridge for authentication"]
+  }
+}
+```
+
+##### Integration Authentication Status
+```json
+{
+  "type": "auth_update",
+  "data": {
+    "device_id": "dev_901",
+    "integration_type": "hue",
+    "status": "authenticated",
+    "devices_discovered": 5,
+    "timestamp": "2024-01-20T10:35:00Z"
+  }
+}
+```
+
 ### WebSocket Client Implementation
 
 ```javascript
@@ -485,7 +840,7 @@ class ConsciousnessWebSocket {
       type: 'init',
       data: {
         auth_token: this.authToken,
-        subscriptions: ['consciousness', 'devices', 'safla']
+        subscriptions: ['consciousness', 'devices', 'safla', 'interview', 'discovery']
       }
     });
   }
