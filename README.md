@@ -1,4 +1,8 @@
 # Consciousness
+
+## Status Updates
+June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude4 which is ideal, then hit limits and dropped back to Claude 3.7 for the more detailed production of plans.
+
 ## Observability and Introspection System
 
 Based on ideas from this blog post I wrote a few years ago [Perhaps Conciousness is Just Human Observability](https://medium.com/@adrianco/perhaps-consciousness-is-just-human-observability-84dfda40d70f) (extracted text included in references directory) I would like to be able to have a conversation with an autonomous system to understand how it is feeling, why it did something, and what is bothering it.
