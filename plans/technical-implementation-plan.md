@@ -40,78 +40,103 @@ The House Consciousness System is an IoT observability and introspection platfor
 - SQLAlchemy models for core entities
 - Secure credential management system
 
-### Milestone 1.2: Database Design
+### Milestone 1.2: Dynamic Database Design
 **Duration**: Week 2
 
-**SQLAlchemy Models**:
+**Core Models (Updated for Dynamic Device Support)**:
 ```python
-# Core Models
 class House(Base):
     id: UUID
     name: str
     location: str
     timezone: str
     owner_preferences: JSON
+    setup_completed: bool
+    last_interview_date: DateTime
 
 class Device(Base):
     id: UUID
     house_id: UUID
+    # User-provided information
+    user_name: str
+    user_description: str
+    location: str
+    # Dynamic technical identification
+    detected_brand: str
+    detected_model: str
+    integration_type: str  # Replaces fixed DeviceType
+    device_class: str
+    # Connection and capabilities
+    connection_method: str
+    supported_features: JSON
+    config_data: JSON
+    discovery_method: str
+    discovery_confidence: float
+
+class DeviceEntity(Base):
+    id: UUID
+    device_id: UUID
+    entity_id: str
     name: str
-    type: DeviceType
-    brand: str
-    api_config: JSON
-    last_seen: DateTime
+    entity_type: str
+    state: str
+    attributes: JSON
 
-class Event(Base):
+class InterviewSession(Base):
     id: UUID
     house_id: UUID
-    device_id: Optional[UUID]
-    event_type: str
-    data: JSON
-    timestamp: DateTime
-    processed: bool
+    session_type: str
+    conversation_log: JSON
+    discovered_devices: JSON
+    current_phase: str
 
-class EmotionalState(Base):
+class DeviceCandidate(Base):
     id: UUID
-    house_id: UUID
-    emotion: EmotionType
-    intensity: float
-    context: JSON
-    timestamp: DateTime
+    interview_session_id: UUID
+    user_description: str
+    detected_brand: str
+    possible_integrations: JSON
+    confidence_score: float
 
-class Memory(Base):
+class IntegrationTemplate(Base):
     id: UUID
-    house_id: UUID
-    type: MemoryType
-    content: JSON
-    importance: float
-    created_at: DateTime
+    integration_name: str
+    brand_keywords: JSON
+    discovery_methods: JSON
+    config_fields: JSON
+    interview_questions: JSON
 ```
 
 **Tasks**:
-- [ ] Design and implement all SQLAlchemy models
+- [ ] Design and implement dynamic device models
+- [ ] Create interview system models
+- [ ] Implement Home Assistant integration templates
 - [ ] Create database migrations with Alembic
-- [ ] Implement data access layer (repositories)
+- [ ] Implement data access layer with device discovery support
 - [ ] Add database indexing and performance optimization
 
-### Milestone 1.3: Device Discovery Framework
+### Milestone 1.3: Conversational Device Discovery Framework
 **Duration**: Week 3-4
 
 **Tasks**:
-- [ ] Create abstract device interface pattern
-- [ ] Implement device discovery mechanisms:
-  - Apple HomeKit integration
-  - Amazon Alexa device discovery
-  - Network scanning for IP devices
-  - MQTT broker integration
-- [ ] Build credential management for device APIs
-- [ ] Create device configuration wizard
+- [ ] Implement Home Assistant integration knowledge base
+- [ ] Create device classification engine using LLM
+- [ ] Build conversational interview system
+- [ ] Implement multi-protocol automatic discovery:
+  - Network scanning (DHCP, mDNS, SSDP/UPnP)
+  - Bluetooth/BLE discovery
+  - HomeKit device discovery
+  - MQTT broker discovery
+- [ ] Create device candidate matching system
+- [ ] Build credential management for discovered devices
+- [ ] Design interview-guided configuration flows
 
 **Deliverables**:
-- Generic device interface framework
-- HomeKit and Alexa integration modules
-- Device discovery and registration system
-- Configuration management UI
+- Conversational device interview engine
+- Home Assistant integration template database
+- Multi-protocol discovery system
+- Device classification and matching algorithms
+- Dynamic configuration wizard based on device type
 
 ## Phase 2: Consciousness Engine (Weeks 5-8)
 
@@ -166,50 +191,92 @@ class Memory(Base):
 - [ ] Build preference learning from user interactions
 - [ ] Design predictive modeling capabilities
 
-## Phase 3: Device Integration (Weeks 9-12)
+## Phase 3: Dynamic Device Integration & Interview System (Weeks 9-12)
 
-### Milestone 3.1: Core IoT Integrations
-**Duration**: Week 9-10
+### Milestone 3.1: Interview-Driven Device Onboarding
+**Duration**: Week 9
 
-**Priority Integrations**:
-1. **Weather Systems**:
-   - Tempest Weather Station API integration
-   - Ambient Weather API integration
-   - National Weather Service API
-   
-2. **HVAC Systems**:
-   - Mitsubishi Kumo API integration
-   - Generic thermostat APIs
-   - Zone-based climate control
+**Core Components**:
+1. **Conversational Interview Engine**:
+   - Multi-turn conversation flow management
+   - Context-aware question generation
+   - Natural language processing for device descriptions
+   - Integration with LLM for intelligent responses
 
-3. **Energy Management**:
-   - Tesla Powerwall API (pypowerwall)
-   - Solar system monitoring
-   - Smart meter integration
+2. **Device Classification System**:
+   - Brand and model detection from user descriptions
+   - Capability inference from natural language
+   - Integration matching using Home Assistant patterns
+   - Confidence scoring for device identification
 
 **Tasks**:
-- [ ] Implement weather data collection and processing
-- [ ] Build HVAC control and monitoring
-- [ ] Create energy system integration
-- [ ] Develop device-specific error handling
+- [ ] Implement conversational interview flow
+- [ ] Build device description parser and classifier
+- [ ] Create Home Assistant integration matching engine
+- [ ] Develop dynamic question generation system
+- [ ] Implement conversation state management
+- [ ] Build device candidate ranking system
 
-### Milestone 3.2: Security and Access Control
-**Duration**: Week 11
+### Milestone 3.2: Automatic Discovery Integration
+**Duration**: Week 10
+
+**Discovery Methods**:
+1. **Network-Based Discovery**:
+   - DHCP lease scanning for IP devices
+   - mDNS/Zeroconf service discovery
+   - SSDP/UPnP device detection
+   - Network port scanning for known device services
+
+2. **Protocol-Specific Discovery**:
+   - Bluetooth/BLE device scanning
+   - Zigbee device discovery (via coordinators)
+   - Z-Wave device detection
+   - Matter/Thread device discovery
 
 **Tasks**:
-- [ ] Implement gate and door control systems
-- [ ] Build security camera integration
-- [ ] Create visitor detection and management
-- [ ] Design access control automation
+- [ ] Implement parallel discovery across all protocols
+- [ ] Build discovery result correlation with interview data
+- [ ] Create device fingerprinting for identification
+- [ ] Develop discovery confidence scoring
+- [ ] Implement discovery result caching and optimization
+- [ ] Build discovery scheduling and automation
 
-### Milestone 3.3: Lifestyle Integration
-**Duration**: Week 12
+### Milestone 3.3: Dynamic Integration Implementation
+**Duration**: Week 11-12
+
+**Integration Patterns**:
+1. **Cloud API Integrations**:
+   - OAuth flow implementation for cloud services
+   - API key management and rotation
+   - Rate limiting and error handling
+   - Webhook setup for real-time updates
+
+2. **Local Device Integrations**:
+   - Direct device API communication
+   - Hub-based device control (Hue Bridge, SmartThings, etc.)
+   - Custom protocol implementations
+   - Local push/pull data synchronization
 
 **Tasks**:
-- [ ] Calendar integration for presence prediction
-- [ ] Music and entertainment system control
-- [ ] Lighting scene management
-- [ ] Pool and outdoor system integration
+- [ ] Build dynamic integration factory pattern
+- [ ] Implement common integration base classes
+- [ ] Create OAuth and API key management system
+- [ ] Build integration health monitoring
+- [ ] Implement integration-specific error handling
+- [ ] Create integration testing framework
+- [ ] Build integration update and maintenance system
+
+**Popular Integration Examples**:
+- Philips Hue (local bridge API)
+- Google Nest (OAuth cloud API)
+- Ring (OAuth cloud API)
+- Tesla (unofficial API)
+- Samsung SmartThings (cloud API)
+- Ecobee (OAuth cloud API)
+- LIFX (cloud and local API)
+- TP-Link Kasa (cloud API)
+- Sonos (local API)
+- Roku (local API)
 
 ## Phase 4: User Interfaces (Weeks 13-16)
 
@@ -302,10 +369,17 @@ uv add --dev pytest black isort mypy
 uv add openai anthropic
 uv add psycopg2-binary redis celery
 
+# Device discovery and interview system
+uv add aiohttp httpx  # For device API calls
+uv add zeroconf upnp_client  # Network discovery
+uv add bleak  # Bluetooth discovery
+uv add pydantic-settings  # Configuration management
+
 # Development workflow
 uv run pytest  # Run tests
 uv run black . # Format code
 uv run mypy .  # Type checking
+uv run python -m interview_system.test_discovery  # Test device discovery
 ```
 
 ### Database Management
@@ -389,13 +463,21 @@ uv run celery worker -A app.celery
 1. **Immediate Actions**:
    - Set up development environment with UV
    - Initialize FastAPI project structure
-   - Design initial database schema
-   - Begin device discovery framework
+   - Design dynamic database schema with interview system
+   - Research Home Assistant integration patterns
+   - Begin conversational interview framework
 
 2. **Week 1 Priorities**:
    - Complete foundation infrastructure setup
+   - Implement dynamic device models and interview system
+   - Create Home Assistant integration template database
    - Establish CI/CD pipeline
    - Create development and testing procedures
-   - Begin device API research and prototyping
 
-This implementation plan provides a comprehensive roadmap for building the House Consciousness System with clear phases, milestones, and deliverables. The modular architecture allows for iterative development and gradual feature expansion.
+3. **Interview System Development**:
+   - Build conversational flow engine
+   - Implement device classification using LLM
+   - Create automatic discovery correlation system
+   - Test with various device types and user descriptions
+
+This implementation plan provides a comprehensive roadmap for building the House Consciousness System with dynamic device discovery through conversational interviews. The approach leverages Home Assistant's extensive integration knowledge while providing a natural, user-friendly setup experience that can adapt to any combination of smart home devices.
