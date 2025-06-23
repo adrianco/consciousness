@@ -1,4 +1,4 @@
-# Consciousness (abbreviated as c11s)
+# Consciousness
 ## Observability and Introspection System
 
 Based on ideas from this blog post I wrote a few years ago [Perhaps Conciousness is Just Human Observability](https://medium.com/@adrianco/perhaps-consciousness-is-just-human-observability-84dfda40d70f) (extracted text included in references directory) I would like to be able to have a conversation with an autonomous system to understand how it is feeling, why it did something, and what is bothering it.
@@ -103,7 +103,31 @@ Coded in Python, with a service running on something like a Mac Mini somewhere i
 Mobile single page web app that surfaces a basic interface to the owners and guests. iOS app if needed to support notifications and spoken interface.
 
 Architecture consiste of a control loop along the lines of the STPA model described in the blog post [Failure Modes and Continuous Resilience](https://medium.com/@adrianco/failure-modes-and-continuous-resilience-6553078caad5), text of this post is supplied in the references folder.
-The house is a system that has many "Observability" interfaces. The observable inputs feed a "Consciousness" model. Some aspects of the house system can be manipulated via "Controllability" interfaces. 
+The house is a system that has many "Observability" interfaces. The observable inputs feed a "Consciousness" model. Some aspects of the house system can be manipulated via "Controllability" interfaces.
+
+One big problem is that in general every house has a different set of interfaces to a wide variety of devices and "Internet of Things" related products. The novel solution to this is that the LLM itself will learn what devices exist via a conversation with the house owner, then research, configure and write code to build whatever interfaces are needed. To do this a secure way to store passwords and credentials is needed.
+
+Example conversations:
+LLM: Do you have devices controlled by Apple Homekit, Google Home, Amazon Alexa or Home Assistant?
+Owner: We have lots of Apple Homekit devices and some Amazon Alexa devices, no Google Home or Home Assistant here.
+LLM: ..works through a discovery process to find the devices..
+
+LLM: tell me about any systems or interfaces that record actual temperature or weather information at your location, otherwise we can use the local weather forecast.
+Owner: There are three local systems, one is a Tempest weather station that records rain, wind etc, the second is an Ambient Weather unit that records temperatures inside and outside the house, and a floating swimming pool temperature monitor, the third is a separate Ambient Weather unit that records PM2.5 smoke levels outside.
+LLM: (after researching how Tempest works) In the settings for the Tempest, there's a URL for public data, what's the station number?
+Owner: ..nnnnnnnn..
+LLM: (after researching how Ambient Wather works) for the Ambient Weather units, their MAC address is what identifies them, what are they?
+Owner: The temperature monitor is aa:bb:cc:dd:ee and the PM2.5 monitor is vv:ww:xx:yy:zz
+LLM: ok, I'll go and build interfaces to those devices.
+
+LLM: Do you have any solar power, battery or energy monitoring systems?
+Owner: Yes we have solar and Tesla Powerwalls.
+LLM: Cool, there's an API I can use via github.com/jasonacox/pypowerwall to see the battery and solar and house usage.
+
+LLM: What do you use for heating and cooling, do you have any connected thermostats?
+Owner: We have several Mitsubishi heat pumps, and they use a Mitsubishi Comfort app that says it has Google Home and Alexa interfaces available, but not configured.
+LLM: It appears that the latest Mitsubishi Comfort app doesn't have a working Alexa skill at the moment, but there are some github projects that document the Mitsubishi Kumo API for tools like Home Assistant that we can leverage to figure out how to talk to the heat pumps.
+
 
 
 
