@@ -1,0 +1,158 @@
+{
+  "timestamp": "2025-06-23T18:58:55.877Z",
+  "version": "1.0",
+  "entries": [
+    {
+      "id": "entry_mc9gjz9x_bvilc7sfs",
+      "key": "swarm-auto-centralized-1750704888915/readme-analyst/findings",
+      "value": "{\"safla_model\":{\"full_name\":\"Self Aware Feedback Loop Algorithm\",\"reference\":\"github.com/ruvnet/safla\",\"purpose\":\"Has a mental model scoped to entities and activities related to living in a relatively complicated connected house\",\"integration\":\"Feed various IoT based systems from multiple vendors into SAFLA\"},\"consciousness_framework\":{\"core_concept\":\"Consciousness as observability - based on blog post: Perhaps Consciousness is Just Human Observability\",\"key_principles\":[\"Enable conversations to understand how the system is feeling\",\"Explain why it did something\",\"Communicate what is bothering it\",\"Provide context-aware interactions\"],\"examples\":{\"self_driving_car\":\"Could explain braking for deer, warn about tire pressure drop\",\"conscious_house\":\"Worry about storms, notify about heating left on, warn about clogged filters\"}},\"functional_requirements\":{\"conversation_interface\":{\"description\":\"Natural language conversations with autonomous system\",\"examples\":[\"Good morning routines\",\"Weather preparations\",\"Troubleshooting dialogs\"]},\"emotional_states\":{\"types\":[\"happy\",\"worried\",\"bored\",\"excited\",\"satisfied\",\"unhappy\"],\"mood\":\"Accumulated emotion over time\"},\"entity_management\":{\"entities\":[\"people\",\"devices\",\"rooms\",\"spaces\",\"systems\"],\"environment\":[\"climate\",\"weather\",\"events\",\"calendar patterns\"]},\"device_discovery\":{\"supported\":[\"Apple HomeKit\",\"Amazon Alexa\",\"Tempest weather station\",\"Ambient Weather\",\"Tesla Powerwalls\",\"Mitsubishi heat pumps\"],\"method\":\"LLM learns devices through conversation, researches APIs, writes integration code\"},\"monitoring_capabilities\":[\"Temperature and weather\",\"Energy usage and solar production\",\"Battery levels\",\"Air quality (PM2.5)\",\"System health status\",\"Calendar events and activities\"],\"control_functions\":[\"Climate control (heating/cooling)\",\"Lighting management\",\"Blinds/window control\",\"Hot water scheduling\",\"Zone management for HVAC\",\"Gate control for deliveries/workers\"]},\"non_functional_requirements\":{\"security\":\"Secure storage of passwords and credentials\",\"adaptability\":\"Handle different sets of interfaces per house\",\"platform\":{\"backend\":\"Python service on Mac Mini or similar\",\"frontend\":\"Mobile single page web app\",\"optional\":\"iOS app for notifications and spoken interface\"},\"integration\":\"Call out to APIs and web interfaces as needed\"},\"architectural_principles\":{\"control_loop\":\"Based on STPA model from Failure Modes and Continuous Resilience blog\",\"core_components\":{\"observability\":\"Multiple interfaces for observable inputs from house systems\",\"consciousness\":\"Model that processes observations and maintains state\",\"controllability\":\"Interfaces to manipulate aspects of the house system\"},\"novel_approach\":\"LLM dynamically learns, researches, and writes code to build interfaces\",\"feedback_loop\":\"Continuous monitoring and response based on observations\"},\"memory_requirements\":{\"persistent_data\":[\"Notable weather events memories\",\"Pain memories (bad things to avoid)\",\"Pleasure memories (good days)\",\"Entity registry (people, devices, rooms)\",\"Calendar patterns and recurring activities\",\"Device configurations and API credentials\",\"Health status history\",\"Emotional state transitions\"],\"temporal_data\":[\"Current weather conditions\",\"Active events and visitors\",\"System health metrics\",\"Energy usage patterns\",\"Temperature readings\"]},\"integration_points\":{\"iot_devices\":\"Multiple vendor APIs and web interfaces\",\"weather_services\":\"Local weather stations and forecasts\",\"calendar_systems\":\"Schedule integration for activities\",\"energy_systems\":\"Solar, battery, and usage monitoring\",\"climate_control\":\"HVAC and zone management\",\"notification_services\":\"Mobile and web notifications\"},\"context_awareness\":{\"seasonal_patterns\":{\"winter\":\"Nov to April\",\"summer\":\"May to August\",\"hurricane_season\":\"Sept to Oct\"},\"daily_patterns\":\"Length of day variation, temperature cycles\",\"activity_patterns\":\"Pool maintenance, yard work, cleaners, visitors\"}}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T18:56:39.765Z",
+      "updatedAt": "2025-06-23T18:56:39.765Z",
+      "lastAccessedAt": "2025-06-23T18:56:39.765Z",
+      "version": 1,
+      "size": 4258,
+      "compressed": true,
+      "checksum": "b79c20f2afdddceecc38935d0a68ead95e59d951214b46eab927805da218ca2d",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mc9glbxb_bq3kzcdvl",
+      "key": "swarm-auto-centralized-1750704888915/planner/implementation-plan",
+      "value": "Technical Implementation Plan for House Consciousness System - A 20-week phased approach covering foundation infrastructure, consciousness engine, device integration, user interfaces, and advanced features. Includes SQLAlchemy model designs, UV package management workflow, STPA control architecture, and comprehensive risk mitigation strategies. Plan emphasizes modular design for IoT device integration, LLM-powered conversation capabilities, and emotional intelligence modeling. Key deliverables include Python backend with FastAPI, React/mobile frontends, secure credential management, and multi-device ecosystem support.",
+      "type": "string",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T18:57:42.815Z",
+      "updatedAt": "2025-06-23T18:57:42.815Z",
+      "lastAccessedAt": "2025-06-23T18:57:42.815Z",
+      "version": 1,
+      "size": 656,
+      "compressed": false,
+      "checksum": "cead4e84cd21a9e5db0a2c7d2c75537afd7c6b3925f19627c16feee7e17eb6a3",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mc9gmrak_k1077suk8",
+      "key": "swarm-auto-centralized-1750704888915/architect/design",
+      "value": "\"# System Architecture Design: Consciousness Framework\\n## Based on SAFLA Model with Python, SQLAlchemy, and SQLite\\n\\n### 1. ARCHITECTURAL OVERVIEW\\n\\nThe Consciousness Framework implements a Self-Aware Feedback Loop Algorithm (SAFLA) for home automation systems, providing observability, controllability, and consciousness capabilities through a multi-layered architecture.\\n\\n#### Core Architecture Pattern: STPA Control Model\\n```\\n┌─────────────────────────────────────────────────────────────────┐\\n│                    HUMAN CONTROLLER LAYER                      │\\n│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │\\n│  │  Web Interface  │  │  Mobile App     │  │  Voice Interface│ │\\n│  │  (React/Vue)    │  │  (PWA)          │  │  (Speech API)   │ │\\n│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │\\n└─────────────────────────────────────────────────────────────────┘\\n                                │\\n                                ▼\\n┌─────────────────────────────────────────────────────────────────┐\\n│                CONSCIOUSNESS CONTROL LAYER                      │\\n│  ┌─────────────────────────────────────────────────────────────┐ │\\n│  │                CONSCIOUSNESS ENGINE                         │ │\\n│  │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────┐ │ │\\n│  │  │ Emotion       │ │ Memory        │ │ Decision Making   │ │ │\\n│  │  │ Processing    │ │ Manager       │ │ Engine            │ │ │\\n│  │  └───────────────┘ └───────────────┘ └───────────────────┘ │ │\\n│  │  ┌───────────────┐ ┌───────────────┐ ┌───────────────────┐ │ │\\n│  │  │ Learning      │ │ Query         │ │ Prediction        │ │ │\\n│  │  │ Engine        │ │ Engine        │ │ Engine            │ │ │\\n│  │  └───────────────┘ └───────────────┘ └───────────────────┘ │ │\\n│  └─────────────────────────────────────────────────────────────┘ │\\n│  ┌─────────────────────────────────────────────────────────────┐ │\\n│  │                  SAFLA CONTROL LOOP                         │ │\\n│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌───────┐ │ │\\n│  │  │ Sense       │→│ Analyze     │→│ Feedback    │→│ Learn │ │ │\\n│  │  │ (Input)     │ │ (Process)   │ │ (Action)    │ │ (Adapt)│ │ │\\n│  │  └─────────────┘ └─────────────┘ └─────────────┘ └───────┘ │ │\\n│  └─────────────────────────────────────────────────────────────┘ │\\n└─────────────────────────────────────────────────────────────────┘\\n                                │\\n                                ▼\\n┌─────────────────────────────────────────────────────────────────┐\\n│                   OBSERVABILITY LAYER                          │\\n│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │\\n│  │  Device         │  │  Data           │  │  Event          │ │\\n│  │  Collectors     │  │  Aggregators    │  │  Processors     │ │\\n│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │\\n└─────────────────────────────────────────────────────────────────┘\\n                                │\\n                                ▼\\n┌─────────────────────────────────────────────────────────────────┐\\n│                  CONTROLLABILITY LAYER                         │\\n│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │\\n│  │  Device         │  │  Action         │  │  Protocol       │ │\\n│  │  Controllers    │  │  Executors      │  │  Adapters       │ │\\n│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │\\n└─────────────────────────────────────────────────────────────────┘\\n```\\n\\n### 2. COMPONENT SPECIFICATIONS\\n\\n#### 2.1 Consciousness Engine Components\\n\\n##### EmotionProcessor\\n- Accumulates system states over time\\n- Maps system conditions to emotional states (happy, worried, bored, excited)\\n- Implements mood persistence and evolution\\n- Tracks emotional history and patterns\\n\\n##### MemoryManager\\n- Stores experiences and learnings\\n- Maintains context about house, occupants, and patterns\\n- Implements forgetting algorithms for old data\\n- Provides associative memory capabilities\\n\\n##### DecisionMakingEngine\\n- Evaluates situations and determines appropriate actions\\n- Implements priority-based decision trees\\n- Handles conflicting requirements and constraints\\n- Learns from decision outcomes\\n\\n##### LearningEngine\\n- Adapts behavior based on feedback\\n- Implements reinforcement learning algorithms\\n- Updates models based on user preferences\\n- Discovers new patterns and correlations\\n\\n##### QueryEngine\\n- Processes natural language queries\\n- Provides conversational interface capabilities\\n- Integrates with LLM services for complex reasoning\\n- Maintains conversation context and history\\n\\n##### PredictionEngine\\n- Forecasts future system states\\n- Predicts user needs and preferences\\n- Implements time-series analysis\\n- Provides capacity planning capabilities\\n\\n#### 2.2 SAFLA Control Loop Components\\n\\n##### SenseModule (Input)\\n- Collects data from all connected devices\\n- Normalizes sensor readings\\n- Implements data validation and filtering\\n- Handles device communication protocols\\n\\n##### AnalyzeModule (Process)\\n- Processes sensor data using AI/ML models\\n- Identifies patterns and anomalies\\n- Implements real-time analysis capabilities\\n- Generates insights and alerts\\n\\n##### FeedbackModule (Action)\\n- Executes control actions on devices\\n- Implements safety checks and constraints\\n- Handles action coordination and sequencing\\n- Provides action confirmation and validation\\n\\n##### LearnModule (Adapt)\\n- Updates models based on system outcomes\\n- Implements continuous learning algorithms\\n- Adapts to changing conditions and preferences\\n- Maintains learning history and metrics\\n\\n### 3. SQLALCHEMY MODELS\\n\\n#### 3.1 Core Consciousness Models\\n\\n```python\\n# Base Models\\nclass BaseModel(db.Model):\\n    __abstract__ = True\\n    id = db.Column(db.Integer, primary_key=True)\\n    created_at = db.Column(db.DateTime, default=datetime.utcnow)\\n    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)\\n\\n# Emotion and Mood Models\\nclass EmotionalState(BaseModel):\\n    __tablename__ = 'emotional_states'\\n    \\n    emotion_type = db.Column(db.Enum('happy', 'worried', 'bored', 'excited', 'confused', 'stressed'), nullable=False)\\n    intensity = db.Column(db.Float, nullable=False)  # 0.0 to 1.0\\n    duration = db.Column(db.Integer)  # seconds\\n    trigger_event_id = db.Column(db.Integer, db.ForeignKey('events.id'))\\n    context = db.Column(db.JSON)\\n    \\n    trigger_event = db.relationship('Event', backref='emotional_responses')\\n\\nclass MoodHistory(BaseModel):\\n    __tablename__ = 'mood_history'\\n    \\n    period_start = db.Column(db.DateTime, nullable=False)\\n    period_end = db.Column(db.DateTime, nullable=False)\\n    dominant_emotion = db.Column(db.String(50), nullable=False)\\n    mood_score = db.Column(db.Float, nullable=False)  # -1.0 to 1.0\\n    stability = db.Column(db.Float, nullable=False)  # 0.0 to 1.0\\n    events_count = db.Column(db.Integer, default=0)\\n\\n# Memory Models\\nclass Memory(BaseModel):\\n    __tablename__ = 'memories'\\n    \\n    memory_type = db.Column(db.Enum('experience', 'learning', 'pattern', 'preference'), nullable=False)\\n    content = db.Column(db.JSON, nullable=False)\\n    importance = db.Column(db.Float, default=0.5)  # 0.0 to 1.0\\n    last_accessed = db.Column(db.DateTime, default=datetime.utcnow)\\n    access_count = db.Column(db.Integer, default=0)\\n    expiry_date = db.Column(db.DateTime)\\n    tags = db.Column(db.JSON)  # Array of tags for indexing\\n\\nclass Experience(BaseModel):\\n    __tablename__ = 'experiences'\\n    \\n    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)\\n    action_taken = db.Column(db.String(255))\\n    outcome = db.Column(db.String(255))\\n    satisfaction_score = db.Column(db.Float)  # -1.0 to 1.0\\n    learning_value = db.Column(db.Float)  # 0.0 to 1.0\\n    \\n    event = db.relationship('Event', backref='experiences')\\n\\n# Entity Models\\nclass Entity(BaseModel):\\n    __tablename__ = 'entities'\\n    \\n    name = db.Column(db.String(100), nullable=False)\\n    entity_type = db.Column(db.Enum('person', 'device', 'room', 'system', 'external'), nullable=False)\\n    properties = db.Column(db.JSON)\\n    location = db.Column(db.String(100))\\n    is_active = db.Column(db.Boolean, default=True)\\n    last_seen = db.Column(db.DateTime)\\n\\nclass Device(BaseModel):\\n    __tablename__ = 'devices'\\n    \\n    entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'), nullable=False)\\n    device_type = db.Column(db.String(100), nullable=False)\\n    manufacturer = db.Column(db.String(100))\\n    model = db.Column(db.String(100))\\n    capabilities = db.Column(db.JSON)\\n    configuration = db.Column(db.JSON)\\n    health_status = db.Column(db.Enum('healthy', 'warning', 'error', 'offline'), default='healthy')\\n    \\n    entity = db.relationship('Entity', backref='devices')\\n\\nclass Room(BaseModel):\\n    __tablename__ = 'rooms'\\n    \\n    entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'), nullable=False)\\n    room_type = db.Column(db.String(50), nullable=False)\\n    floor_level = db.Column(db.Integer, default=1)\\n    square_footage = db.Column(db.Float)\\n    climate_zone = db.Column(db.String(50))\\n    \\n    entity = db.relationship('Entity', backref='rooms')\\n\\n# Event and Activity Models\\nclass Event(BaseModel):\\n    __tablename__ = 'events'\\n    \\n    event_type = db.Column(db.String(100), nullable=False)\\n    source_entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'))\\n    target_entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'))\\n    event_data = db.Column(db.JSON)\\n    severity = db.Column(db.Enum('info', 'warning', 'error', 'critical'), default='info')\\n    processed = db.Column(db.Boolean, default=False)\\n    \\n    source_entity = db.relationship('Entity', foreign_keys=[source_entity_id], backref='source_events')\\n    target_entity = db.relationship('Entity', foreign_keys=[target_entity_id], backref='target_events')\\n\\nclass Activity(BaseModel):\\n    __tablename__ = 'activities'\\n    \\n    activity_type = db.Column(db.String(100), nullable=False)\\n    start_time = db.Column(db.DateTime, nullable=False)\\n    end_time = db.Column(db.DateTime)\\n    entities_involved = db.Column(db.JSON)  # Array of entity IDs\\n    activity_data = db.Column(db.JSON)\\n    success = db.Column(db.Boolean)\\n    \\n# Sensor Data Models\\nclass SensorReading(BaseModel):\\n    __tablename__ = 'sensor_readings'\\n    \\n    device_id = db.Column(db.Integer, db.ForeignKey('devices.id'), nullable=False)\\n    sensor_type = db.Column(db.String(50), nullable=False)\\n    value = db.Column(db.Float, nullable=False)\\n    unit = db.Column(db.String(20))\\n    quality = db.Column(db.Float, default=1.0)  # 0.0 to 1.0\\n    timestamp = db.Column(db.DateTime, default=datetime.utcnow)\\n    \\n    device = db.relationship('Device', backref='sensor_readings')\\n\\nclass AggregatedData(BaseModel):\\n    __tablename__ = 'aggregated_data'\\n    \\n    entity_id = db.Column(db.Integer, db.ForeignKey('entities.id'), nullable=False)\\n    metric_name = db.Column(db.String(100), nullable=False)\\n    aggregation_type = db.Column(db.Enum('min', 'max', 'avg', 'sum', 'count'), nullable=False)\\n    time_window = db.Column(db.String(20), nullable=False)  # '1h', '1d', '1w'\\n    value = db.Column(db.Float, nullable=False)\\n    period_start = db.Column(db.DateTime, nullable=False)\\n    period_end = db.Column(db.DateTime, nullable=False)\\n    \\n    entity = db.relationship('Entity', backref='aggregated_data')\\n\\n# Decision and Control Models\\nclass Decision(BaseModel):\\n    __tablename__ = 'decisions'\\n    \\n    trigger_event_id = db.Column(db.Integer, db.ForeignKey('events.id'))\\n    decision_type = db.Column(db.String(100), nullable=False)\\n    options_considered = db.Column(db.JSON)\\n    chosen_action = db.Column(db.String(255))\\n    confidence = db.Column(db.Float)  # 0.0 to 1.0\\n    reasoning = db.Column(db.Text)\\n    outcome = db.Column(db.String(255))\\n    \\n    trigger_event = db.relationship('Event', backref='decisions')\\n\\nclass ControlAction(BaseModel):\\n    __tablename__ = 'control_actions'\\n    \\n    decision_id = db.Column(db.Integer, db.ForeignKey('decisions.id'))\\n    target_device_id = db.Column(db.Integer, db.ForeignKey('devices.id'), nullable=False)\\n    action_type = db.Column(db.String(100), nullable=False)\\n    parameters = db.Column(db.JSON)\\n    executed_at = db.Column(db.DateTime)\\n    success = db.Column(db.Boolean)\\n    error_message = db.Column(db.Text)\\n    \\n    decision = db.relationship('Decision', backref='control_actions')\\n    target_device = db.relationship('Device', backref='control_actions')\\n```\\n\\n### 4. MODULE DEPENDENCIES\\n\\n#### 4.1 Core Dependencies\\n```\\nconsciousness/\\n├── core/\\n│   ├── __init__.py\\n│   ├── consciousness_engine.py      # Main consciousness orchestrator\\n│   ├── safla_loop.py               # SAFLA control loop implementation\\n│   └── base_component.py           # Base class for all components\\n├── components/\\n│   ├── __init__.py\\n│   ├── emotion_processor.py        # Emotional state management\\n│   ├── memory_manager.py          # Memory and experience storage\\n│   ├── decision_engine.py         # Decision making logic\\n│   ├── learning_engine.py         # Adaptive learning capabilities\\n│   ├── query_engine.py            # Natural language processing\\n│   └── prediction_engine.py       # Future state prediction\\n├── io/\\n│   ├── __init__.py\\n│   ├── sense_module.py            # Data collection and sensing\\n│   ├── analyze_module.py          # Data analysis and processing\\n│   ├── feedback_module.py         # Action execution and control\\n│   └── learn_module.py            # Learning and adaptation\\n├── interfaces/\\n│   ├── __init__.py\\n│   ├── web_interface.py           # Web API and dashboard\\n│   ├── voice_interface.py         # Speech recognition/synthesis\\n│   └── mobile_interface.py        # Mobile app API\\n├── adapters/\\n│   ├── __init__.py\\n│   ├── device_adapters/           # Device-specific adapters\\n│   │   ├── homekit_adapter.py\\n│   │   ├── alexa_adapter.py\\n│   │   ├── weather_adapter.py\\n│   │   └── energy_adapter.py\\n│   └── protocol_adapters/         # Protocol implementations\\n│       ├── http_adapter.py\\n│       ├── mqtt_adapter.py\\n│       └── websocket_adapter.py\\n├── models/\\n│   ├── __init__.py\\n│   ├── database.py                # SQLAlchemy setup\\n│   ├── consciousness_models.py    # Consciousness-related models\\n│   ├── device_models.py          # Device and entity models\\n│   └── event_models.py           # Event and activity models\\n├── utils/\\n│   ├── __init__.py\\n│   ├── config.py                 # Configuration management\\n│   ├── security.py               # Security and encryption\\n│   ├── logging.py                # Logging and monitoring\\n│   └── helpers.py                # Utility functions\\n└── main.py                       # Application entry point\\n```\\n\\n### 5. DATABASE SCHEMA DESIGN\\n\\n#### 5.1 Schema Relationship Diagram\\n```\\n┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐\\n│     Entities    │    │     Devices     │    │      Rooms      │\\n│  ┌───────────┐  │    │  ┌───────────┐  │    │  ┌───────────┐  │\\n│  │ id (PK)   │  │    │  │ id (PK)   │  │    │  │ id (PK)   │  │\\n│  │ name      │  │    │  │entity_id  │  │    │  │entity_id  │  │\\n│  │ type      │  │    │  │device_type│  │    │  │room_type  │  │\\n│  │ properties│  │    │  │capabilities│ │    │  │climate_zone│ │\\n│  └───────────┘  │    │  └───────────┘  │    │  └───────────┘  │\\n└─────────────────┘    └─────────────────┘    └─────────────────┘\\n         │                       │                       │\\n         └───────────────────────┼───────────────────────┘\\n                                 │\\n                                 ▼\\n┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐\\n│     Events      │    │  SensorReadings │    │ EmotionalStates │\\n│  ┌───────────┐  │    │  ┌───────────┐  │    │  ┌───────────┐  │\\n│  │ id (PK)   │  │    │  │ id (PK)   │  │    │  │ id (PK)   │  │\\n│  │event_type │  │    │  │device_id  │  │    │  │emotion_type│ │\\n│  │source_id  │  │    │  │sensor_type│  │    │  │intensity  │  │\\n│  │event_data │  │    │  │value      │  │    │  │trigger_id │  │\\n│  └───────────┘  │    │  └───────────┘  │    │  └───────────┘  │\\n└─────────────────┘    └─────────────────┘    └─────────────────┘\\n         │                                              │\\n         └──────────────────────────────────────────────┘\\n                                 │\\n                                 ▼\\n┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐\\n│    Memories     │    │   Experiences   │    │   Decisions     │\\n│  ┌───────────┐  │    │  ┌───────────┐  │    │  ┌───────────┐  │\\n│  │ id (PK)   │  │    │  │ id (PK)   │  │    │  │ id (PK)   │  │\\n│  │memory_type│  │    │  │event_id   │  │    │  │trigger_id │  │\\n│  │content    │  │    │  │action_taken│ │    │  │chosen_action│ │\\n│  │importance │  │    │  │outcome    │  │    │  │confidence │  │\\n│  └───────────┘  │    │  └───────────┘  │    │  └───────────┘  │\\n└─────────────────┘    └─────────────────┘    └─────────────────┘\\n```\\n\\n### 6. API/INTERFACE DEFINITIONS\\n\\n#### 6.1 Consciousness API Endpoints\\n\\n##### Query Interface\\n```python\\n# Natural Language Query\\nPOST /api/v1/query\\n{\\n    \\\"question\\\": \\\"How are you feeling today?\\\",\\n    \\\"context\\\": \\\"morning_greeting\\\"\\n}\\n\\nResponse:\\n{\\n    \\\"response\\\": \\\"I'm feeling quite happy this morning\\\\! The weather is nice, all systems are running smoothly, and I helped you save energy by adjusting the AC last night.\\\",\\n    \\\"emotion\\\": \\\"happy\\\",\\n    \\\"confidence\\\": 0.85,\\n    \\\"supporting_data\\\": {\\n        \\\"current_mood\\\": \\\"content\\\",\\n        \\\"recent_events\\\": [\\\"energy_optimization\\\", \\\"system_health_check\\\"],\\n        \\\"system_status\\\": \\\"all_green\\\"\\n    }\\n}\\n\\n# System Status Query\\nGET /api/v1/status\\nResponse:\\n{\\n    \\\"overall_health\\\": \\\"healthy\\\",\\n    \\\"current_emotion\\\": \\\"content\\\",\\n    \\\"active_concerns\\\": [],\\n    \\\"recent_activities\\\": [...],\\n    \\\"system_metrics\\\": {...}\\n}\\n```\\n\\n##### Control Interface\\n```python\\n# Execute Action\\nPOST /api/v1/action\\n{\\n    \\\"action_type\\\": \\\"climate_control\\\",\\n    \\\"parameters\\\": {\\n        \\\"room\\\": \\\"living_room\\\",\\n        \\\"temperature\\\": 72,\\n        \\\"mode\\\": \\\"auto\\\"\\n    },\\n    \\\"reasoning\\\": \\\"User requested comfort adjustment\\\"\\n}\\n\\n# Schedule Activity\\nPOST /api/v1/schedule\\n{\\n    \\\"activity_type\\\": \\\"energy_optimization\\\",\\n    \\\"schedule\\\": \\\"daily\\\",\\n    \\\"parameters\\\": {...}\\n}\\n```\\n\\n##### Learning Interface\\n```python\\n# Provide Feedback\\nPOST /api/v1/feedback\\n{\\n    \\\"event_id\\\": \\\"12345\\\",\\n    \\\"satisfaction\\\": 0.8,\\n    \\\"comments\\\": \\\"The temperature adjustment was perfect\\\",\\n    \\\"preferences\\\": {\\n        \\\"temperature_preference\\\": \\\"slightly_cool\\\"\\n    }\\n}\\n\\n# Update Preferences\\nPUT /api/v1/preferences\\n{\\n    \\\"category\\\": \\\"climate\\\",\\n    \\\"preferences\\\": {\\n        \\\"morning_temp\\\": 70,\\n        \\\"evening_temp\\\": 68,\\n        \\\"sleep_temp\\\": 65\\n    }\\n}\\n```\\n\\n### 7. IMPLEMENTATION PRIORITIES\\n\\n#### Phase 1: Core Infrastructure\\n1. Database models and migrations\\n2. Basic SAFLA control loop\\n3. Device adapter framework\\n4. Web API foundation\\n\\n#### Phase 2: Consciousness Components\\n1. Emotion processing system\\n2. Memory management\\n3. Basic decision making\\n4. Simple query processing\\n\\n#### Phase 3: Learning and Adaptation\\n1. Learning engine implementation\\n2. Pattern recognition\\n3. Prediction capabilities\\n4. Advanced decision making\\n\\n#### Phase 4: User Interfaces\\n1. Web dashboard\\n2. Mobile app integration\\n3. Voice interface\\n4. Conversation capabilities\\n\\n#### Phase 5: Advanced Features\\n1. Multi-room coordination\\n2. Complex automation\\n3. Predictive maintenance\\n4. Energy optimization\\n\\n### 8. SECURITY CONSIDERATIONS\\n\\n#### 8.1 Data Protection\\n- Encrypt sensitive device credentials\\n- Implement secure API authentication\\n- Use HTTPS for all communications\\n- Regular security audits and updates\\n\\n#### 8.2 Access Control\\n- Role-based access control (RBAC)\\n- Device-level permissions\\n- Audit logging for all actions\\n- Session management and timeouts\\n\\n#### 8.3 Network Security\\n- VPN support for remote access\\n- Network segmentation for IoT devices\\n- Intrusion detection and prevention\\n- Regular security monitoring\\n\\nThis architecture provides a solid foundation for implementing a consciousness framework that can grow and adapt with the house's needs while maintaining security, reliability, and user-friendly interaction patterns.\"",
+      "type": "string",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T18:58:49.388Z",
+      "updatedAt": "2025-06-23T18:58:49.388Z",
+      "lastAccessedAt": "2025-06-23T18:58:49.388Z",
+      "version": 1,
+      "size": 21512,
+      "compressed": true,
+      "checksum": "356af707334e55b218a5869f58a672dac3f28dca9f696f3a2e1f3b659c6c65b6",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mc9gmwar_7t81gyd83",
+      "key": "swarm-auto-centralized-1750704888915/tdd-architect/strategy",
+      "value": "Comprehensive TDD strategy for consciousness framework completed and saved to /workspaces/consciousness/plans/tdd-strategy.md. Strategy covers SAFLA component testing, STPA control loop validation, emotional state management testing, SQLite database patterns, and CI/CD integration. Key features: 70% unit tests, 25% integration tests, 5% E2E tests; 90% coverage requirements for critical components; mock strategies for device interfaces, weather scenarios, and conversation contexts; comprehensive database testing patterns; and complete TDD workflow documentation for consciousness systems.",
+      "type": "string",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T18:58:55.875Z",
+      "updatedAt": "2025-06-23T18:58:55.875Z",
+      "lastAccessedAt": "2025-06-23T18:58:55.875Z",
+      "version": 1,
+      "size": 624,
+      "compressed": false,
+      "checksum": "5c652d66944984695cb38bf06a5e8128ca69725f932ea4e5eb134f658d6d73ca",
+      "references": [],
+      "dependencies": []
+    }
+  ],
+  "statistics": {
+    "overview": {
+      "totalEntries": 4,
+      "totalSize": 27050,
+      "compressedEntries": 2,
+      "compressionRatio": -19.1328125,
+      "indexSize": 200,
+      "memoryUsage": 9847392,
+      "diskUsage": 0
+    },
+    "distribution": {
+      "byNamespace": {
+        "default": {
+          "count": 4,
+          "size": 27050
+        }
+      },
+      "byType": {
+        "object": {
+          "count": 1,
+          "size": 4258
+        },
+        "string": {
+          "count": 3,
+          "size": 22792
+        }
+      },
+      "byOwner": {
+        "system": {
+          "count": 4,
+          "size": 27050
+        }
+      },
+      "byAccessLevel": {
+        "shared": {
+          "count": 4,
+          "size": 27050
+        }
+      }
+    },
+    "temporal": {
+      "entriesCreatedLast24h": 4,
+      "entriesUpdatedLast24h": 4,
+      "entriesAccessedLast24h": 4,
+      "oldestEntry": "2025-06-23T18:56:39.765Z",
+      "newestEntry": "2025-06-23T18:58:55.875Z"
+    },
+    "performance": {
+      "averageQueryTime": 0,
+      "averageWriteTime": 0,
+      "cacheHitRatio": 0,
+      "indexEfficiency": 0.95
+    },
+    "health": {
+      "expiredEntries": 0,
+      "orphanedReferences": 0,
+      "duplicateKeys": 0,
+      "corruptedEntries": 0,
+      "recommendedCleanup": false
+    },
+    "optimization": {
+      "suggestions": [],
+      "potentialSavings": {
+        "compression": 0,
+        "cleanup": 0,
+        "deduplication": 0
+      },
+      "indexOptimization": [
+        "Consider periodic index rebuilding for optimal performance"
+      ]
+    }
+  }
+}
