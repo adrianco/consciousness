@@ -101,38 +101,111 @@ sudo systemctl status consciousness
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and configure the following variables:
+Copy `.env.example` to `.env` and configure the following key variables:
 
 ```bash
-# Database Configuration
-DATABASE_URL=sqlite:///./consciousness.db
-# Or use PostgreSQL: postgresql://user:password@localhost/consciousness
+# =============================================================================
+# REQUIRED SETTINGS - Configure these first
+# =============================================================================
 
-# API Configuration
-API_HOST=0.0.0.0
-API_PORT=8000
-DEBUG=false
+# Application environment and debugging
+ENVIRONMENT=production                    # development, staging, production
+DEBUG=false                              # Set to true for development
+API_HOST=0.0.0.0                        # Host for API server
+API_PORT=8000                            # Port for API server
 
-# Security
-SECRET_KEY=your-secret-key-here
-ALLOWED_HOSTS=localhost,127.0.0.1,your-domain.com
+# Database configuration
+DATABASE_URL=sqlite+aiosqlite:///./data/consciousness.db
+# For PostgreSQL: postgresql+asyncpg://user:password@localhost/consciousness
 
-# Device Discovery
-ENABLE_BLUETOOTH=true
-ENABLE_MDNS=true
-ENABLE_UPNP=true
-ENABLE_ZIGBEE=false
+# Security keys (CHANGE THESE!)
+SECRET_KEY=your-super-secret-key-here-change-this-in-production
+JWT_SECRET_KEY=your-jwt-secret-key-here-change-this
+ENCRYPTION_KEY=your-32-character-encryption-key-here
 
-# OpenAI Configuration (for advanced AI features)
-OPENAI_API_KEY=your-openai-key-here
+# =============================================================================
+# DEVICE DISCOVERY - Configure based on your home setup
+# =============================================================================
 
-# Monitoring
-ENABLE_PROMETHEUS=true
-PROMETHEUS_PORT=9090
+ENABLE_BLUETOOTH=true                    # For smart sensors, fitness trackers
+ENABLE_MDNS=true                        # For Apple devices, Chromecast
+ENABLE_UPNP=true                        # For media servers, smart TVs
+ENABLE_ZIGBEE=false                     # Enable if you have Zigbee hub
 
-# Logging
-LOG_LEVEL=INFO
-LOG_FILE=./logs/consciousness.log
+# =============================================================================
+# AI SERVICES - Add your API keys for advanced features
+# =============================================================================
+
+OPENAI_API_KEY=your-openai-api-key-here
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
+
+# =============================================================================
+# EXTERNAL INTEGRATIONS (Optional)
+# =============================================================================
+
+WEATHER_API_KEY=your-weather-api-key-here
+ENERGY_PROVIDER_API_KEY=your-energy-api-key-here
+HOMEKIT_PIN=123-45-678                  # Format: XXX-XX-XXX
+
+# =============================================================================
+# MONITORING AND LOGGING
+# =============================================================================
+
+ENABLE_PROMETHEUS=true                  # Enable metrics collection
+PROMETHEUS_PORT=9090                    # Prometheus metrics port
+LOG_LEVEL=INFO                         # DEBUG, INFO, WARNING, ERROR, CRITICAL
+LOG_FILE=logs/consciousness.log        # Log file location
+
+# =============================================================================
+# CONSCIOUSNESS ENGINE BEHAVIOR
+# =============================================================================
+
+EMOTION_UPDATE_INTERVAL=300             # How often to update emotional state (seconds)
+MEMORY_RETENTION_DAYS=365              # How long to keep memories (days)
+LEARNING_RATE=0.01                     # Learning rate for adaptive behaviors (0.0-1.0)
+PREDICTION_HORIZON_HOURS=24            # How far ahead to predict scenarios (hours)
+```
+
+**Complete configuration options:** See `.env.example` for all available settings including SSL, backup, notifications, and advanced security options.
+
+### Configuration Setup Guide
+
+**1. Essential Setup (Required)**
+```bash
+cp .env.example .env
+nano .env  # Edit the file
+
+# Change these security keys:
+SECRET_KEY=generate-a-secure-random-32-character-key
+JWT_SECRET_KEY=generate-another-secure-random-key
+ENCRYPTION_KEY=exactly-32-character-encryption-key
+```
+
+**2. Database Options**
+- **SQLite (Default)**: No additional setup required
+- **PostgreSQL**: Install PostgreSQL and update `DATABASE_URL`
+
+**3. Device Discovery Setup**
+- **Bluetooth**: Requires system Bluetooth support (`sudo apt install bluetooth bluez`)
+- **mDNS**: Works automatically on most networks
+- **UPnP**: Automatic discovery for compatible devices
+- **Zigbee**: Requires Zigbee coordinator hardware
+
+**4. AI Service Setup**
+- **OpenAI**: Sign up at https://platform.openai.com for API key
+- **Anthropic**: Sign up at https://console.anthropic.com for Claude API
+
+**5. External Integrations**
+- **Weather API**: Use OpenWeatherMap, WeatherAPI, or similar service
+- **Energy Provider**: Check if your utility offers API access
+- **HomeKit**: Generate a random PIN in XXX-XX-XXX format
+
+**6. Production Security**
+```bash
+# Generate secure keys:
+openssl rand -base64 32  # For SECRET_KEY
+openssl rand -base64 32  # For JWT_SECRET_KEY
+openssl rand -hex 16     # For ENCRYPTION_KEY (32 chars)
 ```
 
 ### Network Configuration
