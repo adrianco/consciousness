@@ -5,7 +5,7 @@
   "objective": "push all the code changes to github so it can be installed elsewhere, then run simulation tests",
   "agentStatus": {
     "git-manager": "pending",
-    "test-specialist": "pending", 
+    "test-specialist": "pending",
     "installation-validator": "pending",
     "coordinator": "pending"
   },
@@ -17,7 +17,7 @@
     "remoteRepository": "https://github.com/adrianco/consciousness",
     "simulationTests": [
       "test_safla_simple.py",
-      "test_safla_integration.py", 
+      "test_safla_integration.py",
       "test_device_interview_flow.py"
     ],
     "majorChanges": [

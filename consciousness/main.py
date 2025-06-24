@@ -2,11 +2,14 @@
 Main FastAPI application for the House Consciousness System.
 """
 
+import os
 from contextlib import asynccontextmanager
 from datetime import datetime
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from .health import health_checker
 
@@ -38,14 +41,37 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount static files
+static_path = os.path.join(os.path.dirname(__file__), "static")
+if os.path.exists(static_path):
+    app.mount("/static", StaticFiles(directory=static_path), name="static")
+
 
 @app.get("/")
 async def root():
-    """Root endpoint."""
+    """Serve the web interface."""
+    static_path = os.path.join(os.path.dirname(__file__), "static", "index.html")
+    if os.path.exists(static_path):
+        with open(static_path, "r") as f:
+            return HTMLResponse(content=f.read())
+    else:
+        return {
+            "message": "House Consciousness System",
+            "version": "1.0.0",
+            "status": "active",
+            "web_interface": "Install complete system to access web interface",
+        }
+
+
+@app.get("/api")
+async def api_root():
+    """API root endpoint."""
     return {
-        "message": "House Consciousness System",
+        "message": "House Consciousness System API",
         "version": "1.0.0",
         "status": "active",
+        "docs": "/docs",
+        "web_interface": "/",
     }
 
 
