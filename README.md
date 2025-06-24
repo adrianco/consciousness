@@ -5,7 +5,7 @@ June 22, 2025 - wrote this README file and saved two old blog posts into referen
 
 June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude4 which is ideal, then hit limits and dropped back to Claude 3.7 for the more detailed production of plans. Project setup, database implementation and conciousness engine coded.
 
-June 24, 2025 - Modified plans to include digital twin and simulator. Told claude-flow to finish building the project.
+June 24, 2025 - Modified plans to include digital twin and simulator. Told claude-flow to finish building the project and pushed code. Created INSTALLATION and USER guides. Still have no idea whether this works at all... Now trying to get it setup and running to see.
 
 ## Observability and Introspection System
 
