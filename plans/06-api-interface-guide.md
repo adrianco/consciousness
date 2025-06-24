@@ -4,21 +4,25 @@
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [RESTful API Endpoints](#restful-api-endpoints)
-4. [WebSocket Implementation](#websocket-implementation)
-5. [Authentication & Security](#authentication--security)
-6. [API Documentation](#api-documentation)
-7. [Error Handling](#error-handling)
-8. [Rate Limiting & Performance](#rate-limiting--performance)
-9. [Implementation Examples](#implementation-examples)
+4. [Digital Twin API Endpoints](#digital-twin-api-endpoints)
+5. [Scenario & Prediction APIs](#scenario--prediction-apis)
+6. [WebSocket Implementation](#websocket-implementation)
+7. [Authentication & Security](#authentication--security)
+8. [API Documentation](#api-documentation)
+9. [Error Handling](#error-handling)
+10. [Rate Limiting & Performance](#rate-limiting--performance)
+11. [Implementation Examples](#implementation-examples)
 
 ## Overview
 
-This guide outlines the comprehensive API interface design for the consciousness system, enabling natural language interaction, device orchestration, and real-time communication with IoT networks.
+This guide outlines the comprehensive API interface design for the consciousness system, enabling natural language interaction, device orchestration, digital twin management, and real-time communication with IoT networks.
 
 ### Key Features
 - RESTful endpoints for consciousness queries and device control
-- WebSocket connections for real-time updates
-- Natural language processing integration
+- Digital twin management and synchronization APIs
+- Scenario testing and prediction endpoints
+- WebSocket connections for real-time updates including twin synchronization
+- Natural language processing integration with twin insights
 - Secure authentication and authorization
 - Comprehensive error handling and monitoring
 
@@ -40,6 +44,10 @@ This guide outlines the comprehensive API interface design for the consciousness
 │  ┌─────────────┐  ┌─────────────┐  ┌───────────────────┐  │
 │  │Consciousness│  │   Device    │  │      SAFLA        │  │
 │  │   Service   │  │  Manager    │  │   Orchestrator    │  │
+│  └─────────────┘  └─────────────┘  └───────────────────┘  │
+│  ┌─────────────┐  ┌─────────────┐  ┌───────────────────┐  │
+│  │Digital Twin │  │  Scenario   │  │   Prediction      │  │
+│  │   Manager   │  │   Engine    │  │     Engine        │  │
 │  └─────────────┘  └─────────────┘  └───────────────────┘  │
 ├─────────────────────────────────────────────────────────────┤
 │                    Data Layer                                │
@@ -660,6 +668,160 @@ Manually trigger a SAFLA loop iteration.
     "trigger_id": "trigger_12345",
     "status": "initiated",
     "estimated_completion": 5000
+  }
+}
+```
+
+## Digital Twin API Endpoints
+
+### Twin Management
+
+#### GET /api/v1/twins
+List all digital twins in the system.
+
+```json
+{
+  "endpoint": "GET /api/v1/twins",
+  "query_params": {
+    "device_id": "device_123",
+    "sync_status": "synchronized",
+    "fidelity_level": "advanced"
+  },
+  "response": {
+    "twins": [
+      {
+        "id": "twin_001",
+        "device_id": "device_123",
+        "name": "Living Room Light Twin",
+        "type": "hue_light",
+        "fidelity_level": "advanced",
+        "sync_status": "synchronized",
+        "last_sync": "2024-01-20T10:30:00Z",
+        "divergence_score": 0.02,
+        "capabilities": ["prediction", "scenario_testing", "physics_modeling"]
+      }
+    ],
+    "total": 15,
+    "synchronized": 14,
+    "out_of_sync": 1
+  }
+}
+```
+
+#### POST /api/v1/twins
+Create a new digital twin for a device.
+
+```json
+{
+  "endpoint": "POST /api/v1/twins",
+  "request": {
+    "device_id": "device_456",
+    "fidelity_level": "expert",
+    "config": {
+      "sync_frequency": 30,
+      "enable_predictions": true,
+      "enable_scenarios": true,
+      "physics_modeling": true,
+      "learning_enabled": true
+    }
+  },
+  "response": {
+    "twin_id": "twin_002",
+    "status": "created",
+    "sync_status": "initializing",
+    "estimated_ready_time": "2024-01-20T10:35:00Z",
+    "capabilities": [
+      "real_time_sync",
+      "predictive_modeling",
+      "scenario_simulation",
+      "physics_based_modeling",
+      "behavioral_learning"
+    ]
+  }
+}
+```
+
+## Scenario & Prediction APIs
+
+### Scenario Testing
+
+#### POST /api/v1/scenarios
+Create and run a scenario simulation.
+
+```json
+{
+  "endpoint": "POST /api/v1/scenarios",
+  "request": {
+    "name": "power_outage_evening",
+    "description": "30-minute power outage during evening hours",
+    "duration": 1800,
+    "events": [
+      {
+        "time": 0,
+        "type": "power_loss",
+        "affected_circuits": ["main"]
+      },
+      {
+        "time": 1800,
+        "type": "power_restore",
+        "affected_circuits": ["main"]
+      }
+    ],
+    "twin_ids": ["twin_001", "twin_002", "twin_003"]
+  },
+  "response": {
+    "scenario_id": "scenario_123",
+    "status": "running",
+    "estimated_completion": "2024-01-20T10:35:00Z",
+    "affected_twins": 3,
+    "simulation_rate": 10.0
+  }
+}
+```
+
+### Prediction APIs
+
+#### POST /api/v1/predictions/what-if
+Run what-if analysis using digital twins.
+
+```json
+{
+  "endpoint": "POST /api/v1/predictions/what-if",
+  "request": {
+    "scenario": "thermostat_setback",
+    "changes": {
+      "device_456": {
+        "target_temperature": 18
+      }
+    },
+    "duration": "8h",
+    "metrics": ["energy_consumption", "comfort_score", "cost_savings"]
+  },
+  "response": {
+    "analysis_id": "analysis_789",
+    "status": "completed",
+    "results": {
+      "energy_consumption": {
+        "baseline": 12.5,
+        "predicted": 9.8,
+        "savings": 2.7,
+        "savings_percent": 21.6
+      },
+      "comfort_score": {
+        "baseline": 0.85,
+        "predicted": 0.72,
+        "impact": -0.13
+      },
+      "cost_savings": {
+        "amount": 0.54,
+        "currency": "USD",
+        "period": "8h"
+      }
+    },
+    "recommendations": [
+      "Consider gradual temperature reduction to minimize comfort impact",
+      "Optimal setback time appears to be 6 hours based on occupancy patterns"
+    ]
   }
 }
 ```

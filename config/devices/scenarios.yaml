@@ -1,0 +1,174 @@
+# Simulation Scenarios
+scenarios:
+  morning_routine:
+    description: Typical morning routine simulation
+    duration: 3600  # 1 hour in seconds
+    events:
+      - time: 0
+        device: bedroom_lights
+        action: turn_on
+        brightness: 30
+      - time: 300
+        device: smart_thermostat
+        action: set_temperature
+        temperature: 22
+      - time: 600
+        device: kitchen_lights
+        action: turn_on
+        brightness: 80
+      - time: 900
+        device: bedroom_lights
+        action: turn_off
+      - time: 1800
+        device: smart_lock
+        action: unlock
+      - time: 1820
+        device: smart_lock
+        action: lock
+      - time: 3300
+        device: kitchen_lights
+        action: turn_off
+    weather:
+      condition: clear
+      temperature: 15
+      humidity: 60
+    time_of_day: morning
+    occupancy:
+      - person1
+    initial_states:
+      bedroom_lights:
+        power: false
+        brightness: 0
+      smart_thermostat:
+        temperature: 18
+        mode: heat
+      smart_lock:
+        locked: true
+      kitchen_lights:
+        power: false
+
+  evening_routine:
+    description: Evening relaxation and security routine
+    duration: 7200  # 2 hours in seconds
+    events:
+      - time: 0
+        device: living_room_lights
+        action: turn_on
+        brightness: 80
+      - time: 1800
+        device: living_room_lights
+        action: set_brightness
+        brightness: 40
+      - time: 3600
+        device: smart_thermostat
+        action: set_temperature
+        temperature: 20
+      - time: 6000
+        device: living_room_lights
+        action: turn_off
+      - time: 6300
+        device: smart_lock
+        action: verify_locked
+    weather:
+      condition: cloudy
+      temperature: 8
+      humidity: 70
+    time_of_day: evening
+    occupancy:
+      - person1
+      - person2
+    initial_states:
+      living_room_lights:
+        power: false
+      smart_thermostat:
+        temperature: 22
+        mode: auto
+      smart_lock:
+        locked: false
+
+  security_test:
+    description: Security system testing scenario
+    duration: 1800  # 30 minutes
+    events:
+      - time: 0
+        device: smart_lock
+        action: lock
+      - time: 300
+        device: smart_lock
+        action: unlock
+      - time: 310
+        device: smart_lock
+        action: lock
+      - time: 600
+        device: bedroom_sensor
+        action: simulate_motion
+      - time: 900
+        device: smart_lock
+        action: verify_locked
+      - time: 1200
+        device: smart_lock
+        action: unlock
+      - time: 1500
+        device: smart_lock
+        action: lock
+    weather:
+      condition: night
+      temperature: 12
+      humidity: 65
+    time_of_day: night
+    occupancy: []
+    initial_states:
+      smart_lock:
+        locked: false
+      bedroom_sensor:
+        motion: false
+
+  energy_optimization:
+    description: Energy optimization testing scenario
+    duration: 14400  # 4 hours
+    events:
+      - time: 0
+        device: living_room_lights
+        action: turn_on
+        brightness: 100
+      - time: 1800
+        device: living_room_lights
+        action: set_brightness
+        brightness: 50
+      - time: 3600
+        device: kitchen_lights
+        action: turn_on
+        brightness: 75
+      - time: 5400
+        device: smart_thermostat
+        action: set_temperature
+        temperature: 18
+      - time: 7200
+        device: living_room_lights
+        action: turn_off
+      - time: 9000
+        device: kitchen_lights
+        action: set_brightness
+        brightness: 25
+      - time: 10800
+        device: smart_thermostat
+        action: set_temperature
+        temperature: 22
+      - time: 12600
+        device: kitchen_lights
+        action: turn_off
+    weather:
+      condition: overcast
+      temperature: 10
+      humidity: 80
+    time_of_day: day
+    occupancy:
+      - person1
+    initial_states:
+      living_room_lights:
+        power: false
+      kitchen_lights:
+        power: false
+      smart_thermostat:
+        temperature: 20
+        mode: auto

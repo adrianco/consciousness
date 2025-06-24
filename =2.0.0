@@ -1,0 +1,23 @@
+Collecting pydantic
+  Downloading pydantic-2.11.7-py3-none-any.whl.metadata (67 kB)
+Collecting pydantic-settings
+  Downloading pydantic_settings-2.10.0-py3-none-any.whl.metadata (3.4 kB)
+Collecting annotated-types>=0.6.0 (from pydantic)
+  Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.33.2 (from pydantic)
+  Downloading pydantic_core-2.33.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.8 kB)
+Requirement already satisfied: typing-extensions>=4.12.2 in /home/codespace/.local/lib/python3.12/site-packages (from pydantic) (4.13.2)
+Collecting typing-inspection>=0.4.0 (from pydantic)
+  Downloading typing_inspection-0.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting python-dotenv>=0.21.0 (from pydantic-settings)
+  Downloading python_dotenv-1.1.0-py3-none-any.whl.metadata (24 kB)
+Downloading pydantic-2.11.7-py3-none-any.whl (444 kB)
+Downloading pydantic_core-2.33.2-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.0/2.0 MB 13.6 MB/s eta 0:00:00
+Downloading pydantic_settings-2.10.0-py3-none-any.whl (45 kB)
+Downloading annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading python_dotenv-1.1.0-py3-none-any.whl (20 kB)
+Downloading typing_inspection-0.4.1-py3-none-any.whl (14 kB)
+Installing collected packages: typing-inspection, python-dotenv, pydantic-core, annotated-types, pydantic, pydantic-settings
+
+Successfully installed annotated-types-0.7.0 pydantic-2.11.7 pydantic-core-2.33.2 pydantic-settings-2.10.0 python-dotenv-1.1.0 typing-inspection-0.4.1

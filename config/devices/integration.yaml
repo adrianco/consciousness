@@ -1,0 +1,27 @@
+# Device Integration Settings
+mode: real  # Options: real, simulated, hybrid
+discovery_enabled: true
+discovery_protocols:
+  - mdns
+  - dhcp
+  - upnp
+  - bluetooth
+
+# Simulation settings
+simulation_mode: realistic  # Options: realistic, fast, debug
+auto_populate_devices: true
+sync_interval_seconds: 30
+
+# Hybrid mode settings
+hybrid_simulate_devices: []  # List of device names to simulate in hybrid mode
+hybrid_fallback_to_simulation: true
+
+# Performance settings
+max_concurrent_connections: 50
+connection_timeout_seconds: 10
+retry_attempts: 3
+
+# Logging
+debug_mode: false
+log_device_events: true
+log_state_changes: false

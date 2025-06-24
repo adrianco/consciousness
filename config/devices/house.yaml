@@ -1,0 +1,51 @@
+# House Configuration
+name: Smart Home Demo
+address: 123 Smart Street
+timezone: America/New_York
+
+rooms:
+  - name: Living Room
+    devices:
+      - living_room_lights
+      - smart_tv
+      - living_room_thermostat
+    automation_rules: []
+    environmental_factors:
+      natural_light: true
+      traffic: medium
+      size: large
+
+  - name: Bedroom
+    devices:
+      - bedroom_lights
+      - bedroom_sensor
+    automation_rules: []
+    environmental_factors:
+      natural_light: false
+      privacy: high
+      size: medium
+
+  - name: Kitchen
+    devices:
+      - kitchen_lights
+      - smart_fridge
+    automation_rules: []
+    environmental_factors:
+      humidity: high
+      temperature_variance: high
+      size: medium
+
+  - name: Front Door
+    devices:
+      - smart_lock
+      - doorbell_camera
+    automation_rules: []
+    environmental_factors:
+      security: high
+      weather_exposure: high
+
+global_automation: []
+security_settings:
+  armed_delay: 30
+  disarmed_delay: 10
+  alarm_timeout: 300

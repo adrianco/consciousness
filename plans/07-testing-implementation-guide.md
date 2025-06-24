@@ -4,40 +4,48 @@
 1. [Overview](#overview)
 2. [Testing Architecture](#testing-architecture)
 3. [Unit Testing](#unit-testing)
-4. [Integration Testing](#integration-testing)
-5. [End-to-End Testing](#end-to-end-testing)
-6. [Performance Testing](#performance-testing)
-7. [Security Testing](#security-testing)
-8. [API Testing](#api-testing)
-9. [WebSocket Testing](#websocket-testing)
-10. [Test Data Management](#test-data-management)
-11. [Continuous Integration](#continuous-integration)
-12. [Monitoring & Reporting](#monitoring--reporting)
+4. [Digital Twin Testing](#digital-twin-testing)
+5. [Scenario Testing](#scenario-testing)
+6. [Integration Testing](#integration-testing)
+7. [End-to-End Testing](#end-to-end-testing)
+8. [Performance Testing](#performance-testing)
+9. [Security Testing](#security-testing)
+10. [API Testing](#api-testing)
+11. [WebSocket Testing](#websocket-testing)
+12. [Test Data Management](#test-data-management)
+13. [Continuous Integration](#continuous-integration)
+14. [Monitoring & Reporting](#monitoring--reporting)
 
 ## Overview
 
-This guide outlines a comprehensive testing strategy for the consciousness system, ensuring reliability, performance, and security across all components including consciousness queries, device orchestration, SAFLA loops, and real-time communication.
+This guide outlines a comprehensive testing strategy for the consciousness system, ensuring reliability, performance, and security across all components including consciousness queries, device orchestration, SAFLA loops, digital twin synchronization, scenario testing, and real-time communication.
 
 ### Testing Pyramid
 
 ```
-                    ┌─────────────────────┐
-                    │   E2E Tests (5%)    │
-                    │ - User journeys     │
-                    │ - System scenarios  │
-                    └─────────────────────┘
-                ┌─────────────────────────────┐
-                │  Integration Tests (20%)    │
-                │ - API endpoints             │
-                │ - Service interactions      │
-                │ - SAFLA loops              │
-                └─────────────────────────────┘
-        ┌─────────────────────────────────────────┐
-        │        Unit Tests (75%)                 │
-        │ - Individual components                 │
-        │ - Pure functions                        │
-        │ - Business logic                        │
-        └─────────────────────────────────────────┘
+                        ┌─────────────────────┐
+                        │   E2E Tests (5%)    │
+                        │ - User journeys     │
+                        │ - System scenarios  │
+                        └─────────────────────┘
+                    ┌─────────────────────────────┐
+                    │  Integration Tests (15%)    │
+                    │ - API endpoints             │
+                    │ - Service interactions      │
+                    │ - SAFLA loops              │
+                    └─────────────────────────────┘
+                ┌─────────────────────────────────────┐
+                │    Digital Twin Tests (10%)        │
+                │ - Twin synchronization              │
+                │ - Scenario validation              │
+                │ - Prediction accuracy              │
+                └─────────────────────────────────────┘
+        ┌─────────────────────────────────────────────────┐
+        │           Unit Tests (70%)                      │
+        │ - Individual components                         │
+        │ - Pure functions                                │
+        │ - Business logic                                │
+        └─────────────────────────────────────────────────┘
 ```
 
 ## Testing Architecture
@@ -49,34 +57,47 @@ tests/
 ├── unit/                   # Unit tests
 │   ├── consciousness/
 │   ├── devices/
+│   ├── digital_twin/       # Twin component units
 │   ├── interview/          # Interview system units
 │   ├── discovery/          # Auto-discovery units
 │   ├── safla/
 │   └── utils/
+├── twin/                   # Digital twin specific tests
+│   ├── synchronization/    # Twin-device sync tests
+│   ├── scenarios/          # Scenario simulation tests
+│   ├── prediction/         # Prediction accuracy tests
+│   ├── physics/            # Physics model validation
+│   └── learning/           # Twin learning tests
 ├── integration/            # Integration tests
 │   ├── api/
 │   ├── interview/          # Interview flow tests
 │   ├── discovery/          # Discovery integration tests
+│   ├── twin_integration/   # Twin system integration
 │   ├── services/
 │   └── database/
 ├── e2e/                   # End-to-end tests
 │   ├── scenarios/
+│   ├── twin_workflows/     # Twin creation & management
 │   └── pages/
 ├── performance/           # Performance tests
 │   ├── load/
 │   ├── stress/
+│   ├── twin_simulation/    # Twin simulation performance
 │   └── spike/
 ├── security/              # Security tests
 │   ├── auth/
+│   ├── twin_security/      # Twin data protection tests
 │   ├── injection/
 │   └── vulnerabilities/
 ├── fixtures/              # Test data
 │   ├── devices.json
 │   ├── scenarios.json
+│   ├── twin_templates.json # Twin configuration templates
 │   └── users.json
 └── utils/                 # Test utilities
     ├── helpers.js
     ├── mocks.js
+    ├── twin_factory.js     # Twin test utilities
     └── setup.js
 ```
 
@@ -811,6 +832,524 @@ describe('Interview Flow Integration', () => {
           .post('/api/v1/interview/start')
           .send({ house_id: 1 });
       }, 100);
+    });
+  });
+});
+```
+
+## Digital Twin Testing
+
+Digital twin testing ensures accuracy of virtual device representations, synchronization fidelity, and scenario simulation reliability.
+
+### Twin Synchronization Tests
+
+```javascript
+// tests/twin/synchronization/twin-device-sync.test.js
+const { DigitalTwinManager } = require('../../../src/digital_twin/core');
+const { MockDevice } = require('../../utils/mocks');
+const { createTestTwin } = require('../../utils/twin_factory');
+
+describe('Digital Twin Synchronization', () => {
+  let twinManager;
+  let mockDevice;
+  let twin;
+
+  beforeEach(async () => {
+    twinManager = new DigitalTwinManager();
+    await twinManager.initialize();
+    
+    mockDevice = new MockDevice({
+      id: 'device_123',
+      type: 'light',
+      brand: 'Philips',
+      model: 'Hue Color A19'
+    });
+    
+    twin = await createTestTwin(mockDevice, {
+      fidelity: 'advanced',
+      syncFrequency: 1 // 1 second for testing
+    });
+  });
+
+  afterEach(async () => {
+    await twinManager.cleanup();
+  });
+
+  describe('bidirectional synchronization', () => {
+    it('should sync device state changes to twin', async () => {
+      // Arrange
+      const initialState = { on: false, brightness: 0 };
+      const newState = { on: true, brightness: 80 };
+      
+      await mockDevice.setState(initialState);
+      await twin.syncFromDevice();
+      
+      // Act
+      await mockDevice.setState(newState);
+      await twinManager.triggerSync(twin.id);
+      
+      // Assert
+      const twinState = await twin.getState();
+      expect(twinState).toMatchObject(newState);
+      expect(twin.lastSyncTime).toBeCloseTo(Date.now(), -2);
+    });
+
+    it('should sync twin state changes to device safely', async () => {
+      // Arrange
+      const safeChanges = { brightness: 50 };
+      const unsafeChanges = { brightness: 200 }; // Over limit
+      
+      // Act - Safe changes
+      const safeResult = await twin.updateState(safeChanges);
+      await twinManager.syncToDevice(twin.id);
+      
+      // Assert - Safe changes applied
+      expect(safeResult.safe).toBe(true);
+      const deviceState = await mockDevice.getState();
+      expect(deviceState.brightness).toBe(50);
+      
+      // Act - Unsafe changes
+      const unsafeResult = await twin.updateState(unsafeChanges);
+      
+      // Assert - Unsafe changes blocked
+      expect(unsafeResult.safe).toBe(false);
+      expect(unsafeResult.reason).toContain('safety constraint');
+    });
+
+    it('should detect and resolve synchronization conflicts', async () => {
+      // Arrange - Simulate simultaneous changes
+      const deviceChange = { brightness: 30 };
+      const twinChange = { brightness: 70 };
+      
+      // Act - Create conflict
+      await mockDevice.setState(deviceChange);
+      await twin.updateState(twinChange);
+      
+      // Trigger conflict resolution
+      const resolution = await twinManager.resolveConflict(twin.id);
+      
+      // Assert - Device wins by default
+      expect(resolution.strategy).toBe('device_wins');
+      expect(resolution.finalState.brightness).toBe(30);
+      
+      const twinState = await twin.getState();
+      expect(twinState.brightness).toBe(30);
+    });
+  });
+
+  describe('synchronization performance', () => {
+    it('should maintain sync latency under 100ms', async () => {
+      const stateChanges = Array.from({ length: 10 }, (_, i) => ({
+        brightness: i * 10
+      }));
+      
+      const latencies = [];
+      
+      for (const change of stateChanges) {
+        const startTime = Date.now();
+        await mockDevice.setState(change);
+        await twinManager.triggerSync(twin.id);
+        const endTime = Date.now();
+        
+        latencies.push(endTime - startTime);
+      }
+      
+      const avgLatency = latencies.reduce((a, b) => a + b, 0) / latencies.length;
+      expect(avgLatency).toBeLessThan(100);
+    });
+
+    it('should handle high-frequency updates without data loss', async () => {
+      const updateCount = 50;
+      const updateInterval = 10; // 10ms
+      
+      // Generate rapid updates
+      const updates = [];
+      for (let i = 0; i < updateCount; i++) {
+        setTimeout(async () => {
+          const state = { brightness: i * 2 };
+          await mockDevice.setState(state);
+          updates.push(state);
+        }, i * updateInterval);
+      }
+      
+      // Wait for all updates
+      await new Promise(resolve => setTimeout(resolve, updateCount * updateInterval + 100));
+      
+      // Verify final state consistency
+      await twinManager.triggerSync(twin.id);
+      const finalTwinState = await twin.getState();
+      const finalDeviceState = await mockDevice.getState();
+      
+      expect(finalTwinState.brightness).toBe(finalDeviceState.brightness);
+    });
+  });
+});
+```
+
+### Scenario Testing
+
+```javascript
+// tests/twin/scenarios/scenario-simulation.test.js
+const { ScenarioEngine } = require('../../../src/simulators/scenario_engine');
+const { createTestHouse } = require('../../utils/test_house_factory');
+
+describe('Scenario Simulation Testing', () => {
+  let scenarioEngine;
+  let testHouse;
+
+  beforeEach(async () => {
+    testHouse = await createTestHouse({
+      rooms: ['living_room', 'bedroom', 'kitchen'],
+      devices: {
+        'living_room': ['hue_light', 'nest_thermostat'],
+        'bedroom': ['hue_light', 'motion_sensor'],
+        'kitchen': ['smart_switch', 'temperature_sensor']
+      }
+    });
+    
+    scenarioEngine = new ScenarioEngine(testHouse.twinManager);
+  });
+
+  describe('power outage scenarios', () => {
+    it('should accurately simulate 30-minute power outage', async () => {
+      // Arrange
+      const scenario = {
+        name: 'power_outage_30min',
+        duration: 30 * 60 * 1000, // 30 minutes
+        events: [
+          { time: 0, type: 'power_loss', circuits: ['main'] },
+          { time: 1800000, type: 'power_restore', circuits: ['main'] } // 30 min
+        ]
+      };
+      
+      // Act
+      const result = await scenarioEngine.runScenario(scenario);
+      
+      // Assert
+      expect(result.success).toBe(true);
+      expect(result.duration).toBeCloseTo(30 * 60 * 1000, -3);
+      
+      // Check device states during outage
+      const outageStates = result.timeline.filter(t => 
+        t.time > 0 && t.time < 1800000
+      );
+      
+      outageStates.forEach(state => {
+        state.devices.forEach(device => {
+          if (!device.hasBattery) {
+            expect(device.state.powered).toBe(false);
+          }
+        });
+      });
+      
+      // Check restoration
+      const finalState = result.timeline[result.timeline.length - 1];
+      finalState.devices.forEach(device => {
+        expect(device.state.powered).toBe(true);
+      });
+    });
+
+    it('should test emergency response protocols', async () => {
+      const scenario = {
+        name: 'security_emergency',
+        events: [
+          { time: 0, type: 'motion_detected', location: 'living_room', level: 'high' },
+          { time: 5000, type: 'door_sensor_triggered', location: 'front_door' },
+          { time: 10000, type: 'alarm_activation' }
+        ]
+      };
+      
+      const result = await scenarioEngine.runScenario(scenario);
+      
+      expect(result.responses).toContainEqual(
+        expect.objectContaining({
+          type: 'security_alert',
+          triggered: true,
+          response_time: expect.any(Number)
+        })
+      );
+      
+      expect(result.responses).toContainEqual(
+        expect.objectContaining({
+          type: 'emergency_lighting',
+          activated: true
+        })
+      );
+    });
+  });
+
+  describe('environmental scenarios', () => {
+    it('should simulate extreme temperature events', async () => {
+      const scenario = {
+        name: 'heatwave_simulation',
+        duration: 24 * 60 * 60 * 1000, // 24 hours
+        environmental: {
+          external_temperature: {
+            initial: 35, // 35°C
+            peak: 42,    // 42°C at noon
+            pattern: 'daily_cycle'
+          }
+        }
+      };
+      
+      const result = await scenarioEngine.runScenario(scenario);
+      
+      // Check HVAC response
+      const hvacOperations = result.timeline.filter(t => 
+        t.devices.some(d => d.type === 'thermostat' && d.state.cooling)
+      );
+      
+      expect(hvacOperations.length).toBeGreaterThan(0);
+      
+      // Check energy consumption patterns
+      const energyUsage = result.metrics.energy_consumption;
+      expect(energyUsage.peak).toBeGreaterThan(energyUsage.baseline * 1.5);
+    });
+  });
+
+  describe('occupancy scenarios', () => {
+    it('should simulate vacation mode optimization', async () => {
+      const scenario = {
+        name: 'vacation_7_days',
+        duration: 7 * 24 * 60 * 60 * 1000, // 7 days
+        occupancy: {
+          pattern: 'away',
+          start_time: 0,
+          simulation_lighting: true, // Simulate presence
+          temperature_setback: 5 // 5°C setback
+        }
+      };
+      
+      const result = await scenarioEngine.runScenario(scenario);
+      
+      // Check energy savings
+      const baselineEnergy = await scenarioEngine.getBaselineEnergyUsage(7);
+      const vacationEnergy = result.metrics.energy_consumption.total;
+      const savings = (baselineEnergy - vacationEnergy) / baselineEnergy;
+      
+      expect(savings).toBeGreaterThan(0.15); // At least 15% savings
+      
+      // Check presence simulation
+      const lightingEvents = result.timeline.filter(t =>
+        t.events.some(e => e.type === 'light_state_change')
+      );
+      
+      expect(lightingEvents.length).toBeGreaterThan(10); // Some activity
+    });
+  });
+});
+```
+
+### Prediction Accuracy Tests
+
+```javascript
+// tests/twin/prediction/prediction-accuracy.test.js
+const { PredictionEngine } = require('../../../src/digital_twin/prediction');
+const { HistoricalDataGenerator } = require('../../utils/historical_data');
+
+describe('Twin Prediction Accuracy', () => {
+  let predictionEngine;
+  let historicalData;
+
+  beforeEach(async () => {
+    predictionEngine = new PredictionEngine();
+    historicalData = new HistoricalDataGenerator();
+  });
+
+  describe('energy consumption predictions', () => {
+    it('should predict daily energy usage within 10% accuracy', async () => {
+      // Arrange - Generate 30 days of historical data
+      const trainingData = await historicalData.generate({
+        type: 'energy_consumption',
+        days: 30,
+        pattern: 'seasonal',
+        deviceTypes: ['lighting', 'hvac', 'appliances']
+      });
+      
+      await predictionEngine.train(trainingData);
+      
+      // Act - Predict next 7 days
+      const predictions = await predictionEngine.predict({
+        horizon: 7 * 24, // 7 days in hours
+        confidence_interval: 0.95
+      });
+      
+      // Generate actual data for comparison
+      const actualData = await historicalData.generate({
+        type: 'energy_consumption',
+        days: 7,
+        pattern: 'seasonal',
+        deviceTypes: ['lighting', 'hvac', 'appliances'],
+        seed: 'validation_set'
+      });
+      
+      // Assert accuracy
+      const accuracyResults = [];
+      for (let i = 0; i < predictions.length; i++) {
+        const predicted = predictions[i].value;
+        const actual = actualData[i].value;
+        const error = Math.abs(predicted - actual) / actual;
+        accuracyResults.push(error);
+      }
+      
+      const avgError = accuracyResults.reduce((a, b) => a + b, 0) / accuracyResults.length;
+      expect(avgError).toBeLessThan(0.1); // Less than 10% error
+    });
+
+    it('should provide confidence intervals for predictions', async () => {
+      const predictions = await predictionEngine.predict({
+        horizon: 24,
+        confidence_interval: 0.95
+      });
+      
+      predictions.forEach(prediction => {
+        expect(prediction).toHaveProperty('value');
+        expect(prediction).toHaveProperty('confidence_lower');
+        expect(prediction).toHaveProperty('confidence_upper');
+        expect(prediction.confidence_lower).toBeLessThan(prediction.value);
+        expect(prediction.confidence_upper).toBeGreaterThan(prediction.value);
+      });
+    });
+  });
+
+  describe('device failure predictions', () => {
+    it('should predict device failures with 90% precision', async () => {
+      // Arrange - Historical data with known failures
+      const deviceData = await historicalData.generateWithFailures({
+        devices: 100,
+        timespan_days: 365,
+        failure_rate: 0.05 // 5% annual failure rate
+      });
+      
+      await predictionEngine.trainFailureModel(deviceData);
+      
+      // Act - Predict failures for test set
+      const testDevices = deviceData.slice(-20); // Last 20 devices
+      const predictions = await predictionEngine.predictFailures(testDevices, {
+        horizon_days: 30
+      });
+      
+      // Assert precision
+      const truePositives = predictions.filter(p => 
+        p.predicted_failure && p.actual_failure
+      ).length;
+      const falsePositives = predictions.filter(p => 
+        p.predicted_failure && !p.actual_failure
+      ).length;
+      
+      const precision = truePositives / (truePositives + falsePositives);
+      expect(precision).toBeGreaterThan(0.9);
+    });
+  });
+});
+```
+
+### Physics Model Validation
+
+```javascript
+// tests/twin/physics/thermal-model.test.js
+const { ThermalModel } = require('../../../src/digital_twin/physics/thermal');
+const { MockEnvironment } = require('../../utils/mocks');
+
+describe('Thermal Physics Model', () => {
+  let thermalModel;
+  let mockEnv;
+
+  beforeEach(() => {
+    thermalModel = new ThermalModel({
+      thermal_mass: 50000, // J/K
+      insulation_r_value: 20, // m²·K/W
+      volume: 150 // m³
+    });
+    
+    mockEnv = new MockEnvironment({
+      external_temperature: 15, // °C
+      humidity: 50,
+      wind_speed: 2 // m/s
+    });
+  });
+
+  describe('heat transfer calculations', () => {
+    it('should accurately model heat loss through walls', async () => {
+      // Arrange
+      const internal_temp = 20; // °C
+      const external_temp = 10; // °C
+      const wall_area = 100; // m²
+      const u_value = 0.3; // W/m²K
+      
+      // Act
+      const heatLoss = thermalModel.calculateHeatLoss({
+        internal_temp,
+        external_temp,
+        wall_area,
+        u_value
+      });
+      
+      // Assert - Q = U × A × ΔT
+      const expected = u_value * wall_area * (internal_temp - external_temp);
+      expect(heatLoss).toBeCloseTo(expected, 1);
+    });
+
+    it('should model thermal inertia correctly', async () => {
+      // Arrange - Step change in heating
+      const heatingPower = 2000; // 2kW
+      const timeStep = 300; // 5 minutes
+      const initialTemp = 18;
+      
+      thermalModel.setTemperature(initialTemp);
+      
+      // Act - Apply heating for multiple time steps
+      const temperatures = [initialTemp];
+      for (let t = 0; t < 3600; t += timeStep) { // 1 hour
+        const temp = await thermalModel.step({
+          heating_power: heatingPower,
+          time_step: timeStep,
+          external_conditions: mockEnv.getConditions()
+        });
+        temperatures.push(temp);
+      }
+      
+      // Assert - Temperature should rise exponentially
+      expect(temperatures[1]).toBeGreaterThan(initialTemp);
+      expect(temperatures[temperatures.length - 1]).toBeGreaterThan(temperatures[1]);
+      
+      // Check for realistic heating curve (not instantaneous)
+      const tempRise = temperatures[temperatures.length - 1] - initialTemp;
+      expect(tempRise).toBeGreaterThan(2); // Some heating
+      expect(tempRise).toBeLessThan(10); // Not unrealistic
+    });
+  });
+
+  describe('multi-zone modeling', () => {
+    it('should handle inter-room heat transfer', async () => {
+      // Arrange - Two connected rooms
+      const room1 = new ThermalModel({ thermal_mass: 30000 });
+      const room2 = new ThermalModel({ thermal_mass: 40000 });
+      
+      room1.setTemperature(25); // Warm room
+      room2.setTemperature(18); // Cool room
+      
+      const connection = {
+        area: 2, // m² (doorway)
+        conductivity: 10 // W/m²K (air exchange)
+      };
+      
+      // Act - Simulate heat exchange
+      const results = await thermalModel.simulateMultiZone({
+        zones: [room1, room2],
+        connections: [connection],
+        duration: 3600, // 1 hour
+        time_step: 60 // 1 minute
+      });
+      
+      // Assert - Temperatures should converge
+      const finalTemp1 = results.zones[0].final_temperature;
+      const finalTemp2 = results.zones[1].final_temperature;
+      const tempDiff = Math.abs(finalTemp1 - finalTemp2);
+      
+      expect(tempDiff).toBeLessThan(3); // Should converge somewhat
+      expect(finalTemp1).toBeLessThan(25); // Room 1 cooled
+      expect(finalTemp2).toBeGreaterThan(18); // Room 2 warmed
     });
   });
 });
@@ -2329,10 +2868,13 @@ module.exports = { QualityGates };
 This comprehensive testing implementation guide ensures robust quality assurance for the consciousness system. The multi-layered testing approach covers all components from individual units to full system scenarios, while continuous monitoring and quality gates maintain high standards throughout the development lifecycle.
 
 Key benefits of this testing strategy:
-- **Comprehensive Coverage**: Unit, integration, E2E, performance, and security testing
+- **Comprehensive Coverage**: Unit, integration, E2E, performance, security, and digital twin testing
+- **Twin Validation**: Rigorous testing of twin synchronization, prediction accuracy, and scenario simulation
 - **Real-time Validation**: WebSocket and API testing for live system validation
+- **Physics Accuracy**: Validation of physics-based models for realistic twin behavior
 - **Automated Quality Gates**: Continuous monitoring of coverage, performance, and security thresholds
 - **Production Readiness**: Stress testing and monitoring ensure system reliability under load
 - **Security Assurance**: Multiple layers of security testing protect against vulnerabilities
+- **Scenario Coverage**: Comprehensive testing of emergency and edge-case scenarios through twin simulation
 
-The testing framework provides confidence in system reliability while enabling rapid development and deployment of consciousness system features.
+The enhanced testing framework provides confidence in both physical system reliability and digital twin accuracy, enabling rapid development and deployment of consciousness system features with validated predictive capabilities.

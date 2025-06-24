@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-23T18:58:49.393Z",
+  "timestamp": "2025-06-24T01:43:22.485Z",
   "version": "1.0",
   "entries": [
     {
@@ -14,7 +14,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-23T18:56:39.765Z",
       "updatedAt": "2025-06-23T18:56:39.765Z",
-      "lastAccessedAt": "2025-06-23T18:56:39.765Z",
+      "lastAccessedAt": "2025-06-24T01:43:22.456Z",
       "version": 1,
       "size": 4258,
       "compressed": true,
@@ -34,7 +34,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-23T18:57:42.815Z",
       "updatedAt": "2025-06-23T18:57:42.815Z",
-      "lastAccessedAt": "2025-06-23T18:57:42.815Z",
+      "lastAccessedAt": "2025-06-24T01:43:22.456Z",
       "version": 1,
       "size": 656,
       "compressed": false,
@@ -54,30 +54,70 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-23T18:58:49.388Z",
       "updatedAt": "2025-06-23T18:58:49.388Z",
-      "lastAccessedAt": "2025-06-23T18:58:49.388Z",
+      "lastAccessedAt": "2025-06-24T01:43:22.456Z",
       "version": 1,
       "size": 21512,
       "compressed": true,
       "checksum": "356af707334e55b218a5869f58a672dac3f28dca9f696f3a2e1f3b659c6c65b6",
       "references": [],
       "dependencies": []
+    },
+    {
+      "id": "entry_mc9gmwar_7t81gyd83",
+      "key": "swarm-auto-centralized-1750704888915/tdd-architect/strategy",
+      "value": "Comprehensive TDD strategy for consciousness framework completed and saved to /workspaces/consciousness/plans/tdd-strategy.md. Strategy covers SAFLA component testing, STPA control loop validation, emotional state management testing, SQLite database patterns, and CI/CD integration. Key features: 70% unit tests, 25% integration tests, 5% E2E tests; 90% coverage requirements for critical components; mock strategies for device interfaces, weather scenarios, and conversation contexts; comprehensive database testing patterns; and complete TDD workflow documentation for consciousness systems.",
+      "type": "string",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T18:58:55.875Z",
+      "updatedAt": "2025-06-23T18:58:55.875Z",
+      "lastAccessedAt": "2025-06-24T01:43:22.456Z",
+      "version": 1,
+      "size": 624,
+      "compressed": false,
+      "checksum": "5c652d66944984695cb38bf06a5e8128ca69725f932ea4e5eb134f658d6d73ca",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mc9grtu7_vrfrgcemq",
+      "key": "swarm-auto-centralized-1750704888915/tech-researcher/findings",
+      "value": "\"# Technical Stack Research Findings: Python TDD Patterns with UV and SQLAlchemy\\n\\n## UV Package Manager Best Practices\\n\\n### Setup and Configuration\\n- **Installation**: Use standalone installer for fastest setup: `curl -LsSf https://astral.sh/uv/install.sh  < /dev/null |  sh`\\n- **Project Structure**: Use `uv init` for project initialization with pyproject.toml\\n- **Virtual Environments**: UV automatically manages `.venv` in project directory\\n- **Dependencies**: Use `uv add package` for runtime deps, `uv add --dev pytest` for dev deps\\n- **Performance**: 10-100x faster than pip, with parallel downloads and global caching\\n\\n### Consciousness Framework Integration\\n```toml\\n# pyproject.toml for consciousness framework\\n[project]\\nname = \\\"consciousness-framework\\\"\\nversion = \\\"0.1.0\\\"\\nrequires-python = \\\">=3.11\\\"\\ndependencies = [\\n    \\\"sqlalchemy>=2.0.0\\\",\\n    \\\"aiosqlite>=0.19.0\\\",\\n    \\\"pydantic>=2.0.0\\\",\\n    \\\"asyncio-mqtt>=0.13.0\\\",\\n    \\\"httpx>=0.25.0\\\",\\n]\\n\\n[project.optional-dependencies]\\ndev = [\\n    \\\"pytest>=7.4.0\\\",\\n    \\\"pytest-asyncio>=0.21.0\\\",\\n    \\\"black>=23.0.0\\\",\\n    \\\"ruff>=0.1.0\\\",\\n    \\\"mypy>=1.5.0\\\",\\n]\\n```\\n\\n## SQLAlchemy ORM Patterns for Consciousness Framework\\n\\n### Architecture Patterns\\n\\n#### 1. Repository Pattern for Device Abstractions\\n```python\\nfrom abc import ABC, abstractmethod\\nfrom typing import List, Optional\\nfrom sqlalchemy.orm import Session\\n\\nclass DeviceRepository(ABC):\\n    @abstractmethod\\n    def get_by_id(self, device_id: str) -> Optional[Device]:\\n        pass\\n    \\n    @abstractmethod\\n    def get_active_devices(self) -> List[Device]:\\n        pass\\n    \\n    @abstractmethod\\n    def update_device_state(self, device_id: str, state: dict) -> None:\\n        pass\\n\\nclass SQLAlchemyDeviceRepository(DeviceRepository):\\n    def __init__(self, session: Session):\\n        self.session = session\\n    \\n    def get_by_id(self, device_id: str) -> Optional[Device]:\\n        return self.session.query(Device).filter(Device.id == device_id).first()\\n```\\n\\n#### 2. Unit of Work Pattern for Consciousness States\\n```python\\nfrom contextlib import contextmanager\\nfrom sqlalchemy.orm import sessionmaker\\n\\nclass UnitOfWork:\\n    def __init__(self, session_factory: sessionmaker):\\n        self.session_factory = session_factory\\n        \\n    @contextmanager\\n    def __enter__(self):\\n        self.session = self.session_factory()\\n        return self\\n        \\n    def __exit__(self, *args):\\n        self.session.rollback()\\n        self.session.close()\\n        \\n    def commit(self):\\n        self.session.commit()\\n```\\n\\n### Data Models for Consciousness Framework\\n\\n#### Core Entities\\n```python\\nfrom sqlalchemy import Column, String, DateTime, JSON, Float, Boolean\\nfrom sqlalchemy.ext.declarative import declarative_base\\nfrom sqlalchemy.sql import func\\n\\nBase = declarative_base()\\n\\nclass ConsciousnessState(Base):\\n    __tablename__ = 'consciousness_states'\\n    \\n    id = Column(String, primary_key=True)\\n    timestamp = Column(DateTime, default=func.now())\\n    emotional_state = Column(String)  # happy, worried, bored, excited\\n    mood_score = Column(Float)  # -1.0 to 1.0\\n    active_concerns = Column(JSON)\\n    environmental_data = Column(JSON)\\n    \\nclass Device(Base):\\n    __tablename__ = 'devices'\\n    \\n    id = Column(String, primary_key=True)\\n    name = Column(String, nullable=False)\\n    device_type = Column(String)  # thermostat, weather_station, etc.\\n    location = Column(String)\\n    is_active = Column(Boolean, default=True)\\n    last_seen = Column(DateTime, default=func.now())\\n    capabilities = Column(JSON)\\n    current_state = Column(JSON)\\n\\nclass Memory(Base):\\n    __tablename__ = 'memories'\\n    \\n    id = Column(String, primary_key=True)\\n    event_type = Column(String)  # weather_event, maintenance, visitor\\n    significance = Column(Float)  # 0.0 to 1.0\\n    description = Column(String)\\n    metadata = Column(JSON)\\n    created_at = Column(DateTime, default=func.now())\\n```\\n\\n## TDD Methodologies for Consciousness/AI Systems\\n\\n### Testing Strategy Pyramid\\n- **60% Unit Tests**: Individual component behavior (sensors, actuators, decision engines)\\n- **30% Integration Tests**: Device communication, state persistence, workflow coordination\\n- **10% End-to-End Tests**: Full consciousness loop scenarios\\n\\n### Consciousness-Specific Test Patterns\\n\\n#### 1. Behavioral Testing for Emotional States\\n```python\\nimport pytest\\nfrom consciousness.core import EmotionalProcessor\\n\\nclass TestEmotionalProcessor:\\n    def test_weather_concern_triggers_worry(self):\\n        # Arrange\\n        processor = EmotionalProcessor()\\n        weather_data = {\\\"storm_forecast\\\": True, \\\"wind_speed\\\": 45}\\n        \\n        # Act\\n        emotional_state = processor.process_environmental_input(weather_data)\\n        \\n        # Assert\\n        assert emotional_state.primary_emotion == \\\"worried\\\"\\n        assert emotional_state.intensity > 0.7\\n        assert \\\"storm preparation\\\" in emotional_state.active_concerns\\n\\n    def test_all_systems_normal_promotes_happiness(self):\\n        # Arrange\\n        processor = EmotionalProcessor()\\n        system_status = {\\n            \\\"hvac_status\\\": \\\"optimal\\\",\\n            \\\"security_status\\\": \\\"secure\\\",\\n            \\\"weather\\\": \\\"pleasant\\\"\\n        }\\n        \\n        # Act\\n        emotional_state = processor.process_system_status(system_status)\\n        \\n        # Assert\\n        assert emotional_state.primary_emotion == \\\"happy\\\"\\n        assert emotional_state.mood_trend == \\\"positive\\\"\\n```\\n\\n#### 2. Memory Formation Testing\\n```python\\nclass TestMemoryFormation:\\n    def test_significant_events_create_memories(self):\\n        # Test that hurricane warnings create lasting memories\\n        memory_system = MemorySystem()\\n        event = WeatherEvent(type=\\\"hurricane_warning\\\", severity=8)\\n        \\n        memory = memory_system.process_event(event)\\n        \\n        assert memory.significance > 0.8\\n        assert memory.event_type == \\\"weather_event\\\"\\n        assert \\\"hurricane\\\" in memory.description.lower()\\n```\\n\\n### AI System Testing Patterns\\n\\n#### 1. Mocking External Dependencies\\n```python\\n@pytest.fixture\\ndef mock_weather_api():\\n    with patch('consciousness.integrations.WeatherAPI') as mock:\\n        mock.get_current_conditions.return_value = {\\n            \\\"temperature\\\": 72,\\n            \\\"conditions\\\": \\\"sunny\\\",\\n            \\\"wind_speed\\\": 5\\n        }\\n        yield mock\\n\\ndef test_weather_integration(mock_weather_api):\\n    consciousness = ConsciousnessSystem()\\n    consciousness.update_environmental_awareness()\\n    \\n    assert consciousness.current_state.weather_awareness[\\\"temperature\\\"] == 72\\n```\\n\\n## Testing Frameworks Compatibility with UV\\n\\n### pytest Integration\\n- **Installation**: `uv add --dev pytest pytest-asyncio`\\n- **Execution**: `uv run pytest` (not `uv tool run pytest`)\\n- **Configuration**: Use pyproject.toml for pytest settings\\n\\n```toml\\n[tool.pytest.ini_options]\\ntestpaths = [\\\"tests\\\"]\\npython_files = [\\\"test_*.py\\\", \\\"*_test.py\\\"]\\npython_classes = [\\\"Test*\\\"]\\npython_functions = [\\\"test_*\\\"]\\nasyncio_mode = \\\"auto\\\"\\n```\\n\\n### Recommended Testing Stack\\n```bash\\nuv add --dev pytest pytest-asyncio pytest-mock pytest-cov\\nuv add --dev black ruff mypy\\nuv add --dev factory-boy faker  # For test data generation\\n```\\n\\n### Running Tests\\n```bash\\n# Run all tests\\nuv run pytest\\n\\n# Run with coverage\\nuv run pytest --cov=src/consciousness\\n\\n# Run specific test categories\\nuv run pytest -m \\\"unit\\\"\\nuv run pytest -m \\\"integration\\\"\\n```\\n\\n## SQLite Integration Patterns with SQLAlchemy\\n\\n### Configuration for Consciousness Framework\\n```python\\nfrom sqlalchemy import create_engine\\nfrom sqlalchemy.pool import StaticPool\\nfrom sqlalchemy.orm import sessionmaker\\n\\n# Production configuration\\nengine = create_engine(\\n    \\\"sqlite:///consciousness.db\\\",\\n    echo=False,\\n    pool_pre_ping=True,\\n    connect_args={\\n        \\\"check_same_thread\\\": False,\\n        \\\"timeout\\\": 30,\\n    }\\n)\\n\\n# Test configuration\\ntest_engine = create_engine(\\n    \\\"sqlite:///:memory:\\\",\\n    connect_args={\\\"check_same_thread\\\": False},\\n    poolclass=StaticPool,\\n    echo=True\\n)\\n\\nSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)\\n```\\n\\n### Async SQLite Support\\n```python\\nfrom sqlalchemy.ext.asyncio import create_async_engine, AsyncSession\\nfrom sqlalchemy.orm import sessionmaker\\n\\nasync_engine = create_async_engine(\\n    \\\"sqlite+aiosqlite:///consciousness.db\\\",\\n    echo=True\\n)\\n\\nAsyncSessionLocal = sessionmaker(\\n    async_engine, class_=AsyncSession, expire_on_commit=False\\n)\\n\\nasync def get_async_session():\\n    async with AsyncSessionLocal() as session:\\n        yield session\\n```\\n\\n### Database Schema Considerations\\n\\n#### Time-Series Data for Sensor Readings\\n```python\\nclass SensorReading(Base):\\n    __tablename__ = 'sensor_readings'\\n    \\n    id = Column(String, primary_key=True)\\n    device_id = Column(String, nullable=False, index=True)\\n    timestamp = Column(DateTime, default=func.now(), index=True)\\n    reading_type = Column(String, nullable=False)  # temperature, humidity, etc.\\n    value = Column(Float, nullable=False)\\n    unit = Column(String)\\n    \\n    # Composite index for efficient time-series queries\\n    __table_args__ = (\\n        Index('ix_device_timestamp', 'device_id', 'timestamp'),\\n    )\\n```\\n\\n#### Consciousness State History\\n```python\\nclass ConsciousnessHistory(Base):\\n    __tablename__ = 'consciousness_history'\\n    \\n    id = Column(String, primary_key=True)\\n    timestamp = Column(DateTime, default=func.now(), index=True)\\n    state_snapshot = Column(JSON)  # Full state at this moment\\n    trigger_event = Column(String)  # What caused this state change\\n    previous_state_id = Column(String)  # Chain of consciousness\\n```\\n\\n## SAFLA Integration Architecture\\n\\n### Self-Aware Feedback Loop with SQLAlchemy\\n```python\\nclass SAFLAEngine:\\n    def __init__(self, db_session: Session):\\n        self.session = db_session\\n        self.state_repository = ConsciousnessStateRepository(db_session)\\n        self.memory_repository = MemoryRepository(db_session)\\n    \\n    async def process_feedback_loop(self):\\n        # Sense: Gather environmental data\\n        current_observations = await self.gather_observations()\\n        \\n        # Analyze: Process against historical patterns\\n        analysis = await self.analyze_against_memory(current_observations)\\n        \\n        # Feel: Generate emotional response\\n        emotional_state = self.process_emotions(analysis)\\n        \\n        # Learn: Update memories and patterns\\n        await self.update_memories(current_observations, emotional_state)\\n        \\n        # Act: Take appropriate actions\\n        actions = await self.determine_actions(emotional_state)\\n        \\n        return actions\\n```\\n\\n## Deployment Recommendations\\n\\n### Development Environment\\n```bash\\n# Initialize project\\nuv init consciousness-framework\\ncd consciousness-framework\\n\\n# Add dependencies\\nuv add sqlalchemy aiosqlite pydantic asyncio-mqtt httpx\\nuv add --dev pytest pytest-asyncio black ruff mypy\\n\\n# Run tests\\nuv run pytest\\n```\\n\\n### Database Migration Strategy\\n```python\\nfrom alembic import command\\nfrom alembic.config import Config\\n\\ndef run_migrations():\\n    alembic_cfg = Config(\\\"alembic.ini\\\")\\n    command.upgrade(alembic_cfg, \\\"head\\\")\\n```\\n\\nThis technical stack provides a robust foundation for building the consciousness framework with modern Python tooling, efficient data persistence, and comprehensive testing strategies suitable for AI/consciousness systems.\"",
+      "type": "string",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-23T19:02:45.967Z",
+      "updatedAt": "2025-06-23T19:02:45.967Z",
+      "lastAccessedAt": "2025-06-24T01:43:22.456Z",
+      "version": 1,
+      "size": 12355,
+      "compressed": true,
+      "checksum": "76ee55adaff5d3f0246e0e0d5c3b3ca69746c468dda706232b10a4d83cdbab48",
+      "references": [],
+      "dependencies": []
     }
   ],
   "statistics": {
     "overview": {
-      "totalEntries": 3,
-      "totalSize": 26426,
-      "compressedEntries": 2,
-      "compressionRatio": -38.28353658536585,
-      "indexSize": 150,
-      "memoryUsage": 10137376,
+      "totalEntries": 5,
+      "totalSize": 39405,
+      "compressedEntries": 3,
+      "compressionRatio": -28.78515625,
+      "indexSize": 250,
+      "memoryUsage": 10264776,
       "diskUsage": 0
     },
     "distribution": {
       "byNamespace": {
         "default": {
-          "count": 3,
-          "size": 26426
+          "count": 5,
+          "size": 39405
         }
       },
       "byType": {
@@ -86,33 +126,33 @@
           "size": 4258
         },
         "string": {
-          "count": 2,
-          "size": 22168
+          "count": 4,
+          "size": 35147
         }
       },
       "byOwner": {
         "system": {
-          "count": 3,
-          "size": 26426
+          "count": 5,
+          "size": 39405
         }
       },
       "byAccessLevel": {
         "shared": {
-          "count": 3,
-          "size": 26426
+          "count": 5,
+          "size": 39405
         }
       }
     },
     "temporal": {
-      "entriesCreatedLast24h": 3,
-      "entriesUpdatedLast24h": 3,
-      "entriesAccessedLast24h": 3,
+      "entriesCreatedLast24h": 5,
+      "entriesUpdatedLast24h": 5,
+      "entriesAccessedLast24h": 5,
       "oldestEntry": "2025-06-23T18:56:39.765Z",
-      "newestEntry": "2025-06-23T18:58:49.388Z"
+      "newestEntry": "2025-06-23T19:02:45.967Z"
     },
     "performance": {
       "averageQueryTime": 0,
-      "averageWriteTime": 3,
+      "averageWriteTime": 0,
       "cacheHitRatio": 0,
       "indexEfficiency": 0.95
     },

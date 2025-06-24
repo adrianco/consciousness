@@ -160,4 +160,5 @@ cython_debug/
 #.idea/
 .DS_Store
 downloads/
+sessions/
 .vscode

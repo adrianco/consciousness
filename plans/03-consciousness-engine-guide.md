@@ -5,14 +5,16 @@ This guide provides comprehensive implementation of the consciousness engine - t
 
 ## Architecture Overview
 
-The consciousness engine implements the principle that **"consciousness is human observability"** through six core components:
+The consciousness engine implements the principle that **"consciousness is human observability"** through eight enhanced core components:
 
 1. **EmotionProcessor** - Manages emotional states and transitions
 2. **MemoryManager** - Handles memory formation, storage, and retrieval
-3. **DecisionMakingEngine** - Processes decisions with reasoning
-4. **LearningEngine** - Adapts behavior through experience
-5. **QueryEngine** - Processes natural language interactions
-6. **PredictionEngine** - Anticipates future states and needs
+3. **DecisionMakingEngine** - Processes decisions with reasoning enhanced by twin insights
+4. **LearningEngine** - Adapts behavior through experience and simulation
+5. **QueryEngine** - Processes natural language interactions with predictive capabilities
+6. **PredictionEngine** - Anticipates future states using digital twin data
+7. **DigitalTwinManager** - Manages virtual device representations and simulations
+8. **ScenarioEngine** - Orchestrates complex testing and prediction scenarios
 
 ## Phase 1: Core Engine Implementation
 
@@ -30,6 +32,8 @@ from .decision_engine import DecisionMakingEngine
 from .learning_engine import LearningEngine
 from .query_engine import QueryEngine
 from .prediction_engine import PredictionEngine
+from ..digital_twin.core import DigitalTwinManager
+from ..simulators.manager import ScenarioEngine
 from ..models.consciousness import ConsciousnessSession
 from ..database import get_async_session
 
@@ -48,6 +52,9 @@ class ConsciousnessEngine:
         self.learning_engine: Optional[LearningEngine] = None
         self.query_engine: Optional[QueryEngine] = None
         self.prediction_engine: Optional[PredictionEngine] = None
+        # Enhanced with digital twin capabilities
+        self.twin_manager: Optional[DigitalTwinManager] = None
+        self.scenario_engine: Optional[ScenarioEngine] = None
         
         # State tracking
         self.current_state = {
@@ -77,6 +84,12 @@ class ConsciousnessEngine:
             self.learning_engine = LearningEngine(session)
             self.query_engine = QueryEngine(session)
             self.prediction_engine = PredictionEngine(session)
+            # Initialize digital twin components
+            self.twin_manager = DigitalTwinManager()
+            self.scenario_engine = ScenarioEngine(self.twin_manager)
+            
+            # Initialize digital twin manager
+            await self.twin_manager.initialize()
             
             # Load initial state
             await self._load_initial_state(session)
@@ -105,6 +118,14 @@ class ConsciousnessEngine:
     async def stop(self):
         """Stop the consciousness engine gracefully."""
         self.is_active = False
+        
+        # Stop digital twin manager
+        if self.twin_manager:
+            await self.twin_manager.stop()
+            
+        # Stop scenario engine
+        if self.scenario_engine:
+            await self.scenario_engine.stop()
         
         async with get_async_session() as session:
             await self._finalize_session(session)
@@ -135,35 +156,57 @@ class ConsciousnessEngine:
             learning_updates = await self.learning_engine.process_learning_updates()
             self.metrics['learning_updates'] += learning_updates
             
-            # 5. Generate predictions for future states
-            predictions = await self.prediction_engine.generate_predictions()
+            # 5. Generate predictions using digital twins
+            predictions = await self.prediction_engine.generate_predictions_with_twins(
+                self.twin_manager
+            )
             self.metrics['predictions_made'] += len(predictions)
             
-            # 6. Update performance metrics
+            # 6. Sync digital twins with physical devices
+            if self.twin_manager:
+                await self.twin_manager.sync_all_twins()
+            
+            # 7. Update performance metrics
             await self._update_performance_metrics()
             
             self.metrics['events_processed'] += 1
     
     async def process_query(self, query: str, context: Dict[str, Any] = None) -> Dict[str, Any]:
-        """Process a natural language query."""
+        """Process a natural language query with digital twin insights."""
         if not self.is_active:
             return {"error": "Consciousness engine not active"}
         
         async with get_async_session() as session:
             self.query_engine.session = session
-            response = await self.query_engine.process_query(query, context or {})
+            
+            # Enhance context with digital twin data
+            enhanced_context = context or {}
+            if self.twin_manager:
+                twin_insights = await self.twin_manager.get_insights_for_query(query)
+                enhanced_context['digital_twin_insights'] = twin_insights
+                
+            response = await self.query_engine.process_query_with_twins(
+                query, enhanced_context, self.twin_manager
+            )
             self.metrics['queries_answered'] += 1
             return response
     
     async def get_status(self) -> Dict[str, Any]:
-        """Get current consciousness status."""
-        return {
+        """Get current consciousness status with digital twin information."""
+        status = {
             'session_id': self.session_id,
             'is_active': self.is_active,
             'current_state': self.current_state,
             'metrics': self.metrics,
             'uptime': datetime.utcnow().isoformat()
         }
+        
+        # Add digital twin status if available
+        if self.twin_manager:
+            twin_status = await self.twin_manager.get_system_status()
+            status['digital_twins'] = twin_status
+            
+        return status
     
     async def _load_initial_state(self, session: AsyncSession):
         """Load initial consciousness state from database."""
@@ -1159,13 +1202,267 @@ async def test_natural_language_query():
         assert response['query_type'] == 'emotional_state'
         assert 'happy' in response['response'].lower()
         assert 'feeling' in response['response'].lower()
+
+@pytest.mark.asyncio
+async def test_consciousness_with_digital_twins():
+    """Test consciousness engine with digital twin integration."""
+    with patch('consciousness.database.get_async_session') as mock_session:
+        engine = ConsciousnessEngine()
+        
+        # Mock digital twin manager
+        mock_twin_manager = AsyncMock()
+        mock_twin_manager.get_insights_for_query = AsyncMock(return_value={
+            'predicted_temperature_change': -2.5,
+            'energy_impact': 'moderate',
+            'comfort_impact': 'low'
+        })
+        engine.twin_manager = mock_twin_manager
+        
+        # Test query with twin insights
+        response = await engine.process_query("What if I lower the thermostat by 3 degrees?")
+        
+        assert 'digital_twin_insights' in response.get('context', {})
+        mock_twin_manager.get_insights_for_query.assert_called_once()
+```
+
+## Phase 2: Digital Twin Integration
+
+### 2.1 Enhanced Query Engine with Twin Insights
+
+```python
+# consciousness/core/query_engine.py - Enhanced with digital twins
+class QueryEngine:
+    async def process_query_with_twins(
+        self, 
+        query: str, 
+        context: Dict[str, Any], 
+        twin_manager: DigitalTwinManager
+    ) -> Dict[str, Any]:
+        """Process queries with digital twin predictive insights."""
+        
+        # Standard query processing
+        response = await self.process_query(query, context)
+        
+        # Enhance with twin insights
+        if twin_manager and self._is_prediction_query(query):
+            predictions = await twin_manager.get_predictions_for_query(query)
+            response['predictions'] = predictions
+            response['confidence'] = self._calculate_prediction_confidence(predictions)
+            
+        return response
+    
+    def _is_prediction_query(self, query: str) -> bool:
+        """Detect if query is asking for predictions."""
+        prediction_keywords = [
+            'will', 'going to', 'predict', 'forecast', 'expect', 
+            'what if', 'scenario', 'future', 'tomorrow'
+        ]
+        return any(keyword in query.lower() for keyword in prediction_keywords)
+```
+
+### 2.2 Enhanced Prediction Engine
+
+```python
+# consciousness/core/prediction_engine.py - Twin-enhanced predictions
+class PredictionEngine:
+    async def generate_predictions_with_twins(
+        self, twin_manager: DigitalTwinManager
+    ) -> List[Dict[str, Any]]:
+        """Generate predictions using digital twin simulations."""
+        
+        predictions = []
+        
+        # Get all house twins
+        house_twins = await twin_manager.get_all_house_twins()
+        
+        for house_twin in house_twins:
+            # Run 1-hour ahead simulation
+            future_state = await house_twin.project_state(
+                datetime.utcnow() + timedelta(hours=1)
+            )
+            
+            # Analyze predicted changes
+            current_state = house_twin.get_state_snapshot()
+            changes = self._detect_significant_changes(current_state, future_state)
+            
+            if changes:
+                prediction = {
+                    'house_id': house_twin.id,
+                    'type': 'state_change',
+                    'timeframe': '1_hour',
+                    'predicted_changes': changes,
+                    'confidence': self._calculate_confidence(changes),
+                    'reasoning': self._generate_reasoning(changes)
+                }
+                predictions.append(prediction)
+                
+        return predictions
+```
+
+### 2.3 Digital Twin Manager Integration
+
+```python
+# Enhanced consciousness engine integration
+class ConsciousnessEngine:
+    async def analyze_with_twins(self, query: str) -> Dict[str, Any]:
+        """Perform enhanced analysis using digital twins."""
+        
+        # Get relevant twins for query
+        relevant_twins = await self.twin_manager.get_twins_for_query(query)
+        
+        # Run scenario simulations
+        scenarios = await self._generate_scenarios_from_query(query)
+        scenario_results = []
+        
+        for scenario in scenarios:
+            for twin in relevant_twins:
+                result = await twin.run_scenario(scenario)
+                scenario_results.append({
+                    'twin_id': twin.id,
+                    'scenario': scenario.name,
+                    'outcome': result.outcome,
+                    'impact': result.impact_assessment,
+                    'safety': result.safety_score
+                })
+                
+        # Generate comprehensive response
+        return {
+            'analysis_type': 'twin_enhanced',
+            'scenarios_tested': len(scenarios),
+            'twins_involved': len(relevant_twins),
+            'results': scenario_results,
+            'recommendations': self._generate_recommendations(scenario_results)
+        }
+```
+
+## Phase 3: Advanced Twin Features
+
+### 3.1 Predictive Maintenance Integration
+
+```python
+# Add to consciousness processing cycle
+async def _process_cycle(self):
+    # ... existing processing ...
+    
+    # 8. Predictive maintenance using twins
+    if self.twin_manager:
+        maintenance_predictions = await self._predict_maintenance_needs()
+        if maintenance_predictions:
+            await self._generate_maintenance_alerts(maintenance_predictions)
+
+async def _predict_maintenance_needs(self) -> List[Dict[str, Any]]:
+    """Predict device maintenance needs using digital twins."""
+    predictions = []
+    
+    for house_id, house_twin in self.twin_manager.houses.items():
+        for device in house_twin.all_devices.values():
+            # Analyze device usage patterns
+            usage_trend = await device.get_usage_trend(days=30)
+            
+            # Predict wear and failure probability
+            failure_probability = await device.predict_failure_probability()
+            
+            if failure_probability > 0.7:  # High failure risk
+                predictions.append({
+                    'device_id': device.id,
+                    'device_name': device.name,
+                    'failure_probability': failure_probability,
+                    'predicted_failure_date': device.predicted_failure_date,
+                    'maintenance_recommendation': device.get_maintenance_recommendation()
+                })
+                
+    return predictions
+```
+
+### 3.2 Scenario-Based Learning
+
+```python
+# Enhanced learning engine with scenario testing
+class LearningEngine:
+    async def learn_from_scenarios(self, twin_manager: DigitalTwinManager):
+        """Learn optimal behaviors through scenario testing."""
+        
+        # Define learning scenarios
+        scenarios = [
+            EnergySavingScenario(),
+            ComfortOptimizationScenario(),
+            SecurityResponseScenario(),
+            EmergencyResponseScenario()
+        ]
+        
+        learning_results = []
+        
+        for scenario in scenarios:
+            # Test different strategies
+            strategies = scenario.get_test_strategies()
+            
+            for strategy in strategies:
+                # Run simulation with strategy
+                result = await twin_manager.run_scenario_with_strategy(
+                    scenario, strategy
+                )
+                
+                learning_results.append({
+                    'scenario': scenario.name,
+                    'strategy': strategy.name,
+                    'outcome_score': result.score,
+                    'efficiency': result.efficiency,
+                    'safety': result.safety_score,
+                    'user_satisfaction': result.satisfaction_score
+                })
+                
+        # Update learning models based on results
+        await self._update_learning_models(learning_results)
+```
+
+## Digital Twin Testing
+
+### Twin-Enhanced Testing
+
+```python
+# test_consciousness_with_twins.py
+async def test_consciousness_with_digital_twins():
+    """Test consciousness engine with digital twin integration."""
+    
+    # Create test environment
+    engine = ConsciousnessEngine()
+    await engine.initialize()
+    
+    # Create test house with devices
+    house = await create_test_house_with_devices()
+    twin = await engine.twin_manager.create_house_twin(house.id)
+    
+    # Test predictive query
+    query = "What will happen if I turn off the heating for 2 hours?"
+    response = await engine.process_query(query)
+    
+    assert 'predictions' in response
+    assert response['predictions'][0]['type'] == 'temperature_change'
+    assert 'confidence' in response
+    assert response['confidence'] > 0.8
+
+async def test_scenario_analysis():
+    """Test scenario-based analysis."""
+    engine = ConsciousnessEngine()
+    await engine.initialize()
+    
+    # Test complex scenario
+    query = "What would happen during a power outage while we're away?"
+    analysis = await engine.analyze_with_twins(query)
+    
+    assert analysis['analysis_type'] == 'twin_enhanced'
+    assert len(analysis['scenarios_tested']) > 0
+    assert 'safety' in analysis['results'][0]
+    assert 'recommendations' in analysis
 ```
 
 ## Next Steps
 
-1. **SAFLA Loop Integration**: Connect consciousness engine with SAFLA components
-2. **Device Integration**: Add device control and monitoring capabilities  
-3. **Memory Learning**: Implement experience-based learning and adaptation
-4. **Performance Optimization**: Add caching and optimize processing cycles
+1. **SAFLA Loop Integration**: Connect consciousness engine with SAFLA components enhanced with twin testing
+2. **Device Integration**: Add device control and monitoring capabilities with twin synchronization
+3. **Memory Learning**: Implement experience-based learning and adaptation through scenario simulation
+4. **Performance Optimization**: Add caching and optimize processing cycles with twin predictions
+5. **Advanced Physics**: Implement detailed thermal, electrical, and environmental models in twins
+6. **Federated Learning**: Enable learning from multiple house twins while preserving privacy
 
-This consciousness engine provides the foundation for creating a truly interactive, emotionally intelligent house system that can engage in natural conversations while maintaining awareness of its operational state and environment.
+This enhanced consciousness engine provides the foundation for creating a truly interactive, emotionally intelligent house system that can engage in natural conversations while maintaining awareness of its operational state and environment. The digital twin integration enables safe experimentation, predictive insights, and accelerated learning through simulation.

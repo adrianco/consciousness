@@ -1,0 +1,149 @@
+# Device Configurations
+devices:
+  living_room_lights:
+    device_type: hue
+    device_class: light
+    brand: Philips
+    model: Hue Color Bulb A19
+    location: Living Room
+    connection_method: wifi
+    endpoint: http://192.168.1.100/api
+    requires_hub: true
+    hub_name: hue_bridge
+    requires_auth: false
+    capabilities:
+      - power
+      - brightness
+      - color
+    supported_features:
+      - brightness
+      - color
+      - effects
+    simulate: false
+    simulation_config:
+      response_time: 0.5
+      failure_rate: 0.01
+      power_consumption:
+        on: 9
+        off: 0.5
+    is_online: true
+
+  smart_thermostat:
+    device_type: nest
+    device_class: climate
+    brand: Google
+    model: Nest Learning Thermostat
+    location: Hallway
+    connection_method: wifi
+    requires_auth: true
+    auth_method: oauth
+    capabilities:
+      - temperature
+      - humidity
+      - scheduling
+    supported_features:
+      - temperature
+      - mode
+      - fan_speed
+    simulate: false
+    simulation_config:
+      temperature_range: [15, 30]
+      response_time: 2.0
+      thermal_mass: 5.0
+    is_online: true
+
+  smart_lock:
+    device_type: august
+    device_class: lock
+    brand: August
+    model: Smart Lock Pro
+    location: Front Door
+    connection_method: bluetooth
+    requires_auth: true
+    auth_method: api_key
+    capabilities:
+      - lock
+      - unlock
+      - status
+    supported_features:
+      - remote_unlock
+      - auto_lock
+    simulate: true
+    simulation_config:
+      lock_time: 1.0
+      unlock_time: 0.5
+      battery_drain_rate: 0.1
+    is_online: true
+
+  bedroom_lights:
+    device_type: hue
+    device_class: light
+    brand: Philips
+    model: Hue White Bulb
+    location: Bedroom
+    connection_method: wifi
+    requires_hub: true
+    hub_name: hue_bridge
+    capabilities:
+      - power
+      - brightness
+    supported_features:
+      - brightness
+    simulate: false
+    simulation_config:
+      response_time: 0.3
+      failure_rate: 0.005
+    is_online: true
+
+  kitchen_lights:
+    device_type: hue
+    device_class: light
+    brand: Philips
+    model: Hue Light Strip
+    location: Kitchen
+    connection_method: wifi
+    requires_hub: true
+    hub_name: hue_bridge
+    capabilities:
+      - power
+      - brightness
+      - color
+    supported_features:
+      - brightness
+      - color
+    simulate: false
+    is_online: true
+
+  bedroom_sensor:
+    device_type: aqara
+    device_class: sensor
+    brand: Aqara
+    model: Temperature Humidity Sensor
+    location: Bedroom
+    connection_method: zigbee
+    requires_hub: true
+    hub_name: zigbee_hub
+    capabilities:
+      - temperature
+      - humidity
+      - battery
+    supported_features: []
+    simulate: true
+    simulation_config:
+      temperature_range: [18, 25]
+      humidity_range: [40, 70]
+      reading_interval: 60
+    is_online: true
+
+  hue_bridge:
+    device_type: hue_bridge
+    device_class: hub
+    brand: Philips
+    model: Hue Bridge v2
+    location: Living Room
+    connection_method: wifi
+    endpoint: http://192.168.1.100
+    capabilities:
+      - discovery
+      - control
+    is_online: true
