@@ -159,6 +159,19 @@ The `.env` file includes many optional features, each with clear explanations:
 
 **Complete configuration reference:** See `.env.example` for all available options with detailed explanations.
 
+### 🚨 **Quick Fix for Common Errors**
+
+**Getting "ModuleNotFoundError: No module named 'psutil'"?**
+```bash
+# Quick fix - install missing dependencies:
+pip install psutil uvicorn fastapi sqlalchemy aiosqlite redis
+
+# Or create proper virtual environment:
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate  # macOS/Linux
+pip install -e .
+```
+
 ### Platform-Specific Installation
 
 Choose your platform for complete setup instructions:
@@ -183,13 +196,27 @@ git clone https://github.com/adrianco/consciousness.git
 cd consciousness
 cp .env.example .env
 
-# 6. Install Python dependencies
-pip3 install -e .
+# 6. Create and activate virtual environment (IMPORTANT!)
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate
 
-# 7. Start Redis service (in background)
+# 7. Install Python dependencies
+pip install -e .
+
+# 8. Start Redis service (in background)
 brew services start redis
 
-# 8. Start consciousness system
+# 9. Start consciousness system
+python -m consciousness.main
+```
+
+**macOS Alternative (if virtual environment issues):**
+```bash
+# Install dependencies directly with pip3
+pip3 install -e .
+pip3 install psutil uvicorn fastapi
+
+# Then run with python3
 python3 -m consciousness.main
 ```
 
@@ -335,10 +362,32 @@ ANTHROPIC_API_KEY=your-key-here      # Free at console.anthropic.com
 ```
 
 **⚙️ Troubleshooting:**
+
+**Missing Dependencies (psutil, uvicorn, etc.):**
+```bash
+# If you get "ModuleNotFoundError: No module named 'psutil'":
+pip install psutil uvicorn fastapi sqlalchemy aiosqlite redis
+
+# Or reinstall everything:
+pip install -e . --force-reinstall
+```
+
+**Virtual Environment Issues:**
+```bash
+# Make sure you're in the virtual environment:
+source consciousness-env/bin/activate  # Linux/macOS
+# consciousness-env\Scripts\activate   # Windows
+
+# Check if virtual environment is active (should show path):
+which python
+```
+
+**Other Common Issues:**
 - **Port 8000 in use?** Change `API_PORT=8001` in `.env`
 - **Redis not working?** Comment out `REDIS_URL` line in `.env`
-- **Bluetooth issues?** Run `sudo systemctl status bluetooth`
+- **Bluetooth issues?** Run `sudo systemctl status bluetooth` (Linux) or check System Preferences (macOS)
 - **Permission errors?** Make sure you're in the virtual environment
+- **Python version issues?** Ensure Python 3.11+ with `python --version`
 
 ### Production Deployment
 
