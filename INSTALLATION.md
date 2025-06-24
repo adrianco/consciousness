@@ -197,6 +197,35 @@ ANTHROPIC_API_KEY=your-key-here      # Free at console.anthropic.com
 - **Bluetooth issues?** Run `sudo systemctl status bluetooth`
 - **Permission errors?** Make sure you're in the virtual environment
 
+## 🔄 Keeping Your System Updated
+
+### Automatic Update Script (Recommended)
+
+The system includes update scripts for easy maintenance:
+
+**Linux/macOS/Raspberry Pi:**
+```bash
+# Run the update script from your consciousness directory
+./scripts/update.sh
+```
+
+**Windows:**
+```powershell
+# Run the update script from your consciousness directory
+scripts\update.bat
+```
+
+**What the update script does:**
+- ✅ Pulls latest changes from GitHub
+- ✅ Safely handles your local modifications (stashes/restores)
+- ✅ Updates Python dependencies automatically
+- ✅ Provides clear next steps for restart
+- ✅ Handles errors gracefully with helpful messages
+
+### Manual Update Commands
+
+If you prefer manual updates or need to troubleshoot:
+
 ## Configuration
 
 ### Environment Variables
@@ -270,6 +299,52 @@ pip install psutil uvicorn fastapi sqlalchemy aiosqlite redis
 python3 -m venv consciousness-env
 source consciousness-env/bin/activate  # macOS/Linux
 pip install -e .
+```
+
+**Virtual Environment Installation:**
+```bash
+# Navigate to consciousness directory
+cd consciousness
+
+# Pull latest changes
+git pull origin main
+
+# Activate virtual environment
+source consciousness-env/bin/activate  # Linux/macOS
+# consciousness-env\Scripts\activate   # Windows
+
+# Update dependencies
+pip install -e . --upgrade
+
+# Restart the system
+python -m consciousness.main
+```
+
+**Docker Installation:**
+```bash
+# Navigate to consciousness directory
+cd consciousness
+
+# Pull latest changes
+git pull origin main
+
+# Rebuild and restart
+docker-compose down
+docker-compose up -d --build
+```
+
+**System Service Installation:**
+```bash
+# Navigate to consciousness directory
+cd consciousness
+
+# Pull latest changes and update
+git pull origin main
+source consciousness-env/bin/activate
+pip install -e . --upgrade
+
+# Restart services
+sudo systemctl restart consciousness
 ```
 
 ### 🔧 **Advanced Troubleshooting**
