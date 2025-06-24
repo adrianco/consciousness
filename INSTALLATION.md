@@ -2,100 +2,200 @@
 
 This guide will help you install and set up the House Consciousness System on your local machine or server.
 
-## Prerequisites
+## Platform-Specific Installation
 
-- **Python 3.11+** (recommended)
-- **Docker & Docker Compose** (for containerized deployment)
-- **Git** (to clone the repository)
-- **UV Package Manager** (optional, but recommended for faster installs)
+Choose your platform for complete from-scratch setup:
 
-## Installation Methods
-
-### Method 1: Docker Compose (Recommended)
-
-This is the easiest way to get the system running with all dependencies and services.
+### 🍎 **macOS Installation**
 
 ```bash
-# Clone the repository
+# 1. Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. Install Python and Git
+brew install python@3.11 git
+
+# 3. Install Redis for performance boost
+brew install redis
+
+# 4. Install Bluetooth support (for device discovery)
+brew install bluez-tools  # For Bluetooth device scanning
+
+# 5. Clone and setup consciousness
 git clone https://github.com/adrianco/consciousness.git
 cd consciousness
-
-# Copy environment template
 cp .env.example .env
 
-# Edit .env file with your settings (see Configuration section below)
-nano .env
+# 6. Create and activate virtual environment (IMPORTANT!)
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate
 
-# Start the system (production)
-docker-compose -f docker-compose.prod.yml up -d
+# 7. Install Python dependencies
+pip install -e .
+
+# 8. Start Redis service (in background)
+brew services start redis
+
+# 9. Start consciousness system
+python -m consciousness.main
+```
+
+**macOS Alternative (if virtual environment issues):**
+```bash
+# Install dependencies directly with pip3
+pip3 install -e .
+pip3 install psutil uvicorn fastapi
+
+# Then run with python3
+python3 -m consciousness.main
+```
+
+### 🥧 **Raspberry Pi Installation**
+
+```bash
+# 1. Update system
+sudo apt update && sudo apt upgrade -y
+
+# 2. Install Python 3.11+ and dependencies
+sudo apt install -y python3 python3-pip python3-venv git
+
+# 3. Install Redis and Bluetooth support
+sudo apt install -y redis-server bluetooth bluez libbluetooth-dev
+
+# 4. Install system dependencies for device discovery
+sudo apt install -y libffi-dev libssl-dev python3-dev
+
+# 5. Enable Bluetooth service
+sudo systemctl enable bluetooth
+sudo systemctl start bluetooth
+
+# 6. Add user to bluetooth group (logout/login after this)
+sudo usermod -a -G bluetooth $USER
+
+# 7. Clone and setup consciousness
+git clone https://github.com/adrianco/consciousness.git
+cd consciousness
+cp .env.example .env
+
+# 8. Create virtual environment
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate
+
+# 9. Install Python dependencies
+pip install -e .
+
+# 10. Start Redis service
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
+
+# 11. Start consciousness system
+python -m consciousness.main
+```
+
+### 🪟 **Windows Installation**
+
+```powershell
+# 1. Install Python 3.11+ from https://python.org/downloads
+# Make sure to check "Add Python to PATH" during installation
+
+# 2. Install Git from https://git-scm.com/download/win
+
+# 3. Install Redis (using Chocolatey - optional but recommended)
+# First install Chocolatey: https://chocolatey.org/install
+# Then in Admin PowerShell:
+choco install redis-64
+
+# 4. Clone and setup consciousness
+git clone https://github.com/adrianco/consciousness.git
+cd consciousness
+copy .env.example .env
+
+# 5. Create virtual environment (recommended)
+python -m venv consciousness-env
+consciousness-env\Scripts\activate
+
+# 6. Install Python dependencies
+pip install -e .
+
+# 7. Start Redis (if installed) - in separate terminal
+redis-server
+
+# 8. Start consciousness system (in new PowerShell window)
+python -m consciousness.main
+```
+
+**Windows Alternative (without Redis):**
+```powershell
+# Skip Redis installation - system will work but be slower
+# Comment out REDIS_URL in .env file:
+# REDIS_URL=redis://localhost:6379/0
+
+# Just do steps 1, 2, 4, 5, 6, 8 above
+```
+
+### 🐧 **Linux (Ubuntu/Debian) Installation**
+
+```bash
+# 1. Install system dependencies
+sudo apt update
+sudo apt install -y python3 python3-pip python3-venv git redis-server
+sudo apt install -y bluetooth bluez libbluetooth-dev libffi-dev libssl-dev
+
+# 2. Enable services
+sudo systemctl enable redis-server bluetooth
+sudo systemctl start redis-server bluetooth
+
+# 3. Clone and setup consciousness
+git clone https://github.com/adrianco/consciousness.git
+cd consciousness
+cp .env.example .env
+
+# 4. Create virtual environment
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate
+
+# 5. Install Python dependencies
+pip install -e .
+
+# 6. Start consciousness system
+python -m consciousness.main
+```
+
+### 🐳 **Docker Installation (if you prefer containers)**
+
+```bash
+# Install Docker and Docker Compose first:
+# macOS: brew install docker docker-compose
+# Windows: Download Docker Desktop from docker.com
+# Linux: sudo apt install docker.io docker-compose
+
+# Clone repository
+git clone https://github.com/adrianco/consciousness.git
+cd consciousness
+cp .env.example .env
+
+# Start with Docker Compose
+docker-compose up -d
 
 # Or start development environment
 docker-compose -f docker-compose.dev.yml up -d
 ```
 
-The system will be available at:
-- **API**: http://localhost:8000
-- **Web UI**: http://localhost:3000 (if enabled)
-- **Grafana Monitoring**: http://localhost:3001
-- **Prometheus Metrics**: http://localhost:9090
+**🎯 Success!** Open `http://localhost:8000` to see your consciousness system.
 
-### Method 2: UV Package Manager (Fast)
+### Quick Add-Ons After Installation
 
-UV is a fast Python package manager that handles dependencies efficiently.
-
+**🤖 Want AI conversations?** Add API keys to `.env`:
 ```bash
-# Clone the repository
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-
-# Install UV (if not already installed)
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Install dependencies and run
-uv sync
-uv run uvicorn consciousness.main:app --host 0.0.0.0 --port 8000
-
-# Or run in development mode
-uv run python -m consciousness.main --debug
+OPENAI_API_KEY=sk-your-key-here      # Free at platform.openai.com
+ANTHROPIC_API_KEY=your-key-here      # Free at console.anthropic.com
 ```
 
-### Method 3: Traditional Pip Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-
-# Create virtual environment
-python -m venv consciousness-env
-source consciousness-env/bin/activate  # On Windows: consciousness-env\Scripts\activate
-
-# Install the package in development mode
-pip install -e .
-
-# Run the application
-python -m consciousness.main
-```
-
-### Method 4: System Service (Production)
-
-For production deployment with automatic startup:
-
-```bash
-# Install using Method 2 or 3 first
-# Then copy systemd service files
-sudo cp deploy/systemd/consciousness.service /etc/systemd/system/
-sudo cp deploy/systemd/consciousness-worker.service /etc/systemd/system/
-
-# Enable and start services
-sudo systemctl enable consciousness
-sudo systemctl enable consciousness-worker
-sudo systemctl start consciousness
-sudo systemctl start consciousness-worker
-
-# Check status
-sudo systemctl status consciousness
-```
+**⚙️ Troubleshooting:**
+- **Port 8000 in use?** Change `API_PORT=8001` in `.env`
+- **Redis not working?** Comment out `REDIS_URL` line in `.env`
+- **Bluetooth issues?** Run `sudo systemctl status bluetooth`
+- **Permission errors?** Make sure you're in the virtual environment
 
 ## Configuration
 
@@ -172,196 +272,7 @@ source consciousness-env/bin/activate  # macOS/Linux
 pip install -e .
 ```
 
-### Platform-Specific Installation
-
-Choose your platform for complete setup instructions:
-
-#### 🍎 **macOS Installation**
-
-```bash
-# 1. Install Homebrew (if not already installed)
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# 2. Install Python and Git
-brew install python@3.11 git
-
-# 3. Install Redis for performance boost
-brew install redis
-
-# 4. Install Bluetooth support (for device discovery)
-brew install bluez-tools  # For Bluetooth device scanning
-
-# 5. Clone and setup consciousness
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-cp .env.example .env
-
-# 6. Create and activate virtual environment (IMPORTANT!)
-python3 -m venv consciousness-env
-source consciousness-env/bin/activate
-
-# 7. Install Python dependencies
-pip install -e .
-
-# 8. Start Redis service (in background)
-brew services start redis
-
-# 9. Start consciousness system
-python -m consciousness.main
-```
-
-**macOS Alternative (if virtual environment issues):**
-```bash
-# Install dependencies directly with pip3
-pip3 install -e .
-pip3 install psutil uvicorn fastapi
-
-# Then run with python3
-python3 -m consciousness.main
-```
-
-#### 🪟 **Windows Installation**
-
-```powershell
-# 1. Install Python 3.11+ from https://python.org/downloads
-# Make sure to check "Add Python to PATH" during installation
-
-# 2. Install Git from https://git-scm.com/download/win
-
-# 3. Install Redis (using Chocolatey - optional but recommended)
-# First install Chocolatey: https://chocolatey.org/install
-# Then in Admin PowerShell:
-choco install redis-64
-
-# 4. Clone and setup consciousness
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-copy .env.example .env
-
-# 5. Create virtual environment (recommended)
-python -m venv consciousness-env
-consciousness-env\Scripts\activate
-
-# 6. Install Python dependencies
-pip install -e .
-
-# 7. Start Redis (if installed) - in separate terminal
-redis-server
-
-# 8. Start consciousness system (in new PowerShell window)
-python -m consciousness.main
-```
-
-**Windows Alternative (without Redis):**
-```powershell
-# Skip Redis installation - system will work but be slower
-# Comment out REDIS_URL in .env file:
-# REDIS_URL=redis://localhost:6379/0
-
-# Just do steps 1, 2, 4, 5, 6, 8 above
-```
-
-#### 🥧 **Raspberry Pi Installation**
-
-```bash
-# 1. Update system
-sudo apt update && sudo apt upgrade -y
-
-# 2. Install Python 3.11+ and dependencies
-sudo apt install -y python3 python3-pip python3-venv git
-
-# 3. Install Redis and Bluetooth support
-sudo apt install -y redis-server bluetooth bluez libbluetooth-dev
-
-# 4. Install system dependencies for device discovery
-sudo apt install -y libffi-dev libssl-dev python3-dev
-
-# 5. Enable Bluetooth service
-sudo systemctl enable bluetooth
-sudo systemctl start bluetooth
-
-# 6. Add user to bluetooth group (logout/login after this)
-sudo usermod -a -G bluetooth $USER
-
-# 7. Clone and setup consciousness
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-cp .env.example .env
-
-# 8. Create virtual environment
-python3 -m venv consciousness-env
-source consciousness-env/bin/activate
-
-# 9. Install Python dependencies
-pip install -e .
-
-# 10. Start Redis service
-sudo systemctl enable redis-server
-sudo systemctl start redis-server
-
-# 11. Start consciousness system
-python -m consciousness.main
-```
-
-#### 🐧 **Linux (Ubuntu/Debian) Installation**
-
-```bash
-# 1. Install system dependencies
-sudo apt update
-sudo apt install -y python3 python3-pip python3-venv git redis-server
-sudo apt install -y bluetooth bluez libbluetooth-dev libffi-dev libssl-dev
-
-# 2. Enable services
-sudo systemctl enable redis-server bluetooth
-sudo systemctl start redis-server bluetooth
-
-# 3. Clone and setup consciousness
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-cp .env.example .env
-
-# 4. Create virtual environment
-python3 -m venv consciousness-env
-source consciousness-env/bin/activate
-
-# 5. Install Python dependencies
-pip install -e .
-
-# 6. Start consciousness system
-python -m consciousness.main
-```
-
-#### 🐳 **Docker Installation (if you prefer containers)**
-
-```bash
-# Install Docker and Docker Compose first:
-# macOS: brew install docker docker-compose
-# Windows: Download Docker Desktop from docker.com
-# Linux: sudo apt install docker.io docker-compose
-
-# Clone repository
-git clone https://github.com/adrianco/consciousness.git
-cd consciousness
-cp .env.example .env
-
-# Start with Docker Compose
-docker-compose up -d
-
-# Or start development environment
-docker-compose -f docker-compose.dev.yml up -d
-```
-
-**🎯 Success!** Open `http://localhost:8000` to see your consciousness system.
-
-### Quick Add-Ons After Installation
-
-**🤖 Want AI conversations?** Add API keys to `.env`:
-```bash
-OPENAI_API_KEY=sk-your-key-here      # Free at platform.openai.com
-ANTHROPIC_API_KEY=your-key-here      # Free at console.anthropic.com
-```
-
-**⚙️ Troubleshooting:**
+### 🔧 **Advanced Troubleshooting**
 
 **Missing Dependencies (psutil, uvicorn, etc.):**
 ```bash
@@ -382,7 +293,7 @@ source consciousness-env/bin/activate  # Linux/macOS
 which python
 ```
 
-**Other Common Issues:**
+**Additional Common Issues:**
 - **Port 8000 in use?** Change `API_PORT=8001` in `.env`
 - **Redis not working?** Comment out `REDIS_URL` line in `.env`
 - **Bluetooth issues?** Run `sudo systemctl status bluetooth` (Linux) or check System Preferences (macOS)
