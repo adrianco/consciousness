@@ -1,0 +1,13 @@
+{
+  "objective": "follow the guides in /plans and complete building and testing the system",
+  "strategy": "auto",
+  "mode": "centralized",
+  "maxAgents": 5,
+  "timeout": 60,
+  "parallel": false,
+  "monitor": false,
+  "output": "json",
+  "outputDir": "./reports",
+  "timestamp": "2025-06-24T21:43:46.182Z",
+  "id": "swarm-auto-centralized-1750801426183"
+}

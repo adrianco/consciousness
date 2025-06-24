@@ -1,0 +1,126 @@
+version: '3.8'
+
+services:
+  consciousness:
+    build:
+      context: .
+      target: production
+    environment:
+      - ENVIRONMENT=production
+      - DEBUG=false
+      - DATABASE_URL=sqlite:///./data/consciousness.db
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - API_KEY_OPENAI=${API_KEY_OPENAI}
+      - API_KEY_ANTHROPIC=${API_KEY_ANTHROPIC}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - redis
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+      - ./deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  celery:
+    build:
+      context: .
+      target: production
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///./data/consciousness.db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - redis
+    restart: unless-stopped
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+    command: ["uv", "run", "celery", "worker", "-A", "consciousness.tasks", "--loglevel=info", "--concurrency=2"]
+
+  celery-beat:
+    build:
+      context: .
+      target: production
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:///./data/consciousness.db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - redis
+    restart: unless-stopped
+    command: ["uv", "run", "celery", "beat", "-A", "consciousness.tasks", "--loglevel=info"]
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/nginx/prod.conf:/etc/nginx/conf.d/default.conf
+      - ./deploy/ssl:/etc/ssl/certs
+      - ./static:/var/www/static
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - consciousness
+    restart: unless-stopped
+
+  monitoring:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./deploy/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./deploy/monitoring/grafana:/etc/grafana/provisioning
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  prometheus_data:
+  grafana_data:

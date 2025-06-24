@@ -4,30 +4,33 @@ Device Simulator Package
 Provides realistic device simulation for testing without hardware.
 """
 
-from .base import BaseSimulatedDevice, SimulatorEventType, DeviceEvent
+from .base import BaseSimulatedDevice, DeviceEvent, SimulatorEventType
+from .demo_scenarios import DemoScenarios, register_scenarios
 from .devices import (
-    SimulatedLight,
-    SimulatedThermostat,
-    SimulatedSensor,
     SimulatedCamera,
+    SimulatedHub,
+    SimulatedLight,
     SimulatedLock,
+    SimulatedSensor,
     SimulatedSwitch,
-    SimulatedHub
+    SimulatedThermostat,
 )
 from .manager import SimulatorManager
 from .scenarios import ScenarioEngine
 
 __all__ = [
-    'BaseSimulatedDevice',
-    'SimulatorEventType',
-    'DeviceEvent',
-    'SimulatedLight',
-    'SimulatedThermostat',
-    'SimulatedSensor',
-    'SimulatedCamera',
-    'SimulatedLock',
-    'SimulatedSwitch',
-    'SimulatedHub',
-    'SimulatorManager',
-    'ScenarioEngine'
+    "BaseSimulatedDevice",
+    "SimulatorEventType",
+    "DeviceEvent",
+    "SimulatedLight",
+    "SimulatedThermostat",
+    "SimulatedSensor",
+    "SimulatedCamera",
+    "SimulatedLock",
+    "SimulatedSwitch",
+    "SimulatedHub",
+    "SimulatorManager",
+    "DemoScenarios",
+    "register_scenarios",
+    "ScenarioEngine",
 ]

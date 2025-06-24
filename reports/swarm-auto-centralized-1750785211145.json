@@ -1,0 +1,13 @@
+{
+  "objective": "update the instructions in /plans to reflect the new digital twin and simulator design",
+  "strategy": "auto",
+  "mode": "centralized",
+  "maxAgents": 5,
+  "timeout": 60,
+  "parallel": false,
+  "monitor": false,
+  "output": "json",
+  "outputDir": "./reports",
+  "timestamp": "2025-06-24T17:13:31.144Z",
+  "id": "swarm-auto-centralized-1750785211145"
+}

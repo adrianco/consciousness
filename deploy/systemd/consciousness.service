@@ -1,0 +1,36 @@
+[Unit]
+Description=House Consciousness System
+After=network.target
+Requires=redis.service
+
+[Service]
+Type=exec
+User=consciousness
+Group=consciousness
+WorkingDirectory=/opt/consciousness
+Environment=ENVIRONMENT=production
+Environment=DATABASE_URL=sqlite:///./data/consciousness.db
+Environment=REDIS_URL=redis://localhost:6379/0
+EnvironmentFile=/opt/consciousness/.env
+ExecStart=/opt/consciousness/.venv/bin/uvicorn consciousness.main:app --host 0.0.0.0 --port 8000 --workers 4
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=3
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/consciousness/data /opt/consciousness/logs
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+# Resource limits
+MemoryMax=1G
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target

@@ -50,6 +50,9 @@ dev = [
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.3.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-mock>=3.11.0",
     "black>=23.9.0",
     "isort>=5.12.0",
     "flake8>=6.1.0",
@@ -58,15 +61,41 @@ dev = [
     "httpx>=0.25.0",
     "factory-boy>=3.3.0",
     "faker>=19.12.0",
+    "psutil>=5.9.0",
+    "locust>=2.15.0",
+    "playwright>=1.36.0",
+    "websockets>=11.0.0",
+    "safety>=2.3.0",
+    "bandit>=1.7.0",
 ]
 
 test = [
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.3.0",
+    "pytest-timeout>=2.1.0",
+    "pytest-mock>=3.11.0",
     "httpx>=0.25.0",
     "factory-boy>=3.3.0",
     "faker>=19.12.0",
+    "psutil>=5.9.0",
+    "locust>=2.15.0",
+    "playwright>=1.36.0",
+    "websockets>=11.0.0",
+]
+
+performance = [
+    "locust>=2.15.0",
+    "psutil>=5.9.0",
+    "pytest-benchmark>=4.0.0",
+    "memory-profiler>=0.60.0",
+]
+
+security = [
+    "safety>=2.3.0",
+    "bandit>=1.7.0",
+    "semgrep>=1.0.0",
 ]
 
 docs = [
@@ -92,15 +121,31 @@ addopts = [
     "--cov-report=term-missing",
     "--cov-report=html",
     "--cov-report=xml",
+    "--cov-branch",
+    "--timeout=300",
+    "-v",
 ]
 asyncio_mode = "auto"
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
     "e2e: End-to-end tests",
-    "slow: Slow tests",
+    "digital_twin: Digital twin tests",
+    "performance: Performance tests",
+    "security: Security tests",
+    "slow: Slow tests (>5 seconds)",
     "external: Tests requiring external services",
+    "load: Load testing",
+    "stress: Stress testing",
+    "memory: Memory testing",
 ]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+# Minimum coverage thresholds
+# These can be enforced with pytest-cov
+minversion = "7.0"
 
 [tool.black]
 line-length = 88

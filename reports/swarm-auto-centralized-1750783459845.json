@@ -1,0 +1,13 @@
+{
+  "objective": "modify the plans the device integration to include a digital twin model of the house and to build a simulator that can be used to demo and test the entire system without connecting to an actual house",
+  "strategy": "auto",
+  "mode": "centralized",
+  "maxAgents": 5,
+  "timeout": 60,
+  "parallel": false,
+  "monitor": false,
+  "output": "json",
+  "outputDir": "./reports",
+  "timestamp": "2025-06-24T16:44:19.844Z",
+  "id": "swarm-auto-centralized-1750783459845"
+}

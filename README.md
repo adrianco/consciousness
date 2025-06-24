@@ -1,7 +1,11 @@
 # Consciousness
 
 ## Status Updates
-June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude4 which is ideal, then hit limits and dropped back to Claude 3.7 for the more detailed production of plans.
+June 22, 2025 - wrote this README file and saved two old blog posts into references. This is the entire setup that was used to create this whole project.
+
+June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude4 which is ideal, then hit limits and dropped back to Claude 3.7 for the more detailed production of plans. Project setup, database implementation and conciousness engine coded.
+
+June 24, 2025 - Modified plans to include digital twin and simulator. Told claude-flow to finish building the project.
 
 ## Observability and Introspection System
 
@@ -131,8 +135,3 @@ LLM: Cool, there's an API I can use via github.com/jasonacox/pypowerwall to see 
 LLM: What do you use for heating and cooling, do you have any connected thermostats?
 Owner: We have several Mitsubishi heat pumps, and they use a Mitsubishi Comfort app that says it has Google Home and Alexa interfaces available, but not configured.
 LLM: It appears that the latest Mitsubishi Comfort app doesn't have a working Alexa skill at the moment, but there are some github projects that document the Mitsubishi Kumo API for tools like Home Assistant that we can leverage to figure out how to talk to the heat pumps.
-
-
-
-
-

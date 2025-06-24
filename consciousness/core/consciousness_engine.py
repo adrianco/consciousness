@@ -18,7 +18,7 @@ class ConsciousnessEngine:
     """Main consciousness orchestrator that coordinates all cognitive processes."""
 
     def __init__(self):
-        self.session_id = f"consciousness_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
+        self.session_id = None
         self.is_active = False
         self.processing_interval = 5.0  # seconds
 
@@ -50,23 +50,34 @@ class ConsciousnessEngine:
 
     async def initialize(self):
         """Initialize all consciousness components."""
-        async with get_async_session() as session:
-            # Initialize components
-            self.emotion_processor = EmotionProcessor(session)
-            self.memory_manager = MemoryManager(session)
-            self.decision_engine = DecisionMakingEngine(session)
-            self.learning_engine = LearningEngine(session)
-            self.query_engine = QueryEngine(session)
-            self.prediction_engine = PredictionEngine(session)
+        try:
+            self.session_id = f"consciousness_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}"
 
-            # Load initial state
-            await self._load_initial_state(session)
+            # Get async session generator
+            session_gen = get_async_session()
+            session = await session_gen.__anext__()
 
-            # Create session record
-            await self._create_session_record(session)
+                # Initialize components
+                self.emotion_processor = EmotionProcessor(session)
+                self.memory_manager = MemoryManager(session)
+                self.decision_engine = DecisionMakingEngine(session)
+                self.learning_engine = LearningEngine(session)
+                self.query_engine = QueryEngine(session)
+                self.prediction_engine = PredictionEngine(session)
 
-            self.is_active = True
-            print(f"🧠 Consciousness engine initialized - Session: {self.session_id}")
+                # Load initial state
+                await self._load_initial_state(session)
+
+                # Create session record
+                await self._create_session_record(session)
+
+                self.is_active = True
+                print(f"🧠 Consciousness engine initialized - Session: {self.session_id}")
+            finally:
+                await session.close()
+        except Exception as e:
+            self.session_id = None
+            raise RuntimeError(f"Failed to initialize consciousness engine: {e}")
 
     async def start(self):
         """Start the consciousness processing loop."""

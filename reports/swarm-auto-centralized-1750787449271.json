@@ -1,0 +1,13 @@
+{
+  "objective": "fully implement and test the implementation, using the simulator, and don't stop until all test pass",
+  "strategy": "auto",
+  "mode": "centralized",
+  "maxAgents": 5,
+  "timeout": 60,
+  "parallel": false,
+  "monitor": false,
+  "output": "json",
+  "outputDir": "./reports",
+  "timestamp": "2025-06-24T17:50:49.271Z",
+  "id": "swarm-auto-centralized-1750787449271"
+}
