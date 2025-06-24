@@ -169,24 +169,27 @@ Choose your platform for complete setup instructions:
 # 1. Install Homebrew (if not already installed)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# 2. Install Python and dependencies
-brew install python@3.11 git redis
+# 2. Install Python and Git
+brew install python@3.11 git
 
-# 3. Install Bluetooth support (for device discovery)
+# 3. Install Redis for performance boost
+brew install redis
+
+# 4. Install Bluetooth support (for device discovery)
 brew install bluez-tools  # For Bluetooth device scanning
 
-# 4. Clone and setup consciousness
+# 5. Clone and setup consciousness
 git clone https://github.com/adrianco/consciousness.git
 cd consciousness
 cp .env.example .env
 
-# 5. Install Python dependencies
+# 6. Install Python dependencies
 pip3 install -e .
 
-# 6. Start Redis (in background)
+# 7. Start Redis service (in background)
 brew services start redis
 
-# 7. Start consciousness system
+# 8. Start consciousness system
 python3 -m consciousness.main
 ```
 
