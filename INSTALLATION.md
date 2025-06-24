@@ -101,112 +101,153 @@ sudo systemctl status consciousness
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and configure the following key variables:
+Copy `.env.example` to `.env` and configure variables based on your needs:
+
+#### 🚀 **REQUIRED SETTINGS** (Must configure to get running)
 
 ```bash
-# =============================================================================
-# REQUIRED SETTINGS - Configure these first
-# =============================================================================
-
-# Application environment and debugging
+# Basic application settings
 ENVIRONMENT=production                    # development, staging, production
-DEBUG=false                              # Set to true for development
+DEBUG=false                              # Set to true for development only
 API_HOST=0.0.0.0                        # Host for API server
 API_PORT=8000                            # Port for API server
 
-# Database configuration
+# Database (works out of the box with SQLite)
 DATABASE_URL=sqlite+aiosqlite:///./data/consciousness.db
-# For PostgreSQL: postgresql+asyncpg://user:password@localhost/consciousness
 
-# Security keys (CHANGE THESE!)
+# Security keys - GENERATE NEW KEYS!
 SECRET_KEY=your-super-secret-key-here-change-this-in-production
 JWT_SECRET_KEY=your-jwt-secret-key-here-change-this
 ENCRYPTION_KEY=your-32-character-encryption-key-here
 
-# =============================================================================
-# DEVICE DISCOVERY - Configure based on your home setup
-# =============================================================================
-
-ENABLE_BLUETOOTH=true                    # For smart sensors, fitness trackers
-ENABLE_MDNS=true                        # For Apple devices, Chromecast
-ENABLE_UPNP=true                        # For media servers, smart TVs
-ENABLE_ZIGBEE=false                     # Enable if you have Zigbee hub
-
-# =============================================================================
-# AI SERVICES - Add your API keys for advanced features
-# =============================================================================
-
-OPENAI_API_KEY=your-openai-api-key-here
-ANTHROPIC_API_KEY=your-anthropic-api-key-here
-
-# =============================================================================
-# EXTERNAL INTEGRATIONS (Optional)
-# =============================================================================
-
-WEATHER_API_KEY=your-weather-api-key-here
-ENERGY_PROVIDER_API_KEY=your-energy-api-key-here
-HOMEKIT_PIN=123-45-678                  # Format: XXX-XX-XXX
-
-# =============================================================================
-# MONITORING AND LOGGING
-# =============================================================================
-
-ENABLE_PROMETHEUS=true                  # Enable metrics collection
-PROMETHEUS_PORT=9090                    # Prometheus metrics port
-LOG_LEVEL=INFO                         # DEBUG, INFO, WARNING, ERROR, CRITICAL
-LOG_FILE=logs/consciousness.log        # Log file location
-
-# =============================================================================
-# CONSCIOUSNESS ENGINE BEHAVIOR
-# =============================================================================
-
-EMOTION_UPDATE_INTERVAL=300             # How often to update emotional state (seconds)
-MEMORY_RETENTION_DAYS=365              # How long to keep memories (days)
-LEARNING_RATE=0.01                     # Learning rate for adaptive behaviors (0.0-1.0)
-PREDICTION_HORIZON_HOURS=24            # How far ahead to predict scenarios (hours)
+# Basic logging
+LOG_LEVEL=INFO
+LOG_FILE=logs/consciousness.log
 ```
 
-**Complete configuration options:** See `.env.example` for all available settings including SSL, backup, notifications, and advanced security options.
+#### 🏠 **DEVICE DISCOVERY** (Essential for smart home functionality)
+*Impact: Without these, no device discovery or smart home integration*
 
-### Configuration Setup Guide
+```bash
+ENABLE_BLUETOOTH=true                    # Smart sensors, fitness trackers, beacons
+ENABLE_MDNS=true                        # Apple devices, Chromecast, smart speakers
+ENABLE_UPNP=true                        # Media servers, smart TVs, routers
+ENABLE_ZIGBEE=false                     # Zigbee devices (requires coordinator hardware)
+```
 
-**1. Essential Setup (Required)**
+#### 🤖 **AI SERVICES** (For intelligent conversations)
+*Impact: Without API keys, no AI-powered conversations or intelligent responses*
+
+```bash
+OPENAI_API_KEY=your-openai-api-key-here
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
+```
+
+#### ⚡ **REDIS CACHE** (Improves performance)
+*Impact: Without Redis, no session management, slower responses, no real-time features*
+
+```bash
+REDIS_URL=redis://redis:6379/0          # Or redis://localhost:6379/0 for local setup
+```
+
+#### 🌐 **OPTIONAL INTEGRATIONS** (Enhanced functionality)
+*Impact: Enables weather-aware automations, energy optimization, HomeKit compatibility*
+
+```bash
+# Weather integration
+WEATHER_API_KEY=your-weather-api-key-here
+
+# Energy monitoring
+ENERGY_PROVIDER_API_KEY=your-energy-api-key-here
+
+# HomeKit integration
+HOMEKIT_PIN=123-45-678                  # Format: XXX-XX-XXX
+```
+
+#### 📊 **MONITORING** (System health tracking)
+*Impact: Without monitoring, no performance metrics or health alerting*
+
+```bash
+ENABLE_PROMETHEUS=true
+PROMETHEUS_PORT=9090
+GRAFANA_PASSWORD=your-grafana-admin-password
+```
+
+#### 🧠 **CONSCIOUSNESS TUNING** (AI behavior customization)
+*Impact: Controls how the consciousness learns, responds, and evolves*
+
+```bash
+EMOTION_UPDATE_INTERVAL=300             # Emotional state update frequency (seconds)
+MEMORY_RETENTION_DAYS=365              # Memory retention period (days)
+LEARNING_RATE=0.01                     # Adaptive learning rate (0.0-1.0)
+PREDICTION_HORIZON_HOURS=24            # Scenario prediction timeframe (hours)
+```
+
+**Complete configuration:** See `.env.example` for all settings including security, backup, and notifications.
+
+### Quick Setup Guide
+
+**🚀 Minimal Setup (5 minutes to get running)**
 ```bash
 cp .env.example .env
-nano .env  # Edit the file
+nano .env  # Edit these required settings:
 
-# Change these security keys:
+# Change security keys (REQUIRED):
 SECRET_KEY=generate-a-secure-random-32-character-key
 JWT_SECRET_KEY=generate-another-secure-random-key
 ENCRYPTION_KEY=exactly-32-character-encryption-key
+
+# Set environment:
+ENVIRONMENT=development  # or production
+DEBUG=true              # false for production
 ```
 
-**2. Database Options**
-- **SQLite (Default)**: No additional setup required
-- **PostgreSQL**: Install PostgreSQL and update `DATABASE_URL`
-
-**3. Device Discovery Setup**
-- **Bluetooth**: Requires system Bluetooth support (`sudo apt install bluetooth bluez`)
-- **mDNS**: Works automatically on most networks
-- **UPnP**: Automatic discovery for compatible devices
-- **Zigbee**: Requires Zigbee coordinator hardware
-
-**4. AI Service Setup**
-- **OpenAI**: Sign up at https://platform.openai.com for API key
-- **Anthropic**: Sign up at https://console.anthropic.com for Claude API
-
-**5. External Integrations**
-- **Weather API**: Use OpenWeatherMap, WeatherAPI, or similar service
-- **Energy Provider**: Check if your utility offers API access
-- **HomeKit**: Generate a random PIN in XXX-XX-XXX format
-
-**6. Production Security**
+**🏠 Smart Home Setup (add device discovery)**
 ```bash
-# Generate secure keys:
+# Enable discovery protocols for your devices:
+ENABLE_BLUETOOTH=true   # Smart sensors, fitness trackers
+ENABLE_MDNS=true       # Apple devices, Chromecast
+ENABLE_UPNP=true       # Smart TVs, media servers
+ENABLE_ZIGBEE=false    # Only if you have Zigbee coordinator
+```
+
+**🤖 AI-Powered Setup (add intelligent features)**
+```bash
+# Add AI service API keys:
+OPENAI_API_KEY=sk-your-openai-key-here
+ANTHROPIC_API_KEY=your-anthropic-key-here
+```
+
+**⚡ Performance Setup (add Redis for speed)**
+```bash
+# Install Redis and configure:
+REDIS_URL=redis://localhost:6379/0
+```
+
+**🔧 Full Setup (complete configuration)**
+
+**Essential Setup Requirements:**
+```bash
+# 1. Generate secure keys for production:
 openssl rand -base64 32  # For SECRET_KEY
 openssl rand -base64 32  # For JWT_SECRET_KEY
 openssl rand -hex 16     # For ENCRYPTION_KEY (32 chars)
+
+# 2. Database options:
+# SQLite (default): No setup required
+# PostgreSQL: postgresql+asyncpg://user:password@localhost/consciousness
+
+# 3. Device discovery prerequisites:
+sudo apt install bluetooth bluez  # For Bluetooth discovery
+# mDNS/UPnP: Work automatically on most networks
+# Zigbee: Requires coordinator hardware (USB stick)
 ```
+
+**Service Setup Links:**
+- **OpenAI API**: https://platform.openai.com (for GPT models)
+- **Anthropic API**: https://console.anthropic.com (for Claude models)
+- **Weather API**: OpenWeatherMap, WeatherAPI, or similar service
+- **Energy Provider**: Check if your utility offers API access
 
 ### Network Configuration
 
