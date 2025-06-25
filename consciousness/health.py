@@ -8,12 +8,26 @@ from datetime import datetime, timedelta
 from typing import Any, Dict
 
 import psutil
-from sqlalchemy import func, select, text
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from .database import get_async_session
-from .models.consciousness import ConsciousnessSession
-from .models.entities import Device
+# Try to import database components, but don't fail if they don't exist
+try:
+    from sqlalchemy import func, select, text
+    from sqlalchemy.ext.asyncio import AsyncSession
+
+    from .database import get_async_session
+
+    DATABASE_AVAILABLE = True
+except ImportError:
+    DATABASE_AVAILABLE = False
+
+# Try to import models, but don't fail if they don't exist
+try:
+    from .models.consciousness import ConsciousnessSession
+    from .models.entities import Device
+
+    MODELS_AVAILABLE = True
+except ImportError:
+    MODELS_AVAILABLE = False
 
 
 class HealthChecker:
