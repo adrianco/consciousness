@@ -161,4 +161,5 @@ cython_debug/
 .DS_Store
 downloads/
 sessions/
+consciousness-env/
 .vscode
