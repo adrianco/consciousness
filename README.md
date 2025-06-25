@@ -7,6 +7,9 @@ June 23, 2025 - Initial agent swarm setup using claude-flow created planning doc
 
 June 24, 2025 - Modified plans to include digital twin and simulator. Told claude-flow to finish building the project and pushed code. Created INSTALLATION and USER guides. Runs with a basic Web UI. Plenty more debug to do, but this is impressive for a few hours elapsed development time over two days!
 
+![first running screenshot](./references/first-basic-screenshot.png)
+
+## What follows below is the unmodified initial concept that was used as the basis of all the development performed by claude-flow ina few hours over two days.
 ## Observability and Introspection System
 
 Based on ideas from this blog post I wrote a few years ago [Perhaps Conciousness is Just Human Observability](https://medium.com/@adrianco/perhaps-consciousness-is-just-human-observability-84dfda40d70f) (extracted text included in references directory) I would like to be able to have a conversation with an autonomous system to understand how it is feeling, why it did something, and what is bothering it.
