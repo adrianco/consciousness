@@ -10,6 +10,36 @@ June 24, 2025 - Modified plans to include digital twin and simulator. Told claud
 June 25, 2025 - Asked claude-flow to create a web UI that excercises every API call, as the initual UI was very bare bones.
 ![first running screenshot](./references/first-basic-screenshot.png)
 
+## Quick Installation
+
+Get started in 5 minutes:
+
+```bash
+# Clone the repository
+git clone https://github.com/adrianco/consciousness.git
+cd consciousness
+
+# Set up Python virtual environment (recommended)
+python3 -m venv consciousness-env
+source consciousness-env/bin/activate  # Linux/macOS
+# consciousness-env\Scripts\activate   # Windows
+
+# Install the application
+pip install -e .
+
+# Create configuration
+cp .env.example .env
+
+# Start the system
+python -m consciousness.main
+```
+
+Open http://localhost:8000 to access the web interface.
+
+**📖 For detailed installation instructions** including platform-specific setup, Docker deployment, and troubleshooting, see [INSTALLATION.md](INSTALLATION.md).
+
+**👤 For usage instructions** and getting started guide, see [USER.md](USER.md).
+
 ## What follows below is the unmodified initial concept that was used as the basis of all the development performed by claude-flow ina few hours over two days.
 ## Observability and Introspection System
 

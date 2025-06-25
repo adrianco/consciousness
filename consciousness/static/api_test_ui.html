@@ -31,13 +31,6 @@
             padding: 20px;
         }
 
-        .auth-section {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
 
         .api-grid {
             display: grid;
@@ -176,24 +169,6 @@
             white-space: pre-wrap;
         }
 
-        .auth-status {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .auth-status.authenticated {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .auth-status.unauthenticated {
-            background: #f8d7da;
-            color: #721c24;
-        }
 
         .test-summary {
             background: white;
@@ -257,10 +232,6 @@
     <div class="header">
         <h1>🧪 Consciousness API Testing UI</h1>
         <p>Comprehensive testing interface for all API endpoints</p>
-        <div>
-            Authentication Status:
-            <span id="authStatus" class="auth-status unauthenticated">Not Authenticated</span>
-        </div>
     </div>
 
     <div class="container">
@@ -288,20 +259,6 @@
             <button class="btn btn-success" onclick="runAllTests()" style="margin-top: 15px;">🚀 Run All Tests</button>
         </div>
 
-        <!-- Authentication Section -->
-        <div class="auth-section">
-            <h3>🔐 Authentication</h3>
-            <div class="form-group">
-                <label>Username:</label>
-                <input type="text" id="username" class="form-control" value="admin" placeholder="Enter username">
-            </div>
-            <div class="form-group">
-                <label>Password:</label>
-                <input type="password" id="password" class="form-control" value="consciousness123" placeholder="Enter password">
-            </div>
-            <button class="btn btn-primary" onclick="authenticate()">Login</button>
-            <button class="btn btn-danger" onclick="logout()">Logout</button>
-        </div>
 
         <!-- API Endpoints Grid -->
         <div class="api-grid">
@@ -830,7 +787,7 @@
     </div>
 
     <script>
-        let authToken = null;
+        // Authentication bypassed
         let wsConnection = null;
         let testStats = {
             total: 30,
@@ -847,50 +804,14 @@
         }
 
         // Authentication
-        async function authenticate() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
 
-            try {
-                const response = await fetch('/api/v1/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username, password })
-                });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    authToken = data.access_token;
-                    document.getElementById('authStatus').textContent = 'Authenticated';
-                    document.getElementById('authStatus').className = 'auth-status authenticated';
-                    showResponse('auth', response.status, data);
-                } else {
-                    throw new Error(data.error?.message || 'Authentication failed');
-                }
-            } catch (error) {
-                showResponse('auth', 'ERROR', { error: error.message });
-            }
-        }
-
-        function logout() {
-            authToken = null;
-            document.getElementById('authStatus').textContent = 'Not Authenticated';
-            document.getElementById('authStatus').className = 'auth-status unauthenticated';
-        }
-
-        // Generic API call function
+        // Generic API call function (authentication bypassed)
         async function apiCall(endpoint, options = {}) {
             const headers = {
                 'Content-Type': 'application/json',
                 ...options.headers
             };
-
-            if (authToken) {
-                headers['Authorization'] = `Bearer ${authToken}`;
-            }
 
             const response = await fetch(endpoint, {
                 ...options,
@@ -1036,76 +957,40 @@
                         break;
 
                     case 'interview-start':
-                        const houseId = document.getElementById('interview-house-id').value;
-                        result = await apiCall('/api/v1/interview/start', {
-                            method: 'POST',
-                            body: JSON.stringify({ house_id: houseId })
-                        });
+                        // This endpoint doesn't exist in the current backend
+                        throw new Error('Interview system endpoint not implemented');
                         break;
 
                     case 'interview-message':
-                        const interviewId = document.getElementById('interview-message-id').value;
-                        const message = document.getElementById('interview-message-text').value;
-                        if (!interviewId) {
-                            throw new Error('Interview ID is required');
-                        }
-                        result = await apiCall(`/api/v1/interview/${interviewId}/message`, {
-                            method: 'POST',
-                            body: JSON.stringify({ message })
-                        });
+                        // This endpoint doesn't exist in the current backend
+                        throw new Error('Interview system endpoint not implemented');
                         break;
 
                     case 'interview-status':
-                        const statusInterviewId = document.getElementById('interview-status-id').value;
-                        if (!statusInterviewId) {
-                            throw new Error('Interview ID is required');
-                        }
-                        result = await apiCall(`/api/v1/interview/${statusInterviewId}/status`);
+                        // This endpoint doesn't exist in the current backend
+                        throw new Error('Interview system endpoint not implemented');
                         break;
 
                     case 'discovery-scan':
-                        const protocols = Array.from(document.querySelectorAll('input[value="mdns"], input[value="upnp"], input[value="bluetooth"]'))
-                            .filter(cb => cb.checked)
-                            .map(cb => cb.value);
-                        const timeout = document.getElementById('discovery-timeout').value;
-
-                        result = await apiCall('/api/v1/discovery/scan', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                protocols,
-                                timeout_seconds: Number(timeout)
-                            })
+                        // Use the actual backend discovery endpoint
+                        result = await apiCall('/api/discovery/scan', {
+                            method: 'POST'
                         });
                         break;
 
                     case 'discovery-results':
-                        const scanId = document.getElementById('discovery-scan-id').value;
-                        if (!scanId) {
-                            throw new Error('Scan ID is required');
-                        }
-                        result = await apiCall(`/api/v1/discovery/scan/${scanId}`);
+                        // Use the actual backend discovery status endpoint
+                        result = await apiCall('/api/discovery/status');
                         break;
 
                     case 'integration-templates':
-                        const brand = document.getElementById('templates-brand').value;
-                        const deviceClass = document.getElementById('templates-device-class').value;
-                        const templateParams = new URLSearchParams();
-                        if (brand) templateParams.append('brand', brand);
-                        if (deviceClass) templateParams.append('device_class', deviceClass);
-                        result = await apiCall(`/api/v1/integrations/templates?${templateParams.toString()}`);
+                        // This endpoint doesn't exist in the current backend
+                        throw new Error('Integration templates endpoint not implemented');
                         break;
 
                     case 'device-classify':
-                        const description = document.getElementById('classify-description').value;
-                        const context = document.getElementById('classify-context').value;
-
-                        result = await apiCall('/api/v1/integrations/classify', {
-                            method: 'POST',
-                            body: JSON.stringify({
-                                description,
-                                context: context ? JSON.parse(context) : {}
-                            })
-                        });
+                        // This endpoint doesn't exist in the current backend
+                        throw new Error('Device classification endpoint not implemented');
                         break;
 
                     case 'safla-status':
@@ -1200,37 +1085,11 @@
 
         // WebSocket functions
         function connectWebSocket() {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            wsConnection = new WebSocket(`${protocol}//${window.location.host}/api/v1/realtime`);
-
-            wsConnection.onopen = function() {
-                document.getElementById('wsStatus').textContent = 'Connected';
-                document.getElementById('wsStatus').style.color = '#4CAF50';
-                logWebSocket('Connected to WebSocket');
-
-                // Send initialization message
-                wsConnection.send(JSON.stringify({
-                    type: 'init',
-                    data: {
-                        subscriptions: ['consciousness', 'devices', 'interview']
-                    }
-                }));
-            };
-
-            wsConnection.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                logWebSocket(`Received: ${JSON.stringify(data, null, 2)}`);
-            };
-
-            wsConnection.onclose = function() {
-                document.getElementById('wsStatus').textContent = 'Disconnected';
-                document.getElementById('wsStatus').style.color = '#f44336';
-                logWebSocket('WebSocket connection closed');
-            };
-
-            wsConnection.onerror = function(error) {
-                logWebSocket(`WebSocket error: ${error}`);
-            };
+            // WebSocket endpoint doesn't exist in current backend
+            document.getElementById('wsStatus').textContent = 'Not Available';
+            document.getElementById('wsStatus').style.color = '#f44336';
+            logWebSocket('WebSocket endpoint not implemented in current backend');
+            logWebSocket('Real-time updates are not available');
         }
 
         function disconnectWebSocket() {

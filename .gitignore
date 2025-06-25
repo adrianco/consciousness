@@ -162,5 +162,7 @@ cython_debug/
 downloads/
 sessions/
 consciousness-env/
-.vscode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
 memory_key.txt

@@ -1,10 +1,10 @@
 # Claude Code Configuration
 
 ## Build Commands
-- `npm run build`: Build the project
-- `npm run test`: Run the full test suite
-- `npm run lint`: Run ESLint and format checks
-- `npm run typecheck`: Run TypeScript type checking
+- `pip install -e .`: Install the project in development mode
+- `pytest`: Run the full test suite
+- `black . && isort . && flake8`: Run code formatting and linting
+- `mypy consciousness`: Run type checking
 - `./claude-flow --help`: Show all available commands
 
 ## Claude-Flow Complete Command Reference
@@ -194,7 +194,7 @@ TodoWrite([
     assignedAgent: "architect"
   },
   {
-    id: "frontend_development", 
+    id: "frontend_development",
     content: "Develop React components and user interface",
     status: "pending",
     priority: "medium",

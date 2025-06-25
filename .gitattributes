@@ -1,0 +1,34 @@
+# Ensure consistent line endings
+* text=auto eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+
+# Python files
+*.py text diff=python
+
+# Configuration files
+*.json text
+*.yaml text
+*.yml text
+*.toml text
+*.cfg text
+*.ini text
+
+# Documentation
+*.md text
+*.txt text
+*.rst text
+
+# Web files
+*.html text
+*.css text
+*.js text
+*.ts text

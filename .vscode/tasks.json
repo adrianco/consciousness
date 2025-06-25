@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "git-commit-safe",
+            "type": "shell",
+            "command": "git",
+            "args": ["add", "-A", "&&", "git", "commit", "-m", "${input:commitMessage}", "&&", "git", "add", "-A"],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "git-commit-and-push-safe",
+            "type": "shell",
+            "command": "bash",
+            "args": ["-c", "git add -A && git commit -m '${input:commitMessage}' && git add -A && git push"],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "commitMessage",
+            "description": "Commit message",
+            "default": "",
+            "type": "promptString"
+        }
+    ]
+}

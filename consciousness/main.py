@@ -5,15 +5,72 @@ Main FastAPI application for the House Consciousness System.
 import os
 import random
 from contextlib import asynccontextmanager
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, Security
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel, Field
 
 from .demo_devices import device_simulator
 from .simple_health import simple_health_checker
+
+
+# Authentication models and functions
+class AuthCredentials(BaseModel):
+    """Authentication credentials."""
+
+    username: str = Field(..., description="Username")
+    password: str = Field(..., description="Password")
+
+
+# Simple JWT-like token generation (for demo purposes)
+def create_simple_token(username: str) -> str:
+    """Create a simple token for demo purposes."""
+    import base64
+    import json
+
+    token_data = {
+        "sub": username,
+        "exp": (datetime.now() + timedelta(hours=1)).isoformat(),
+        "iat": datetime.now().isoformat(),
+    }
+    token_json = json.dumps(token_data)
+    return base64.b64encode(token_json.encode()).decode()
+
+
+def verify_simple_token(token: str) -> dict:
+    """Verify simple token for demo purposes."""
+    import base64
+    import json
+
+    try:
+        token_json = base64.b64decode(token.encode()).decode()
+        token_data = json.loads(token_json)
+        # Check if token is expired
+        exp_time = datetime.fromisoformat(token_data["exp"])
+        if datetime.now() > exp_time:
+            raise HTTPException(status_code=401, detail="Token expired")
+        return token_data
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+
+# Security
+security = HTTPBearer(auto_error=False)
+
+
+async def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Security(security),
+):
+    """Get current user from token."""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    token_data = verify_simple_token(credentials.credentials)
+    return token_data.get("sub")
 
 
 @asynccontextmanager
@@ -74,6 +131,148 @@ async def api_root():
         "status": "active",
         "docs": "/docs",
         "web_interface": "/",
+    }
+
+
+# Authentication endpoints
+@app.post("/api/v1/auth/login")
+async def login(credentials: AuthCredentials):
+    """Authenticate user and return token."""
+    # Simple demo authentication - in production, use proper password hashing
+    if credentials.username == "admin" and credentials.password == "consciousness123":
+        token = create_simple_token(credentials.username)
+        return {
+            "access_token": token,
+            "token_type": "Bearer",
+            "expires_in": 3600,
+        }
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+
+# Consciousness endpoints
+@app.get("/api/v1/consciousness/status")
+async def get_consciousness_status(current_user: str = Depends(get_current_user)):
+    """Get consciousness system status."""
+    return {
+        "status": "active",
+        "awareness_level": 0.85,
+        "emotional_state": {"primary": "calm", "arousal": 0.3, "valence": 0.7},
+        "active_devices": device_simulator.get_device_count(),
+        "safla_loops": 3,
+        "last_update": datetime.now().isoformat(),
+    }
+
+
+@app.get("/api/v1/consciousness/emotions")
+async def get_emotions(current_user: str = Depends(get_current_user)):
+    """Get emotional state."""
+    return {"current": {"primary_emotion": "calm", "arousal": 0.3, "valence": 0.7}}
+
+
+@app.post("/api/v1/consciousness/query")
+async def query_consciousness(
+    query_data: dict, current_user: str = Depends(get_current_user)
+):
+    """Process consciousness query."""
+    query = query_data.get("query", "")
+    return {
+        "response": f"I understand your query: '{query}'. I'm here to help manage your smart home.",
+        "timestamp": datetime.now().isoformat(),
+    }
+
+
+# Device endpoints (v1 API versions)
+@app.get("/api/v1/devices")
+async def get_devices_v1(current_user: str = Depends(get_current_user)):
+    """Get all devices (v1 API)."""
+    devices = device_simulator.get_all_devices()
+    return {"devices": devices, "total": len(devices)}
+
+
+@app.put("/api/v1/devices/{device_id}/control")
+async def control_device_v1(
+    device_id: str, command: dict, current_user: str = Depends(get_current_user)
+):
+    """Control a device (v1 API)."""
+    device = device_simulator.get_device(device_id)
+    if not device:
+        raise HTTPException(status_code=404, detail="Device not found")
+
+    action = command.get("action")
+    value = command.get("value")
+
+    # Simulate device control
+    update_data = {"last_action": action, "last_update": datetime.now().isoformat()}
+    if action == "turn_on":
+        update_data["status"] = "active"
+    elif action == "turn_off":
+        update_data["status"] = "inactive"
+
+    updated_device = device_simulator.update_device(device_id, update_data)
+    return {"status": "success", "device": updated_device}
+
+
+@app.post("/api/v1/devices/batch-control")
+async def batch_control_devices_v1(
+    batch_data: dict, current_user: str = Depends(get_current_user)
+):
+    """Batch control devices (v1 API)."""
+    devices = batch_data.get("devices", [])
+    results = []
+
+    for device_cmd in devices:
+        device_id = device_cmd.get("device_id")
+        action = device_cmd.get("action")
+
+        if device_id and device_simulator.get_device(device_id):
+            update_data = {
+                "last_action": action,
+                "last_update": datetime.now().isoformat(),
+            }
+            if action == "turn_on":
+                update_data["status"] = "active"
+            elif action == "turn_off":
+                update_data["status"] = "inactive"
+
+            device_simulator.update_device(device_id, update_data)
+            results.append({"device_id": device_id, "status": "success"})
+        else:
+            results.append(
+                {
+                    "device_id": device_id,
+                    "status": "error",
+                    "message": "Device not found",
+                }
+            )
+
+    return {"results": results}
+
+
+# Memory endpoints
+@app.get("/api/v1/memory")
+async def get_memory(current_user: str = Depends(get_current_user)):
+    """Get memory entries."""
+    return {
+        "memories": [
+            {
+                "type": "experience",
+                "content": "User turned on living room lights at 7:30 PM",
+                "timestamp": datetime.now().isoformat(),
+            }
+        ]
+    }
+
+
+@app.post("/api/v1/memory")
+async def store_memory(
+    memory_data: dict, current_user: str = Depends(get_current_user)
+):
+    """Store memory entry."""
+    return {
+        "memory_id": f"mem_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+        "status": "stored",
+        "timestamp": datetime.now().isoformat(),
     }
 
 
@@ -197,9 +396,9 @@ async def scan_for_devices():
     """Trigger device discovery scan."""
     if device_simulator.demo_mode:
         # In demo mode, simulate finding new devices occasionally
-        if random.random() < 0.3:  # 30% chance of "finding" a new device
-            import random
+        import random
 
+        if random.random() < 0.3:  # 30% chance of "finding" a new device
             new_device = {
                 "name": f"New Device {random.randint(100, 999)}",
                 "type": random.choice(["smart_plug", "sensor", "light", "speaker"]),
