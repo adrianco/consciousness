@@ -82,6 +82,8 @@ docker run -d -p 3000:3000 grafana/grafana
 
 **Access:** http://localhost:3000 (admin/admin)
 
+**Note:** The consciousness web interface itself is at http://localhost:8000
+
 **Recommended Dashboards:**
 
 1. **System Overview Dashboard**

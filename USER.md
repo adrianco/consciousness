@@ -27,7 +27,7 @@ curl http://localhost:8000/api/devices/discovered
 
 ### 2. Web Interface
 
-Open your browser to `http://localhost:8000/docs` to access the interactive API documentation, or `http://localhost:3000` for the web interface (if enabled).
+Open your browser to `http://localhost:8000` for the web interface, or `http://localhost:8000/docs` for the interactive API documentation.
 
 ## Core Features
 
