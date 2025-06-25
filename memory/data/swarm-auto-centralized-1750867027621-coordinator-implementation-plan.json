@@ -1,0 +1,356 @@
+{
+  "timestamp": "2025-06-25T16:00:24.366509",
+  "specification_type": "api_implementation_roadmap",
+  "coordinator": "Lead Coordinator",
+  "memory_key": "swarm-auto-centralized-1750867027621/coordinator/implementation_plan",
+  "executive_summary": {
+    "objective": "Extend main Web UI to provide comprehensive API testing and GitHub integration",
+    "current_status": "Web UI is feature-complete, backend APIs need implementation",
+    "gap": "Approximately 25+ API endpoints missing from backend",
+    "strategy": "Extend existing main.py with comprehensive FastAPI endpoints",
+    "testing_approach": "Use existing api_test_ui.html as validation tool"
+  },
+  "api_implementation_specifications": {
+    "authentication_endpoints": {
+      "POST /api/v1/auth/login": {
+        "request_body": {
+          "username": "string",
+          "password": "string"
+        },
+        "response": {
+          "access_token": "string",
+          "token_type": "bearer",
+          "expires_in": "int"
+        },
+        "implementation": "Simple JWT token generation with hardcoded credentials",
+        "test_data": {
+          "username": "admin",
+          "password": "consciousness123"
+        }
+      },
+      "POST /api/v1/auth/logout": {
+        "headers": [
+          "Authorization: Bearer <token>"
+        ],
+        "response": {
+          "message": "Logged out successfully"
+        },
+        "implementation": "Token invalidation (can be simple acknowledgment)"
+      }
+    },
+    "consciousness_endpoints": {
+      "GET /api/v1/consciousness/status": {
+        "response": {
+          "status": "active",
+          "awareness_level": 0.85,
+          "emotional_state": "calm",
+          "safla_loops_active": 3,
+          "memory_usage": "45%",
+          "last_updated": "ISO timestamp"
+        },
+        "implementation": "Return simulated consciousness metrics"
+      },
+      "GET /api/v1/consciousness/emotions": {
+        "query_params": [
+          "time_range",
+          "include_history"
+        ],
+        "response": {
+          "current": {
+            "primary_emotion": "calm",
+            "arousal": 0.3,
+            "valence": 0.7
+          },
+          "history": "array of emotion states if include_history=true"
+        }
+      },
+      "POST /api/v1/consciousness/query": {
+        "request_body": {
+          "query": "string",
+          "include_devices": "boolean",
+          "context": "object"
+        },
+        "response": {
+          "response": "AI-generated response string",
+          "confidence": 0.9,
+          "context_used": "object"
+        },
+        "implementation": "Simple response generation based on query content"
+      }
+    },
+    "memory_endpoints": {
+      "GET /api/v1/memory": {
+        "query_params": [
+          "memory_type",
+          "time_range",
+          "limit"
+        ],
+        "response": {
+          "memories": [
+            {
+              "id": "string",
+              "type": "experience|pattern|preference|interaction",
+              "content": "string",
+              "timestamp": "ISO string",
+              "context": "object"
+            }
+          ],
+          "total": "int"
+        }
+      },
+      "POST /api/v1/memory": {
+        "request_body": {
+          "type": "string",
+          "content": "string",
+          "context": "object"
+        },
+        "response": {
+          "id": "generated_id",
+          "message": "Memory stored successfully"
+        }
+      }
+    },
+    "interview_endpoints": {
+      "POST /api/v1/interview/start": {
+        "request_body": {
+          "house_id": "string"
+        },
+        "response": {
+          "interview_id": "uuid",
+          "ai_message": "Welcome message asking about devices",
+          "status": "active"
+        }
+      },
+      "POST /api/v1/interview/{interview_id}/message": {
+        "request_body": {
+          "message": "string"
+        },
+        "response": {
+          "ai_response": "Follow-up question or acknowledgment",
+          "detected_devices": "array of potential devices",
+          "confidence": "float"
+        }
+      },
+      "GET /api/v1/interview/{interview_id}/status": {
+        "response": {
+          "status": "active|completed|paused",
+          "progress": "float 0-1",
+          "discovered_devices": "int",
+          "last_activity": "ISO timestamp"
+        }
+      }
+    },
+    "discovery_endpoints": {
+      "POST /api/v1/discovery/scan": {
+        "request_body": {
+          "protocols": [
+            "mdns",
+            "upnp",
+            "bluetooth"
+          ],
+          "timeout_seconds": 30
+        },
+        "response": {
+          "scan_id": "uuid",
+          "status": "started",
+          "estimated_completion": "ISO timestamp"
+        }
+      },
+      "GET /api/v1/discovery/scan/{scan_id}": {
+        "response": {
+          "status": "running|completed|failed",
+          "progress": "float 0-1",
+          "total_devices_found": "int",
+          "results": {
+            "mdns": "array of discovered devices",
+            "upnp": "array of discovered devices",
+            "bluetooth": "array of discovered devices"
+          }
+        }
+      }
+    },
+    "safla_endpoints": {
+      "GET /api/v1/safla/status": {
+        "response": {
+          "active_loops": "int",
+          "loops": [
+            {
+              "id": "string",
+              "type": "sense|analyze|feedback|learn|action",
+              "status": "active|paused",
+              "last_run": "ISO timestamp"
+            }
+          ]
+        }
+      },
+      "POST /api/v1/safla/trigger": {
+        "request_body": {
+          "loop_id": "string",
+          "parameters": "object"
+        },
+        "response": {
+          "status": "triggered",
+          "loop_id": "string",
+          "execution_id": "uuid"
+        }
+      }
+    },
+    "twins_endpoints": {
+      "GET /api/v1/twins": {
+        "query_params": [
+          "device_id",
+          "sync_status",
+          "fidelity_level"
+        ],
+        "response": {
+          "twins": [
+            {
+              "id": "uuid",
+              "device_id": "string",
+              "device_name": "string",
+              "fidelity_level": "basic|advanced|expert",
+              "sync_status": "synchronized|out_of_sync",
+              "last_sync": "ISO timestamp"
+            }
+          ]
+        }
+      },
+      "POST /api/v1/twins": {
+        "request_body": {
+          "device_id": "string",
+          "fidelity_level": "basic|advanced|expert",
+          "config": "object"
+        },
+        "response": {
+          "id": "uuid",
+          "message": "Digital twin created successfully"
+        }
+      }
+    },
+    "scenario_endpoints": {
+      "POST /api/v1/scenarios": {
+        "request_body": {
+          "name": "string",
+          "description": "string",
+          "duration": "int (seconds)",
+          "events": "array of timed events",
+          "twin_ids": "array of twin IDs"
+        },
+        "response": {
+          "id": "uuid",
+          "status": "created",
+          "estimated_runtime": "int seconds"
+        }
+      },
+      "POST /api/v1/predictions/what-if": {
+        "request_body": {
+          "scenario": "string",
+          "changes": "object",
+          "duration": "string (1h, 30m, etc)",
+          "metrics": "array of metric names"
+        },
+        "response": {
+          "analysis_id": "uuid",
+          "results": "object with metric values",
+          "confidence": "float",
+          "recommendations": "array of strings"
+        }
+      }
+    },
+    "websocket_endpoint": {
+      "WebSocket /api/v1/realtime": {
+        "connection_flow": [
+          "Client connects to ws://host/api/v1/realtime",
+          "Client sends init message with subscriptions",
+          "Server sends periodic updates based on subscriptions"
+        ],
+        "message_types": [
+          "consciousness_query",
+          "device_update",
+          "batch_device_update",
+          "interview_update",
+          "status_update"
+        ],
+        "implementation": "FastAPI WebSocket with periodic updates"
+      }
+    }
+  },
+  "implementation_structure": {
+    "file_modifications": {
+      "/workspaces/consciousness/consciousness/main.py": {
+        "approach": "Extend existing FastAPI app with new router endpoints",
+        "structure": [
+          "Add authentication middleware",
+          "Add v1 API router with all missing endpoints",
+          "Add WebSocket endpoint for real-time updates",
+          "Add request/response models using Pydantic",
+          "Add simulated data generators for demo responses"
+        ],
+        "preservation": "Keep all existing endpoints and functionality"
+      }
+    },
+    "testing_validation": {
+      "primary_tool": "/workspaces/consciousness/consciousness/static/api_test_ui.html",
+      "validation_steps": [
+        "Run authentication flow",
+        "Test all 30+ endpoints individually",
+        "Test batch operations",
+        "Test WebSocket connections",
+        "Validate error handling",
+        "Test with dashboard.html integration"
+      ]
+    }
+  },
+  "github_integration_plan": {
+    "workflow": {
+      "branch_strategy": "Create feature branch api-extensions",
+      "commit_strategy": "Incremental commits per endpoint group",
+      "testing_protocol": "Test each group before next commits",
+      "documentation": "Update API documentation with new endpoints"
+    },
+    "deliverables": [
+      "Extended main.py with comprehensive API endpoints",
+      "Full test suite validation using api_test_ui.html",
+      "Updated README with API documentation",
+      "Pull request with test results and screenshots"
+    ]
+  },
+  "coordination_assignments": {
+    "backend_developer_agent": {
+      "primary_task": "Implement all missing API endpoints in main.py",
+      "focus_areas": [
+        "Authentication",
+        "Consciousness APIs",
+        "Memory system"
+      ],
+      "deliverable": "Extended FastAPI application with 25+ new endpoints"
+    },
+    "integration_specialist_agent": {
+      "primary_task": "Ensure UI integration works with new APIs",
+      "focus_areas": [
+        "WebSocket implementation",
+        "Real-time updates",
+        "Error handling"
+      ],
+      "deliverable": "Fully functional dashboard with live API connections"
+    },
+    "testing_agent": {
+      "primary_task": "Comprehensive validation using existing test UI",
+      "focus_areas": [
+        "All endpoint testing",
+        "Error scenarios",
+        "Performance validation"
+      ],
+      "deliverable": "Complete test report with success/failure metrics"
+    },
+    "github_agent": {
+      "primary_task": "Git operations and pull request creation",
+      "focus_areas": [
+        "Branch management",
+        "Commit organization",
+        "PR documentation"
+      ],
+      "deliverable": "Pull request with comprehensive API extensions"
+    }
+  }
+}

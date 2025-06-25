@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consciousness API Testing UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .auth-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .api-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .api-category {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .api-category h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e1e5e9;
+        }
+
+        .endpoint {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .endpoint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .method {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .method.GET { background: #28a745; }
+        .method.POST { background: #007bff; }
+        .method.PUT { background: #ffc107; color: #333; }
+        .method.DELETE { background: #dc3545; }
+
+        .endpoint-path {
+            font-family: monospace;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .endpoint-controls {
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-control.textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .response-container {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f1f3f4;
+            border-radius: 4px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .response-status {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .response-status.success { color: #28a745; }
+        .response-status.error { color: #dc3545; }
+
+        .response-body {
+            font-family: monospace;
+            font-size: 12px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .auth-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .auth-status.authenticated {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .auth-status.unauthenticated {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .test-summary {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .test-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .test-stat {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .test-stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .test-stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .websocket-section {
+            grid-column: 1 / -1;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+        }
+
+        .websocket-log {
+            height: 200px;
+            overflow-y: auto;
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧪 Consciousness API Testing UI</h1>
+        <p>Comprehensive testing interface for all API endpoints</p>
+        <div>
+            Authentication Status:
+            <span id="authStatus" class="auth-status unauthenticated">Not Authenticated</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Test Summary -->
+        <div class="test-summary">
+            <h3>Test Coverage Summary</h3>
+            <div class="test-stats">
+                <div class="test-stat">
+                    <div class="test-stat-value" id="totalEndpoints">30+</div>
+                    <div class="test-stat-label">Total Endpoints</div>
+                </div>
+                <div class="test-stat">
+                    <div class="test-stat-value" id="testedEndpoints">0</div>
+                    <div class="test-stat-label">Tested</div>
+                </div>
+                <div class="test-stat">
+                    <div class="test-stat-value" id="successfulTests">0</div>
+                    <div class="test-stat-label">Successful</div>
+                </div>
+                <div class="test-stat">
+                    <div class="test-stat-value" id="failedTests">0</div>
+                    <div class="test-stat-label">Failed</div>
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="runAllTests()" style="margin-top: 15px;">🚀 Run All Tests</button>
+        </div>
+
+        <!-- Authentication Section -->
+        <div class="auth-section">
+            <h3>🔐 Authentication</h3>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="username" class="form-control" value="admin" placeholder="Enter username">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="password" class="form-control" value="consciousness123" placeholder="Enter password">
+            </div>
+            <button class="btn btn-primary" onclick="authenticate()">Login</button>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- API Endpoints Grid -->
+        <div class="api-grid">
+            <!-- Core System Endpoints -->
+            <div class="api-category">
+                <h3>🏠 Core System</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/health</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('health')">Test</button>
+                    <div id="response-health" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/consciousness/status</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('consciousness-status')">Test</button>
+                    <div id="response-consciousness-status" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/consciousness/emotions</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Time Range:</label>
+                            <select id="emotions-time-range" class="form-control">
+                                <option value="1h">1 hour</option>
+                                <option value="6h">6 hours</option>
+                                <option value="1d">1 day</option>
+                                <option value="7d">7 days</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="emotions-include-history" checked> Include History
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('consciousness-emotions')">Test</button>
+                    <div id="response-consciousness-emotions" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/consciousness/query</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Query:</label>
+                            <textarea id="consciousness-query" class="form-control textarea" placeholder="Enter natural language query">How are you feeling today?</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="consciousness-include-devices" checked> Include Devices
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('consciousness-query')">Test</button>
+                    <div id="response-consciousness-query" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Device Management -->
+            <div class="api-category">
+                <h3>📱 Device Management</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/devices</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Status Filter:</label>
+                            <select id="devices-status" class="form-control">
+                                <option value="">All</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Location Filter:</label>
+                            <input type="text" id="devices-location" class="form-control" placeholder="e.g., living_room">
+                        </div>
+                        <div class="form-group">
+                            <label>Device Type Filter:</label>
+                            <input type="text" id="devices-type" class="form-control" placeholder="e.g., light">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('devices-list')">Test</button>
+                    <div id="response-devices-list" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/devices/{device_id}</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Device ID:</label>
+                            <input type="text" id="device-id-get" class="form-control" placeholder="Enter device ID">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('device-get')">Test</button>
+                    <div id="response-device-get" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method PUT">PUT</span>
+                        <span class="endpoint-path">/api/v1/devices/{device_id}/control</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Device ID:</label>
+                            <input type="text" id="device-control-id" class="form-control" placeholder="Enter device ID">
+                        </div>
+                        <div class="form-group">
+                            <label>Action:</label>
+                            <input type="text" id="device-control-action" class="form-control" placeholder="e.g., turn_on, set_brightness">
+                        </div>
+                        <div class="form-group">
+                            <label>Value (optional):</label>
+                            <input type="text" id="device-control-value" class="form-control" placeholder="e.g., 75, true, off">
+                        </div>
+                        <div class="form-group">
+                            <label>Transition Time (ms):</label>
+                            <input type="number" id="device-control-transition" class="form-control" placeholder="1000">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('device-control')">Test</button>
+                    <div id="response-device-control" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/devices/batch-control</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Batch Commands (JSON):</label>
+                            <textarea id="batch-control-commands" class="form-control textarea" placeholder='{"devices": [{"device_id": "1", "action": "turn_on"}, {"device_id": "2", "action": "turn_off"}]}'></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('batch-control')">Test</button>
+                    <div id="response-batch-control" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Memory System -->
+            <div class="api-category">
+                <h3>🧠 Memory System</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/memory</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Memory Type:</label>
+                            <input type="text" id="memory-type" class="form-control" placeholder="e.g., experience, interaction">
+                        </div>
+                        <div class="form-group">
+                            <label>Time Range:</label>
+                            <select id="memory-time-range" class="form-control">
+                                <option value="1d">1 day</option>
+                                <option value="7d" selected>7 days</option>
+                                <option value="30d">30 days</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Limit:</label>
+                            <input type="number" id="memory-limit" class="form-control" value="10" min="1" max="100">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('memory-get')">Test</button>
+                    <div id="response-memory-get" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/memory</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Memory Type:</label>
+                            <input type="text" id="memory-store-type" class="form-control" value="test_memory" placeholder="Memory type">
+                        </div>
+                        <div class="form-group">
+                            <label>Content:</label>
+                            <textarea id="memory-store-content" class="form-control textarea" placeholder="Memory content">Test memory entry from API testing UI</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Context (JSON):</label>
+                            <textarea id="memory-store-context" class="form-control textarea" placeholder='{"source": "api_test", "timestamp": "..."}'></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('memory-store')">Test</button>
+                    <div id="response-memory-store" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Interview System -->
+            <div class="api-category">
+                <h3>🎯 Interview System</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/interview/start</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>House ID:</label>
+                            <input type="text" id="interview-house-id" class="form-control" value="test_house_001" placeholder="House identifier">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('interview-start')">Test</button>
+                    <div id="response-interview-start" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/interview/{interview_id}/message</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Interview ID:</label>
+                            <input type="text" id="interview-message-id" class="form-control" placeholder="Interview ID from start interview">
+                        </div>
+                        <div class="form-group">
+                            <label>Message:</label>
+                            <textarea id="interview-message-text" class="form-control textarea" placeholder="User message to the interview system">I have smart lights in my living room and bedroom, plus a smart thermostat in the hallway.</textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('interview-message')">Test</button>
+                    <div id="response-interview-message" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/interview/{interview_id}/status</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Interview ID:</label>
+                            <input type="text" id="interview-status-id" class="form-control" placeholder="Interview ID">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('interview-status')">Test</button>
+                    <div id="response-interview-status" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Discovery System -->
+            <div class="api-category">
+                <h3>🔍 Discovery System</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/discovery/scan</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Protocols:</label>
+                            <div>
+                                <label><input type="checkbox" value="mdns" checked> mDNS</label>
+                                <label><input type="checkbox" value="upnp" checked> UPnP</label>
+                                <label><input type="checkbox" value="bluetooth"> Bluetooth</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Timeout (seconds):</label>
+                            <input type="number" id="discovery-timeout" class="form-control" value="30" min="5" max="120">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('discovery-scan')">Test</button>
+                    <div id="response-discovery-scan" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/discovery/scan/{scan_id}</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Scan ID:</label>
+                            <input type="text" id="discovery-scan-id" class="form-control" placeholder="Scan ID from discovery scan">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('discovery-results')">Test</button>
+                    <div id="response-discovery-results" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Integration Templates -->
+            <div class="api-category">
+                <h3>🔧 Integration Templates</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/integrations/templates</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Brand Filter:</label>
+                            <input type="text" id="templates-brand" class="form-control" placeholder="e.g., philips, samsung">
+                        </div>
+                        <div class="form-group">
+                            <label>Device Class Filter:</label>
+                            <input type="text" id="templates-device-class" class="form-control" placeholder="e.g., light, sensor">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('integration-templates')">Test</button>
+                    <div id="response-integration-templates" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/integrations/classify</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Device Description:</label>
+                            <textarea id="classify-description" class="form-control textarea" placeholder="Smart bulb that changes colors and can be dimmed, made by Philips Hue">Smart bulb that changes colors and can be dimmed, made by Philips Hue</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Context (JSON):</label>
+                            <textarea id="classify-context" class="form-control textarea" placeholder='{"location": "living_room", "discovered_by": "user_input"}'></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('device-classify')">Test</button>
+                    <div id="response-device-classify" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- SAFLA Loops -->
+            <div class="api-category">
+                <h3>🔄 SAFLA Loops</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/safla/status</span>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('safla-status')">Test</button>
+                    <div id="response-safla-status" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/safla/trigger</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Loop ID:</label>
+                            <input type="text" id="safla-loop-id" class="form-control" value="main_loop" placeholder="SAFLA loop identifier">
+                        </div>
+                        <div class="form-group">
+                            <label>Parameters (JSON):</label>
+                            <textarea id="safla-parameters" class="form-control textarea" placeholder='{"priority": "high", "context": "manual_trigger"}'></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('safla-trigger')">Test</button>
+                    <div id="response-safla-trigger" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Digital Twins -->
+            <div class="api-category">
+                <h3>👥 Digital Twins</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method GET">GET</span>
+                        <span class="endpoint-path">/api/v1/twins</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Device ID Filter:</label>
+                            <input type="text" id="twins-device-id" class="form-control" placeholder="Filter by device ID">
+                        </div>
+                        <div class="form-group">
+                            <label>Sync Status:</label>
+                            <select id="twins-sync-status" class="form-control">
+                                <option value="">All</option>
+                                <option value="synchronized">Synchronized</option>
+                                <option value="out_of_sync">Out of Sync</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fidelity Level:</label>
+                            <select id="twins-fidelity" class="form-control">
+                                <option value="">All</option>
+                                <option value="basic">Basic</option>
+                                <option value="standard">Standard</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('twins-list')">Test</button>
+                    <div id="response-twins-list" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/twins</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Device ID:</label>
+                            <input type="text" id="twin-create-device-id" class="form-control" value="test_device_001" placeholder="Device ID to create twin for">
+                        </div>
+                        <div class="form-group">
+                            <label>Fidelity Level:</label>
+                            <select id="twin-create-fidelity" class="form-control">
+                                <option value="basic">Basic</option>
+                                <option value="standard">Standard</option>
+                                <option value="advanced" selected>Advanced</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Configuration (JSON):</label>
+                            <textarea id="twin-create-config" class="form-control textarea" placeholder='{"update_frequency": 60, "include_history": true}'></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('twin-create')">Test</button>
+                    <div id="response-twin-create" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- Scenarios & Predictions -->
+            <div class="api-category">
+                <h3>🎬 Scenarios & Predictions</h3>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/scenarios</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Scenario Name:</label>
+                            <input type="text" id="scenario-name" class="form-control" value="test_scenario" placeholder="Scenario name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea id="scenario-description" class="form-control textarea" placeholder="Detailed scenario description">Test scenario for API validation</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration (seconds):</label>
+                            <input type="number" id="scenario-duration" class="form-control" value="300" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Events (JSON Array):</label>
+                            <textarea id="scenario-events" class="form-control textarea" placeholder='[{"time": 0, "action": "turn_on", "device": "light_1"}, {"time": 60, "action": "set_brightness", "device": "light_1", "value": 50}]'></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Twin IDs (comma-separated):</label>
+                            <input type="text" id="scenario-twin-ids" class="form-control" value="twin_1,twin_2" placeholder="Affected digital twin IDs">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('scenario-create')">Test</button>
+                    <div id="response-scenario-create" class="response-container" style="display: none;"></div>
+                </div>
+
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method POST">POST</span>
+                        <span class="endpoint-path">/api/v1/predictions/what-if</span>
+                    </div>
+                    <div class="endpoint-controls">
+                        <div class="form-group">
+                            <label>Scenario:</label>
+                            <input type="text" id="whatif-scenario" class="form-control" value="energy_optimization" placeholder="Scenario name">
+                        </div>
+                        <div class="form-group">
+                            <label>Changes (JSON):</label>
+                            <textarea id="whatif-changes" class="form-control textarea" placeholder='{"temperature_setpoint": 20, "lighting_brightness": 75}'></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Duration:</label>
+                            <input type="text" id="whatif-duration" class="form-control" value="1h" placeholder="Analysis duration (e.g., 1h, 30m)">
+                        </div>
+                        <div class="form-group">
+                            <label>Metrics (comma-separated):</label>
+                            <input type="text" id="whatif-metrics" class="form-control" value="energy_consumption,comfort_level,cost" placeholder="Metrics to analyze">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="testEndpoint('whatif-analysis')">Test</button>
+                    <div id="response-whatif-analysis" class="response-container" style="display: none;"></div>
+                </div>
+            </div>
+
+            <!-- WebSocket Real-time Updates -->
+            <div class="websocket-section">
+                <h3>🔴 WebSocket Real-time Updates</h3>
+                <p>Real-time connection to /api/v1/realtime</p>
+                <button class="btn btn-primary" onclick="connectWebSocket()">Connect</button>
+                <button class="btn btn-danger" onclick="disconnectWebSocket()">Disconnect</button>
+                <div>Status: <span id="wsStatus">Disconnected</span></div>
+                <div class="websocket-log" id="wsLog"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = null;
+        let wsConnection = null;
+        let testStats = {
+            total: 30,
+            tested: 0,
+            successful: 0,
+            failed: 0
+        };
+
+        // Update test statistics display
+        function updateTestStats() {
+            document.getElementById('testedEndpoints').textContent = testStats.tested;
+            document.getElementById('successfulTests').textContent = testStats.successful;
+            document.getElementById('failedTests').textContent = testStats.failed;
+        }
+
+        // Authentication
+        async function authenticate() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.access_token;
+                    document.getElementById('authStatus').textContent = 'Authenticated';
+                    document.getElementById('authStatus').className = 'auth-status authenticated';
+                    showResponse('auth', response.status, data);
+                } else {
+                    throw new Error(data.error?.message || 'Authentication failed');
+                }
+            } catch (error) {
+                showResponse('auth', 'ERROR', { error: error.message });
+            }
+        }
+
+        function logout() {
+            authToken = null;
+            document.getElementById('authStatus').textContent = 'Not Authenticated';
+            document.getElementById('authStatus').className = 'auth-status unauthenticated';
+        }
+
+        // Generic API call function
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            const response = await fetch(endpoint, {
+                ...options,
+                headers
+            });
+
+            const data = await response.json().catch(() => ({}));
+            return { response, data };
+        }
+
+        // Show response in UI
+        function showResponse(endpointId, status, data) {
+            const container = document.getElementById(`response-${endpointId}`);
+            if (!container) return;
+
+            container.style.display = 'block';
+            container.innerHTML = `
+                <div class="response-status ${status < 400 ? 'success' : 'error'}">
+                    Status: ${status}
+                </div>
+                <div class="response-body">${JSON.stringify(data, null, 2)}</div>
+            `;
+
+            // Update statistics
+            testStats.tested++;
+            if (status < 400) {
+                testStats.successful++;
+            } else {
+                testStats.failed++;
+            }
+            updateTestStats();
+        }
+
+        // Test endpoint functions
+        async function testEndpoint(endpointType) {
+            try {
+                let result;
+
+                switch (endpointType) {
+                    case 'health':
+                        result = await apiCall('/health');
+                        break;
+
+                    case 'consciousness-status':
+                        result = await apiCall('/api/v1/consciousness/status');
+                        break;
+
+                    case 'consciousness-emotions':
+                        const timeRange = document.getElementById('emotions-time-range').value;
+                        const includeHistory = document.getElementById('emotions-include-history').checked;
+                        result = await apiCall(`/api/v1/consciousness/emotions?time_range=${timeRange}&include_history=${includeHistory}`);
+                        break;
+
+                    case 'consciousness-query':
+                        const query = document.getElementById('consciousness-query').value;
+                        const includeDevices = document.getElementById('consciousness-include-devices').checked;
+                        result = await apiCall('/api/v1/consciousness/query', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                query,
+                                include_devices: includeDevices,
+                                context: { source: 'test_ui' }
+                            })
+                        });
+                        break;
+
+                    case 'devices-list':
+                        const status = document.getElementById('devices-status').value;
+                        const location = document.getElementById('devices-location').value;
+                        const deviceType = document.getElementById('devices-type').value;
+                        const params = new URLSearchParams();
+                        if (status) params.append('status', status);
+                        if (location) params.append('location', location);
+                        if (deviceType) params.append('device_type', deviceType);
+                        result = await apiCall(`/api/v1/devices?${params.toString()}`);
+                        break;
+
+                    case 'device-get':
+                        const deviceId = document.getElementById('device-id-get').value;
+                        if (!deviceId) {
+                            throw new Error('Device ID is required');
+                        }
+                        result = await apiCall(`/api/v1/devices/${deviceId}`);
+                        break;
+
+                    case 'device-control':
+                        const controlId = document.getElementById('device-control-id').value;
+                        const action = document.getElementById('device-control-action').value;
+                        const value = document.getElementById('device-control-value').value;
+                        const transition = document.getElementById('device-control-transition').value;
+
+                        if (!controlId || !action) {
+                            throw new Error('Device ID and action are required');
+                        }
+
+                        const controlData = { action };
+                        if (value) controlData.value = isNaN(value) ? value : Number(value);
+                        if (transition) controlData.transition_time = Number(transition);
+
+                        result = await apiCall(`/api/v1/devices/${controlId}/control`, {
+                            method: 'PUT',
+                            body: JSON.stringify(controlData)
+                        });
+                        break;
+
+                    case 'batch-control':
+                        const batchData = document.getElementById('batch-control-commands').value;
+                        if (!batchData) {
+                            throw new Error('Batch commands JSON is required');
+                        }
+                        result = await apiCall('/api/v1/devices/batch-control', {
+                            method: 'POST',
+                            body: batchData
+                        });
+                        break;
+
+                    case 'memory-get':
+                        const memType = document.getElementById('memory-type').value;
+                        const memTimeRange = document.getElementById('memory-time-range').value;
+                        const memLimit = document.getElementById('memory-limit').value;
+                        const memParams = new URLSearchParams();
+                        if (memType) memParams.append('memory_type', memType);
+                        memParams.append('time_range', memTimeRange);
+                        memParams.append('limit', memLimit);
+                        result = await apiCall(`/api/v1/memory?${memParams.toString()}`);
+                        break;
+
+                    case 'memory-store':
+                        const storeType = document.getElementById('memory-store-type').value;
+                        const storeContent = document.getElementById('memory-store-content').value;
+                        const storeContext = document.getElementById('memory-store-context').value;
+
+                        const memoryData = {
+                            type: storeType,
+                            content: storeContent,
+                            context: storeContext ? JSON.parse(storeContext) : {}
+                        };
+
+                        result = await apiCall('/api/v1/memory', {
+                            method: 'POST',
+                            body: JSON.stringify(memoryData)
+                        });
+                        break;
+
+                    case 'interview-start':
+                        const houseId = document.getElementById('interview-house-id').value;
+                        result = await apiCall('/api/v1/interview/start', {
+                            method: 'POST',
+                            body: JSON.stringify({ house_id: houseId })
+                        });
+                        break;
+
+                    case 'interview-message':
+                        const interviewId = document.getElementById('interview-message-id').value;
+                        const message = document.getElementById('interview-message-text').value;
+                        if (!interviewId) {
+                            throw new Error('Interview ID is required');
+                        }
+                        result = await apiCall(`/api/v1/interview/${interviewId}/message`, {
+                            method: 'POST',
+                            body: JSON.stringify({ message })
+                        });
+                        break;
+
+                    case 'interview-status':
+                        const statusInterviewId = document.getElementById('interview-status-id').value;
+                        if (!statusInterviewId) {
+                            throw new Error('Interview ID is required');
+                        }
+                        result = await apiCall(`/api/v1/interview/${statusInterviewId}/status`);
+                        break;
+
+                    case 'discovery-scan':
+                        const protocols = Array.from(document.querySelectorAll('input[value="mdns"], input[value="upnp"], input[value="bluetooth"]'))
+                            .filter(cb => cb.checked)
+                            .map(cb => cb.value);
+                        const timeout = document.getElementById('discovery-timeout').value;
+
+                        result = await apiCall('/api/v1/discovery/scan', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                protocols,
+                                timeout_seconds: Number(timeout)
+                            })
+                        });
+                        break;
+
+                    case 'discovery-results':
+                        const scanId = document.getElementById('discovery-scan-id').value;
+                        if (!scanId) {
+                            throw new Error('Scan ID is required');
+                        }
+                        result = await apiCall(`/api/v1/discovery/scan/${scanId}`);
+                        break;
+
+                    case 'integration-templates':
+                        const brand = document.getElementById('templates-brand').value;
+                        const deviceClass = document.getElementById('templates-device-class').value;
+                        const templateParams = new URLSearchParams();
+                        if (brand) templateParams.append('brand', brand);
+                        if (deviceClass) templateParams.append('device_class', deviceClass);
+                        result = await apiCall(`/api/v1/integrations/templates?${templateParams.toString()}`);
+                        break;
+
+                    case 'device-classify':
+                        const description = document.getElementById('classify-description').value;
+                        const context = document.getElementById('classify-context').value;
+
+                        result = await apiCall('/api/v1/integrations/classify', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                description,
+                                context: context ? JSON.parse(context) : {}
+                            })
+                        });
+                        break;
+
+                    case 'safla-status':
+                        result = await apiCall('/api/v1/safla/status');
+                        break;
+
+                    case 'safla-trigger':
+                        const loopId = document.getElementById('safla-loop-id').value;
+                        const parameters = document.getElementById('safla-parameters').value;
+
+                        result = await apiCall('/api/v1/safla/trigger', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                loop_id: loopId,
+                                parameters: parameters ? JSON.parse(parameters) : {}
+                            })
+                        });
+                        break;
+
+                    case 'twins-list':
+                        const twinsDeviceId = document.getElementById('twins-device-id').value;
+                        const syncStatus = document.getElementById('twins-sync-status').value;
+                        const fidelity = document.getElementById('twins-fidelity').value;
+                        const twinsParams = new URLSearchParams();
+                        if (twinsDeviceId) twinsParams.append('device_id', twinsDeviceId);
+                        if (syncStatus) twinsParams.append('sync_status', syncStatus);
+                        if (fidelity) twinsParams.append('fidelity_level', fidelity);
+                        result = await apiCall(`/api/v1/twins?${twinsParams.toString()}`);
+                        break;
+
+                    case 'twin-create':
+                        const twinDeviceId = document.getElementById('twin-create-device-id').value;
+                        const twinFidelity = document.getElementById('twin-create-fidelity').value;
+                        const twinConfig = document.getElementById('twin-create-config').value;
+
+                        result = await apiCall('/api/v1/twins', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                device_id: twinDeviceId,
+                                fidelity_level: twinFidelity,
+                                config: twinConfig ? JSON.parse(twinConfig) : {}
+                            })
+                        });
+                        break;
+
+                    case 'scenario-create':
+                        const scenarioName = document.getElementById('scenario-name').value;
+                        const scenarioDesc = document.getElementById('scenario-description').value;
+                        const scenarioDuration = document.getElementById('scenario-duration').value;
+                        const scenarioEvents = document.getElementById('scenario-events').value;
+                        const twinIds = document.getElementById('scenario-twin-ids').value.split(',').map(s => s.trim());
+
+                        result = await apiCall('/api/v1/scenarios', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                name: scenarioName,
+                                description: scenarioDesc,
+                                duration: Number(scenarioDuration),
+                                events: scenarioEvents ? JSON.parse(scenarioEvents) : [],
+                                twin_ids: twinIds
+                            })
+                        });
+                        break;
+
+                    case 'whatif-analysis':
+                        const whatifScenario = document.getElementById('whatif-scenario').value;
+                        const whatifChanges = document.getElementById('whatif-changes').value;
+                        const whatifDuration = document.getElementById('whatif-duration').value;
+                        const whatifMetrics = document.getElementById('whatif-metrics').value.split(',').map(s => s.trim());
+
+                        result = await apiCall('/api/v1/predictions/what-if', {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                scenario: whatifScenario,
+                                changes: whatifChanges ? JSON.parse(whatifChanges) : {},
+                                duration: whatifDuration,
+                                metrics: whatifMetrics
+                            })
+                        });
+                        break;
+
+                    default:
+                        throw new Error(`Unknown endpoint type: ${endpointType}`);
+                }
+
+                showResponse(endpointType, result.response.status, result.data);
+
+            } catch (error) {
+                showResponse(endpointType, 'ERROR', { error: error.message });
+            }
+        }
+
+        // WebSocket functions
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            wsConnection = new WebSocket(`${protocol}//${window.location.host}/api/v1/realtime`);
+
+            wsConnection.onopen = function() {
+                document.getElementById('wsStatus').textContent = 'Connected';
+                document.getElementById('wsStatus').style.color = '#4CAF50';
+                logWebSocket('Connected to WebSocket');
+
+                // Send initialization message
+                wsConnection.send(JSON.stringify({
+                    type: 'init',
+                    data: {
+                        subscriptions: ['consciousness', 'devices', 'interview']
+                    }
+                }));
+            };
+
+            wsConnection.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                logWebSocket(`Received: ${JSON.stringify(data, null, 2)}`);
+            };
+
+            wsConnection.onclose = function() {
+                document.getElementById('wsStatus').textContent = 'Disconnected';
+                document.getElementById('wsStatus').style.color = '#f44336';
+                logWebSocket('WebSocket connection closed');
+            };
+
+            wsConnection.onerror = function(error) {
+                logWebSocket(`WebSocket error: ${error}`);
+            };
+        }
+
+        function disconnectWebSocket() {
+            if (wsConnection) {
+                wsConnection.close();
+                wsConnection = null;
+            }
+        }
+
+        function logWebSocket(message) {
+            const log = document.getElementById('wsLog');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        // Run all tests function
+        async function runAllTests() {
+            const testButton = event.target;
+            testButton.disabled = true;
+            testButton.textContent = 'Running Tests...';
+
+            // Reset statistics
+            testStats = { total: 30, tested: 0, successful: 0, failed: 0 };
+            updateTestStats();
+
+            // List of all test functions to run
+            const tests = [
+                'health',
+                'consciousness-status',
+                'consciousness-emotions',
+                'consciousness-query',
+                'devices-list',
+                'memory-get',
+                'memory-store',
+                'interview-start',
+                'discovery-scan',
+                'integration-templates',
+                'device-classify',
+                'safla-status',
+                'safla-trigger',
+                'twins-list',
+                'twin-create',
+                'scenario-create',
+                'whatif-analysis'
+            ];
+
+            // Run tests with delays to avoid overwhelming the server
+            for (const test of tests) {
+                await testEndpoint(test);
+                await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay between tests
+            }
+
+            testButton.disabled = false;
+            testButton.textContent = '🚀 Run All Tests';
+            alert(`Testing complete! ${testStats.successful}/${testStats.tested} tests passed.`);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTestStats();
+        });
+    </script>
+</body>
+</html>

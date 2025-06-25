@@ -5,32 +5,9 @@
   "maxAgents": 5,
   "timeout": 60,
   "parallel": false,
-  "monitor": true,
+  "monitor": false,
   "output": "json",
   "outputDir": "./reports",
-  "timestamp": "2025-06-24T22:31:00.000Z",
-  "id": "swarm-auto-centralized-1750804281867",
-  "completionTimestamp": "2025-06-24T22:43:30.000Z",
-  "status": "COMPLETED SUCCESSFULLY",
-  "objectiveAchieved": true,
-  "agentsDeployed": 3,
-  "keyResults": {
-    "gitPushCompleted": true,
-    "codeInstallable": true,
-    "repositoryUpdated": "https://github.com/adrianco/consciousness",
-    "simulationTestsRun": true,
-    "systemValidated": true
-  },
-  "agentSummary": {
-    "system-monitor": "Coordinated swarm operations and tracked progress",
-    "installation-validator": "Validated system installation readiness",
-    "git-manager": "Executed git operations and simulation tests"
-  },
-  "metrics": {
-    "duration": "12 minutes",
-    "filesProcessed": 96,
-    "linesChanged": 31027,
-    "testsExecuted": 3,
-    "memoryEntriesCreated": 5
-  }
+  "timestamp": "2025-06-24T22:31:21.867Z",
+  "id": "swarm-auto-centralized-1750804281867"
 }

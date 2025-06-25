@@ -3,10 +3,11 @@
 ## Status Updates
 June 22, 2025 - wrote this README file and saved two old blog posts into references. This is the entire setup that was used to create this whole project.
 
-June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude4 which is ideal, then hit limits and dropped back to Claude 3.7 for the more detailed production of plans. Project setup, database implementation and conciousness engine coded.
+June 23, 2025 - Initial agent swarm setup using claude-flow created planning documents in /plans. Reviewing the plans and iterating on them before moving on. Claude did initial research with Claude Opus 4 which is ideal, then hit limits and dropped back to Claude Sonnet 4 for the more detailed production of plans. Project setup, database implementation and conciousness engine coded.
 
 June 24, 2025 - Modified plans to include digital twin and simulator. Told claude-flow to finish building the project and pushed code. Created INSTALLATION and USER guides. Runs with a basic Web UI. Plenty more debug to do, but this is impressive for a few hours elapsed development time over two days!
 
+June 25, 2025 - Asked claude-flow to create a web UI that excercises every API call, as the initual UI was very bare bones.
 ![first running screenshot](./references/first-basic-screenshot.png)
 
 ## What follows below is the unmodified initial concept that was used as the basis of all the development performed by claude-flow ina few hours over two days.

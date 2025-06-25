@@ -4,52 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>House Consciousness System</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        .app-container {
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
+        /* Header Styles */
         .header {
-            text-align: center;
-            margin-bottom: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .header h1 {
-            color: #333;
-            font-size: 3em;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: #4CAF50;
-            margin-left: 10px;
             animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #ff5252;
+            animation: none;
         }
 
         @keyframes pulse {
@@ -58,400 +75,1377 @@
             100% { opacity: 1; }
         }
 
+        /* Navigation Styles */
+        .nav-tabs {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 2rem;
+            overflow-x: auto;
+        }
+
+        .nav-tabs-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tab {
+            padding: 1rem 0;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 0.95rem;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.3em;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
+        /* Button Styles */
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            margin: 0.25rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+
+        .form-control.is-valid {
+            border-color: #28a745;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Status Styles */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .status-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .status-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Chat Styles */
         .chat-container {
             grid-column: 1 / -1;
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
+            min-height: 400px;
         }
 
         .chat-messages {
             height: 300px;
             overflow-y: auto;
-            padding: 15px;
-            background: white;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #e1e5e9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #fafafa;
+            margin-bottom: 1rem;
         }
 
-        .message {
-            margin-bottom: 15px;
-            padding: 12px;
-            border-radius: 10px;
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 12px;
+            max-width: 80%;
         }
 
-        .user-message {
-            background: #007bff;
+        .chat-message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            margin-left: 20%;
+            margin-left: auto;
+            text-align: right;
         }
 
-        .system-message {
-            background: #f1f3f4;
-            color: #333;
-            margin-right: 20%;
+        .chat-message.system {
+            background: white;
+            border: 1px solid #e0e0e0;
+            margin-right: auto;
         }
 
         .chat-input-container {
             display: flex;
-            gap: 10px;
+            gap: 1rem;
+            align-items: end;
         }
 
         .chat-input {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 25px;
-            font-size: 16px;
-            outline: none;
         }
 
-        .chat-input:focus {
-            border-color: #007bff;
+        /* Loading Styles */
+        .loading {
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .btn-primary {
-            background: #007bff;
-            color: white;
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
         }
 
-        .btn-primary:hover {
-            background: #0056b3;
-            transform: translateY(-2px);
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
         }
 
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-            margin: 5px;
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
 
-        .btn-secondary:hover {
-            background: #545b62;
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
         }
 
-        .status-grid {
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        /* Device Styles */
+        .device-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: #fafafa;
+        }
+
+        .device-info h4 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .device-info p {
+            margin: 0.25rem 0;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .device-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-tabs {
+                padding: 0 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-message {
+                max-width: 95%;
+            }
+        }
+
+        /* Tabs Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Scenario Styles */
+        .scenario-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            gap: 1rem;
         }
 
-        .status-item {
+        .scenario-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
             text-align: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .status-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #007bff;
-        }
-
-        .status-label {
-            color: #666;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .error {
-            color: #dc3545;
-            background: #f8d7da;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-
-        .scenarios {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .scenario-btn {
-            padding: 8px 16px;
-            background: #17a2b8;
-            color: white;
-            border: none;
-            border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
-        .scenario-btn:hover {
-            background: #138496;
+        .scenario-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .scenario-card.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .scenario-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .scenario-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .scenario-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏠 House Consciousness System <span class="status-indicator" id="statusIndicator"></span></h1>
-            <p>Your intelligent home automation companion</p>
-        </div>
+    <div id="root"></div>
 
-        <div class="grid">
-            <!-- System Status -->
-            <div class="card">
-                <h3>📊 System Status</h3>
-                <div class="status-grid">
-                    <div class="status-item">
-                        <div class="status-value" id="statusValue">●</div>
-                        <div class="status-label">Status</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-value" id="deviceCount">-</div>
-                        <div class="status-label">Devices</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-value" id="uptime">-</div>
-                        <div class="status-label">Uptime</div>
-                    </div>
-                </div>
-                <button class="btn btn-secondary" onclick="refreshStatus()">🔄 Refresh</button>
-            </div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
 
-            <!-- Quick Actions -->
-            <div class="card">
-                <h3>⚡ Quick Actions</h3>
-                <button class="btn btn-secondary" onclick="discoverDevices()">🔍 Discover Devices</button>
-                <button class="btn btn-secondary" onclick="getHealth()">🏥 Health Check</button>
-                <button class="btn btn-secondary" onclick="viewMetrics()">📈 View Metrics</button>
-                <button class="btn btn-secondary" onclick="viewLogs()">📋 View Logs</button>
-            </div>
+        // Main Dashboard Component
+        function Dashboard() {
+            const [activeTab, setActiveTab] = useState('overview');
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [connectionStatus, setConnectionStatus] = useState('connected');
+            const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+            const [systemStatus, setSystemStatus] = useState(null);
+            const [devices, setDevices] = useState([]);
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState('');
+            const [chatMessages, setChatMessages] = useState([
+                { id: 1, sender: 'system', text: 'Hello! I\'m your house consciousness. How can I help you today?' }
+            ]);
+            const [chatInput, setChatInput] = useState('');
 
-            <!-- Scenarios -->
-            <div class="card">
-                <h3>🎭 Scenarios</h3>
-                <div class="scenarios">
-                    <button class="scenario-btn" onclick="runScenario('morning')">🌅 Morning Routine</button>
-                    <button class="scenario-btn" onclick="runScenario('security')">🔒 Security Alert</button>
-                    <button class="scenario-btn" onclick="runScenario('energy')">⚡ Energy Optimization</button>
-                    <button class="scenario-btn" onclick="runScenario('party')">🎉 Party Mode</button>
-                    <button class="scenario-btn" onclick="runScenario('vacation')">✈️ Vacation Mode</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Chat Interface -->
-        <div class="card chat-container">
-            <h3>💬 Chat with Your House</h3>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message system-message">
-                    <strong>House:</strong> Hello! I'm your house consciousness. How can I help you today?
-                    <br><small>Try asking: "How are you feeling?" or "What devices do you see?"</small>
-                </div>
-            </div>
-            <div class="chat-input-container">
-                <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
-                <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let startTime = new Date();
-
-        // Initialize the interface
-        document.addEventListener('DOMContentLoaded', function() {
-            refreshStatus();
-            updateUptime();
-            setInterval(updateUptime, 1000);
-            setInterval(refreshStatus, 30000); // Refresh every 30 seconds
-        });
-
-        function updateUptime() {
-            const now = new Date();
-            const diff = Math.floor((now - startTime) / 1000);
-            const hours = Math.floor(diff / 3600);
-            const minutes = Math.floor((diff % 3600) / 60);
-            const seconds = diff % 60;
-            document.getElementById('uptime').textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        async function apiCall(endpoint, options = {}) {
-            try {
-                const response = await fetch(endpoint, {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...options.headers
-                    },
-                    ...options
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            // Authentication check
+            useEffect(() => {
+                if (authToken) {
+                    setIsAuthenticated(true);
+                    fetchSystemStatus();
+                    fetchDevices();
                 }
+            }, [authToken]);
 
-                return await response.json();
-            } catch (error) {
-                console.error('API call failed:', error);
-                showError(`API Error: ${error.message}`);
-                throw error;
-            }
-        }
+            // WebSocket connection
+            useEffect(() => {
+                if (isAuthenticated) {
+                    const ws = new WebSocket(`ws://${window.location.host}/api/v1/realtime`);
 
-        async function refreshStatus() {
-            try {
-                const health = await apiCall('/health');
-                const detailedHealth = await apiCall('/health/detailed');
-                const metrics = await apiCall('/metrics');
+                    ws.onopen = () => setConnectionStatus('connected');
+                    ws.onclose = () => setConnectionStatus('disconnected');
+                    ws.onerror = () => setConnectionStatus('error');
 
-                document.getElementById('statusValue').textContent = '✅';
-                document.getElementById('deviceCount').textContent = metrics.consciousness_device_count || 0;
+                    ws.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        handleWebSocketMessage(data);
+                    };
 
-                const indicator = document.getElementById('statusIndicator');
-                indicator.style.background = '#4CAF50';
-
-            } catch (error) {
-                document.getElementById('statusValue').textContent = '❌';
-                document.getElementById('deviceCount').textContent = '?';
-
-                const indicator = document.getElementById('statusIndicator');
-                indicator.style.background = '#f44336';
-            }
-        }
-
-        async function discoverDevices() {
-            showMessage('system', 'Starting device discovery... This may take a moment.');
-            try {
-                // This would call the actual device discovery endpoint
-                showMessage('system', 'Device discovery completed! Found devices will appear in the device list.');
-            } catch (error) {
-                showMessage('system', 'Device discovery failed. Please check the system logs.');
-            }
-        }
-
-        async function getHealth() {
-            try {
-                const health = await apiCall('/health/detailed');
-                showMessage('system', `System Health: ${health.status}\nComponents: ${Object.keys(health.components || {}).length}\nTimestamp: ${health.timestamp}`);
-            } catch (error) {
-                showMessage('system', 'Unable to retrieve health status.');
-            }
-        }
-
-        async function viewMetrics() {
-            try {
-                const metrics = await apiCall('/metrics');
-                let metricsText = 'System Metrics:\n';
-                for (const [key, value] of Object.entries(metrics)) {
-                    metricsText += `• ${key.replace('consciousness_', '').replace('_', ' ')}: ${value}\n`;
+                    return () => ws.close();
                 }
-                showMessage('system', metricsText);
-            } catch (error) {
-                showMessage('system', 'Unable to retrieve metrics.');
-            }
-        }
+            }, [isAuthenticated]);
 
-        function viewLogs() {
-            showMessage('system', 'Logs are available in the consciousness.log file. Future versions will display them here.');
-        }
+            // API functions
+            const apiCall = async (endpoint, options = {}) => {
+                try {
+                    const response = await fetch(`/api/v1${endpoint}`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(authToken && { 'Authorization': `Bearer ${authToken}` }),
+                            ...options.headers
+                        },
+                        ...options
+                    });
 
-        function runScenario(scenario) {
-            const scenarios = {
-                'morning': 'Running Smart Morning Routine: Adjusting temperature, opening blinds, starting coffee...',
-                'security': 'Activating Security Alert mode: Checking sensors, enabling cameras...',
-                'energy': 'Starting Energy Optimization: Analyzing usage patterns, adjusting devices...',
-                'party': 'Enabling Party Mode: Setting mood lighting, adjusting audio systems...',
-                'vacation': 'Activating Vacation Mode: Setting security protocols, managing energy...'
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            setIsAuthenticated(false);
+                            setAuthToken(null);
+                            localStorage.removeItem('authToken');
+                        }
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    return await response.json();
+                } catch (error) {
+                    setError(error.message);
+                    throw error;
+                }
             };
 
-            showMessage('system', scenarios[scenario] || 'Running scenario...');
-            setTimeout(() => {
-                showMessage('system', `${scenario.charAt(0).toUpperCase() + scenario.slice(1)} scenario completed successfully!`);
-            }, 2000);
+            const login = async (username, password) => {
+                try {
+                    setLoading(true);
+                    const response = await apiCall('/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    setAuthToken(response.access_token);
+                    localStorage.setItem('authToken', response.access_token);
+                    setIsAuthenticated(true);
+                    setError('');
+                } catch (error) {
+                    setError('Login failed. Please check your credentials.');
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const logout = () => {
+                setIsAuthenticated(false);
+                setAuthToken(null);
+                localStorage.removeItem('authToken');
+            };
+
+            const fetchSystemStatus = async () => {
+                try {
+                    const status = await apiCall('/consciousness/status');
+                    setSystemStatus(status);
+                } catch (error) {
+                    console.error('Failed to fetch system status:', error);
+                }
+            };
+
+            const fetchDevices = async () => {
+                try {
+                    const deviceList = await apiCall('/devices');
+                    setDevices(deviceList);
+                } catch (error) {
+                    console.error('Failed to fetch devices:', error);
+                }
+            };
+
+            const sendChatMessage = async (message) => {
+                try {
+                    const userMessage = { id: Date.now(), sender: 'user', text: message };
+                    setChatMessages(prev => [...prev, userMessage]);
+                    setChatInput('');
+
+                    const response = await apiCall('/consciousness/query', {
+                        method: 'POST',
+                        body: JSON.stringify({ query: message })
+                    });
+
+                    const systemMessage = {
+                        id: Date.now() + 1,
+                        sender: 'system',
+                        text: response.response || 'I understand your request.'
+                    };
+                    setChatMessages(prev => [...prev, systemMessage]);
+                } catch (error) {
+                    const errorMessage = {
+                        id: Date.now() + 1,
+                        sender: 'system',
+                        text: 'Sorry, I encountered an error processing your request.'
+                    };
+                    setChatMessages(prev => [...prev, errorMessage]);
+                }
+            };
+
+            const handleWebSocketMessage = (data) => {
+                if (data.type === 'status_update') {
+                    setSystemStatus(data.data);
+                } else if (data.type === 'device_update') {
+                    setDevices(prev => prev.map(device =>
+                        device.id === data.data.id ? { ...device, ...data.data } : device
+                    ));
+                }
+            };
+
+            const runScenario = async (scenarioName) => {
+                try {
+                    setLoading(true);
+                    await apiCall(`/scenarios/${scenarioName}/run`, { method: 'POST' });
+                    setError('');
+                    // Show success message
+                    const successMessage = {
+                        id: Date.now(),
+                        sender: 'system',
+                        text: `${scenarioName.charAt(0).toUpperCase() + scenarioName.slice(1)} scenario executed successfully!`
+                    };
+                    setChatMessages(prev => [...prev, successMessage]);
+                } catch (error) {
+                    setError(`Failed to run ${scenarioName} scenario`);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const controlDevice = async (deviceId, action, value) => {
+                try {
+                    await apiCall(`/devices/${deviceId}/control`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ action, value })
+                    });
+                    fetchDevices(); // Refresh device list
+                } catch (error) {
+                    setError('Failed to control device');
+                }
+            };
+
+            // Login Form Component
+            const LoginForm = () => {
+                const [username, setUsername] = useState('admin');
+                const [password, setPassword] = useState('consciousness123');
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    login(username, password);
+                };
+
+                return (
+                    <div className="app-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
+                            <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>🏠 House Consciousness</h2>
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label className="form-label">Username</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                {error && <div className="alert alert-danger">{error}</div>}
+                                <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+                                    {loading ? <span className="loading"></span> : 'Login'}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Main Dashboard Content
+            const DashboardContent = () => (
+                <div className="app-container">
+                    <header className="header">
+                        <div className="header-content">
+                            <h1>🏠 House Consciousness System</h1>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div className="connection-status">
+                                    <div className={`status-dot ${connectionStatus !== 'connected' ? 'offline' : ''}`}></div>
+                                    <span>{connectionStatus === 'connected' ? 'Connected' : 'Offline'}</span>
+                                </div>
+                                <button className="btn btn-secondary" onClick={logout}>Logout</button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <nav className="nav-tabs">
+                        <div className="nav-tabs-content">
+                            {[
+                                { id: 'overview', label: '📊 Overview' },
+                                { id: 'devices', label: '🔌 Devices' },
+                                { id: 'scenarios', label: '🎭 Scenarios' },
+                                { id: 'chat', label: '💬 Chat' },
+                                { id: 'memory', label: '🧠 Memory' },
+                                { id: 'discovery', label: '🔍 Discovery' },
+                                { id: 'api-testing', label: '🧪 API Testing' },
+                                { id: 'github', label: '📤 GitHub' }
+                            ].map(tab => (
+                                <button
+                                    key={tab.id}
+                                    className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    <main className="main-content">
+                        {error && <div className="alert alert-danger">{error}</div>}
+
+                        {/* Overview Tab */}
+                        <div className={`tab-content ${activeTab === 'overview' ? 'active' : ''}`}>
+                            <div className="grid">
+                                <div className="card">
+                                    <h3>📊 System Status</h3>
+                                    <div className="status-grid">
+                                        <div className="status-item">
+                                            <span className="status-value">
+                                                {systemStatus?.status === 'active' ? '✅' : '❌'}
+                                            </span>
+                                            <div className="status-label">Status</div>
+                                        </div>
+                                        <div className="status-item">
+                                            <span className="status-value">{devices.length}</span>
+                                            <div className="status-label">Devices</div>
+                                        </div>
+                                        <div className="status-item">
+                                            <span className="status-value">
+                                                {systemStatus?.awareness_level || 'N/A'}
+                                            </span>
+                                            <div className="status-label">Awareness</div>
+                                        </div>
+                                        <div className="status-item">
+                                            <span className="status-value">
+                                                {systemStatus?.emotional_state || 'N/A'}
+                                            </span>
+                                            <div className="status-label">Emotion</div>
+                                        </div>
+                                    </div>
+                                    <button className="btn btn-primary" onClick={fetchSystemStatus}>
+                                        🔄 Refresh Status
+                                    </button>
+                                </div>
+
+                                <div className="card">
+                                    <h3>⚡ Quick Actions</h3>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                        <button className="btn btn-primary" onClick={() => runScenario('smart_morning')}>
+                                            🌅 Morning Routine
+                                        </button>
+                                        <button className="btn btn-warning" onClick={() => runScenario('security_alert')}>
+                                            🔒 Security Alert
+                                        </button>
+                                        <button className="btn btn-success" onClick={() => runScenario('energy_optimization')}>
+                                            ⚡ Energy Optimization
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={fetchDevices}>
+                                            🔍 Refresh Devices
+                                        </button>
+                                        <button className="btn btn-secondary" onClick={viewLogs}>
+                                            📋 View Logs
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="card">
+                                    <h3>🏠 House Health</h3>
+                                    <div className="status-grid">
+                                        <div className="status-item">
+                                            <span className="status-value">
+                                                {systemStatus?.safla_loops_active || 0}
+                                            </span>
+                                            <div className="status-label">SAFLA Loops</div>
+                                        </div>
+                                        <div className="status-item">
+                                            <span className="status-value">
+                                                {systemStatus?.memory_usage || 'N/A'}
+                                            </span>
+                                            <div className="status-label">Memory</div>
+                                        </div>
+                                    </div>
+                                    <p style={{ color: '#6c757d', marginTop: '1rem' }}>
+                                        {systemStatus?.last_updated ?
+                                            `Last updated: ${new Date(systemStatus.last_updated).toLocaleString()}` :
+                                            'No status data available'
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Devices Tab */}
+                        <div className={`tab-content ${activeTab === 'devices' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>🔌 Device Management</h3>
+                                <div className="device-list">
+                                    {devices.length === 0 ? (
+                                        <p>No devices found. Try discovering devices first.</p>
+                                    ) : (
+                                        devices.map(device => (
+                                            <div key={device.id} className="device-item">
+                                                <div className="device-info">
+                                                    <h4>{device.name || `Device ${device.id}`}</h4>
+                                                    <p>Type: {device.type || 'Unknown'}</p>
+                                                    <p>Status: {device.status || 'Unknown'}</p>
+                                                    <p>Location: {device.location || 'Unknown'}</p>
+                                                </div>
+                                                <div className="device-controls">
+                                                    <button
+                                                        className="btn btn-success"
+                                                        onClick={() => controlDevice(device.id, 'turn_on')}
+                                                    >
+                                                        Turn On
+                                                    </button>
+                                                    <button
+                                                        className="btn btn-danger"
+                                                        onClick={() => controlDevice(device.id, 'turn_off')}
+                                                    >
+                                                        Turn Off
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                                <button className="btn btn-primary" onClick={fetchDevices}>
+                                    🔄 Refresh Devices
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Scenarios Tab */}
+                        <div className={`tab-content ${activeTab === 'scenarios' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>🎭 Scenario Management</h3>
+                                <div className="scenario-grid">
+                                    {[
+                                        { id: 'smart_morning', icon: '🌅', title: 'Smart Morning', description: 'Optimize your morning routine' },
+                                        { id: 'security_alert', icon: '🔒', title: 'Security Alert', description: 'Activate security protocols' },
+                                        { id: 'energy_optimization', icon: '⚡', title: 'Energy Optimization', description: 'Reduce energy consumption' },
+                                        { id: 'party_mode', icon: '🎉', title: 'Party Mode', description: 'Set up for entertainment' },
+                                        { id: 'vacation_mode', icon: '✈️', title: 'Vacation Mode', description: 'Secure home while away' }
+                                    ].map(scenario => (
+                                        <div key={scenario.id} className="scenario-card" onClick={() => runScenario(scenario.id)}>
+                                            <div className="scenario-icon">{scenario.icon}</div>
+                                            <div className="scenario-title">{scenario.title}</div>
+                                            <div className="scenario-description">{scenario.description}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Chat Tab */}
+                        <div className={`tab-content ${activeTab === 'chat' ? 'active' : ''}`}>
+                            <div className="card chat-container">
+                                <h3>💬 Chat with Your House</h3>
+                                <div className="chat-messages">
+                                    {chatMessages.map(message => (
+                                        <div key={message.id} className={`chat-message ${message.sender}`}>
+                                            <strong>{message.sender === 'user' ? 'You' : 'House'}:</strong> {message.text}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="chat-input-container">
+                                    <input
+                                        type="text"
+                                        className="form-control chat-input"
+                                        value={chatInput}
+                                        onChange={(e) => setChatInput(e.target.value)}
+                                        onKeyPress={(e) => e.key === 'Enter' && sendChatMessage(chatInput)}
+                                        placeholder="Ask your house anything..."
+                                    />
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => sendChatMessage(chatInput)}
+                                        disabled={!chatInput.trim()}
+                                    >
+                                        Send
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Memory Tab */}
+                        <div className={`tab-content ${activeTab === 'memory' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>🧠 Memory Management</h3>
+                                <p>Memory management features coming soon...</p>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <button className="btn btn-secondary">View Memories</button>
+                                    <button className="btn btn-secondary">Create Memory</button>
+                                    <button className="btn btn-secondary">Memory Stats</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Discovery Tab */}
+                        <div className={`tab-content ${activeTab === 'discovery' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>🔍 Device Discovery</h3>
+                                <p>Discover new devices on your network and integrate them into your house consciousness system.</p>
+                                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                    <button className="btn btn-primary">Start Network Scan</button>
+                                    <button className="btn btn-secondary">Bluetooth Scan</button>
+                                    <button className="btn btn-secondary">Start Interview</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* API Testing Tab */}
+                        <div className={`tab-content ${activeTab === 'api-testing' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>🧪 API Testing Suite</h3>
+                                <div className="grid">
+                                    <div className="card">
+                                        <h4>Test Statistics</h4>
+                                        <div className="status-grid">
+                                            <div className="status-item">
+                                                <span className="status-value" id="total-endpoints">30+</span>
+                                                <div className="status-label">Total Endpoints</div>
+                                            </div>
+                                            <div className="status-item">
+                                                <span className="status-value" id="tested-endpoints">0</span>
+                                                <div className="status-label">Tested</div>
+                                            </div>
+                                            <div className="status-item">
+                                                <span className="status-value" id="successful-tests">0</span>
+                                                <div className="status-label">Successful</div>
+                                            </div>
+                                            <div className="status-item">
+                                                <span className="status-value" id="failed-tests">0</span>
+                                                <div className="status-label">Failed</div>
+                                            </div>
+                                        </div>
+                                        <div style={{ marginTop: '1rem' }}>
+                                            <button className="btn btn-primary" onClick={runAllAPITests}>🚀 Run All Tests</button>
+                                            <button className="btn btn-secondary" onClick={clearTestResults}>🗑️ Clear Results</button>
+                                            <button className="btn btn-success" onClick={exportTestResults}>📊 Export Results</button>
+                                        </div>
+                                    </div>
+
+                                    <div className="card">
+                                        <h4>Quick API Tests</h4>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                            <button className="btn btn-primary" onClick={() => testSingleEndpoint('health')}>🏥 Health Check</button>
+                                            <button className="btn btn-primary" onClick={() => testSingleEndpoint('consciousness-status')}>🧠 Consciousness Status</button>
+                                            <button className="btn btn-primary" onClick={() => testSingleEndpoint('devices-list')}>📱 List Devices</button>
+                                            <button className="btn btn-primary" onClick={() => testSingleEndpoint('memory-get')}>🧠 Get Memory</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="card">
+                                    <h4>Custom API Test</h4>
+                                    <div className="grid">
+                                        <div className="form-group">
+                                            <label className="form-label">HTTP Method:</label>
+                                            <select id="custom-method" className="form-control">
+                                                <option value="GET">GET</option>
+                                                <option value="POST">POST</option>
+                                                <option value="PUT">PUT</option>
+                                                <option value="DELETE">DELETE</option>
+                                            </select>
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Endpoint:</label>
+                                            <input type="text" id="custom-endpoint" className="form-control" placeholder="/api/v1/..." />
+                                        </div>
+                                        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                            <label className="form-label">Request Body (JSON):</label>
+                                            <textarea id="custom-body" className="form-control" rows="4" placeholder='{"key": "value"}'></textarea>
+                                        </div>
+                                        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+                                            <button className="btn btn-primary" onClick={executeCustomTest}>Execute Custom Test</button>
+                                        </div>
+                                    </div>
+                                    <div id="custom-test-result" style={{ display: 'none', marginTop: '1rem' }}></div>
+                                </div>
+
+                                <div className="card">
+                                    <h4>Detailed Test UI</h4>
+                                    <p>For comprehensive endpoint testing with all parameters:</p>
+                                    <button className="btn btn-secondary" onClick={() => window.open('/static/api_test_ui.html', '_blank')}>Open Full API Test UI</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* GitHub Integration Tab */}
+                        <div className={`tab-content ${activeTab === 'github' ? 'active' : ''}`}>
+                            <div className="card">
+                                <h3>📤 GitHub Integration</h3>
+                                <div className="grid">
+                                    <div className="card">
+                                        <h4>GitHub Configuration</h4>
+                                        <div className="form-group">
+                                            <label className="form-label">GitHub Token:</label>
+                                            <input type="password" id="github-token" className="form-control" placeholder="ghp_..." />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Repository:</label>
+                                            <input type="text" id="github-repo" className="form-control" placeholder="username/repository" />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">Branch:</label>
+                                            <input type="text" id="github-branch" className="form-control" value="main" />
+                                        </div>
+                                        <button className="btn btn-primary" onClick={configureGitHub}>💾 Save Configuration</button>
+                                    </div>
+
+                                    <div className="card">
+                                        <h4>Test Results Upload</h4>
+                                        <div id="github-status" className="alert alert-info" style={{ display: 'none' }}></div>
+                                        <div className="form-group">
+                                            <label className="form-label">Commit Message:</label>
+                                            <input type="text" id="commit-message" className="form-control" value="Update API test results" />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="form-label">File Path:</label>
+                                            <input type="text" id="file-path" className="form-control" value="api-test-results.json" />
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                            <button className="btn btn-primary" onClick={uploadTestResults}>📤 Upload Test Results</button>
+                                            <button className="btn btn-success" onClick={createTestReport}>📊 Create Test Report</button>
+                                            <button className="btn btn-secondary" onClick={downloadResults}>💾 Download Results</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="card">
+                                    <h4>Recent Uploads</h4>
+                                    <div id="upload-history">
+                                        <p style={{ color: '#666', textAlign: 'center' }}>No uploads yet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+
+            // Render based on authentication status
+            return isAuthenticated ? <DashboardContent /> : <LoginForm />;
         }
 
-        function handleChatKeyPress(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
+        // API Testing Functions
+        let testResults = {
+            total: 0,
+            tested: 0,
+            successful: 0,
+            failed: 0,
+            results: []
+        };
+
+        const updateTestStats = () => {
+            if (document.getElementById('tested-endpoints')) {
+                document.getElementById('tested-endpoints').textContent = testResults.tested;
+                document.getElementById('successful-tests').textContent = testResults.successful;
+                document.getElementById('failed-tests').textContent = testResults.failed;
             }
-        }
+        };
 
-        async function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+        const testSingleEndpoint = async (endpointType) => {
+            try {
+                let result;
 
-            if (!message) return;
+                switch (endpointType) {
+                    case 'health':
+                        result = await apiCall('/health');
+                        break;
+                    case 'consciousness-status':
+                        result = await apiCall('/api/v1/consciousness/status');
+                        break;
+                    case 'devices-list':
+                        result = await apiCall('/api/v1/devices');
+                        break;
+                    case 'memory-get':
+                        result = await apiCall('/api/v1/memory?limit=5');
+                        break;
+                    default:
+                        throw new Error(`Unknown endpoint: ${endpointType}`);
+                }
 
-            showMessage('user', message);
-            input.value = '';
+                testResults.tested++;
+                testResults.successful++;
+                testResults.results.push({
+                    endpoint: endpointType,
+                    status: 'success',
+                    timestamp: new Date().toISOString(),
+                    response: result
+                });
 
-            // Simulate AI response for now
-            setTimeout(() => {
-                const responses = [
-                    "I'm feeling quite well, thank you! All my systems are running smoothly.",
-                    "I can see several devices on the network. Device discovery is ongoing.",
-                    "The temperature is comfortable and energy usage is optimal.",
-                    "I'm monitoring the security systems and everything looks secure.",
-                    "Would you like me to run any specific scenarios or check particular systems?",
-                    "I'm learning your patterns and preferences to better serve you.",
-                    "All environmental systems are functioning within normal parameters."
-                ];
+                updateTestStats();
+                alert(`✅ ${endpointType} test passed!`);
+            } catch (error) {
+                testResults.tested++;
+                testResults.failed++;
+                testResults.results.push({
+                    endpoint: endpointType,
+                    status: 'failed',
+                    timestamp: new Date().toISOString(),
+                    error: error.message
+                });
 
-                const response = responses[Math.floor(Math.random() * responses.length)];
-                showMessage('system', response);
-            }, 1000);
-        }
+                updateTestStats();
+                alert(`❌ ${endpointType} test failed: ${error.message}`);
+            }
+        };
 
-        function showMessage(sender, message) {
-            const messagesContainer = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}-message`;
+        const runAllAPITests = async () => {
+            const endpoints = [
+                'health',
+                'consciousness-status',
+                'devices-list',
+                'memory-get'
+            ];
 
-            const senderName = sender === 'user' ? 'You' : 'House';
-            messageDiv.innerHTML = `<strong>${senderName}:</strong> ${message.replace(/\n/g, '<br>')}`;
+            testResults = { total: endpoints.length, tested: 0, successful: 0, failed: 0, results: [] };
 
-            messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
+            for (const endpoint of endpoints) {
+                await testSingleEndpoint(endpoint);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Delay between tests
+            }
 
-        function showError(message) {
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'error';
-            errorDiv.textContent = message;
-            document.querySelector('.container').insertBefore(errorDiv, document.querySelector('.grid'));
+            alert(`Testing complete! ${testResults.successful}/${testResults.tested} tests passed.`);
+        };
 
-            setTimeout(() => errorDiv.remove(), 5000);
-        }
+        const executeCustomTest = async () => {
+            const method = document.getElementById('custom-method').value;
+            const endpoint = document.getElementById('custom-endpoint').value;
+            const body = document.getElementById('custom-body').value;
+            const resultDiv = document.getElementById('custom-test-result');
+
+            if (!endpoint) {
+                alert('Please enter an endpoint');
+                return;
+            }
+
+            try {
+                const options = { method };
+                if (body && (method === 'POST' || method === 'PUT')) {
+                    options.body = body;
+                }
+
+                const result = await apiCall(endpoint, options);
+
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Success!</strong> Status: 200 OK
+                    </div>
+                    <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px; max-height: 300px; overflow-y: auto;">${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong> ${error.message}
+                    </div>
+                `;
+            }
+        };
+
+        const clearTestResults = () => {
+            testResults = { total: 0, tested: 0, successful: 0, failed: 0, results: [] };
+            updateTestStats();
+            if (document.getElementById('custom-test-result')) {
+                document.getElementById('custom-test-result').style.display = 'none';
+            }
+        };
+
+        const exportTestResults = () => {
+            const data = {
+                summary: testResults,
+                timestamp: new Date().toISOString(),
+                environment: window.location.origin,
+                userAgent: navigator.userAgent
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `api-test-results-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // GitHub Integration Functions
+        let githubConfig = {
+            token: localStorage.getItem('github-token') || '',
+            repo: localStorage.getItem('github-repo') || '',
+            branch: localStorage.getItem('github-branch') || 'main'
+        };
+
+        const configureGitHub = () => {
+            const token = document.getElementById('github-token').value;
+            const repo = document.getElementById('github-repo').value;
+            const branch = document.getElementById('github-branch').value;
+
+            if (!token || !repo) {
+                alert('Please enter both GitHub token and repository');
+                return;
+            }
+
+            githubConfig = { token, repo, branch };
+            localStorage.setItem('github-token', token);
+            localStorage.setItem('github-repo', repo);
+            localStorage.setItem('github-branch', branch);
+
+            showGitHubStatus('GitHub configuration saved successfully!', 'success');
+        };
+
+        const showGitHubStatus = (message, type) => {
+            const statusDiv = document.getElementById('github-status');
+            if (statusDiv) {
+                statusDiv.style.display = 'block';
+                statusDiv.className = `alert alert-${type}`;
+                statusDiv.textContent = message;
+
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 5000);
+            }
+        };
+
+        const uploadTestResults = async () => {
+            if (!githubConfig.token || !githubConfig.repo) {
+                alert('Please configure GitHub settings first');
+                return;
+            }
+
+            const commitMessage = document.getElementById('commit-message').value;
+            const filePath = document.getElementById('file-path').value;
+
+            const data = {
+                summary: testResults,
+                timestamp: new Date().toISOString(),
+                environment: window.location.origin,
+                userAgent: navigator.userAgent,
+                version: '1.0.0'
+            };
+
+            try {
+                showGitHubStatus('Uploading to GitHub...', 'info');
+
+                // GitHub API call to create/update file
+                const response = await fetch(`https://api.github.com/repos/${githubConfig.repo}/contents/${filePath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${githubConfig.token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: commitMessage,
+                        content: btoa(JSON.stringify(data, null, 2)),
+                        branch: githubConfig.branch
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showGitHubStatus('Test results uploaded successfully!', 'success');
+                    addToUploadHistory(result.commit.html_url, filePath, commitMessage);
+                } else {
+                    const error = await response.json();
+                    showGitHubStatus(`Upload failed: ${error.message}`, 'danger');
+                }
+            } catch (error) {
+                showGitHubStatus(`Upload error: ${error.message}`, 'danger');
+            }
+        };
+
+        const createTestReport = async () => {
+            const report = {
+                title: 'Consciousness API Test Report',
+                date: new Date().toISOString(),
+                summary: {
+                    totalTests: testResults.tested,
+                    passed: testResults.successful,
+                    failed: testResults.failed,
+                    passRate: testResults.tested > 0 ? ((testResults.successful / testResults.tested) * 100).toFixed(1) : 0
+                },
+                environment: {
+                    url: window.location.origin,
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
+                },
+                results: testResults.results
+            };
+
+            const markdown = generateMarkdownReport(report);
+
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `api-test-report-${new Date().toISOString().split('T')[0]}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        const generateMarkdownReport = (report) => {
+            return `# ${report.title}
+
+**Date:** ${new Date(report.date).toLocaleString()}
+
+## Summary
+
+- **Total Tests:** ${report.summary.totalTests}
+- **Passed:** ${report.summary.passed}
+- **Failed:** ${report.summary.failed}
+- **Pass Rate:** ${report.summary.passRate}%
+
+## Environment
+
+- **URL:** ${report.environment.url}
+- **User Agent:** ${report.environment.userAgent}
+- **Timestamp:** ${report.environment.timestamp}
+
+## Test Results
+
+${report.results.map(result => `
+### ${result.endpoint}
+
+- **Status:** ${result.status}
+- **Timestamp:** ${result.timestamp}
+${result.error ? `- **Error:** ${result.error}` : '- **Result:** Success'}
+`).join('')}
+
+---
+
+*Generated by Consciousness API Testing Suite*`;
+        };
+
+        const downloadResults = () => {
+            exportTestResults();
+        };
+
+        const addToUploadHistory = (commitUrl, filePath, message) => {
+            const historyDiv = document.getElementById('upload-history');
+            if (historyDiv) {
+                const entry = document.createElement('div');
+                entry.style.cssText = 'padding: 0.75rem; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 0.5rem;';
+                entry.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${filePath}</strong><br>
+                            <small style="color: #666;">${message}</small>
+                        </div>
+                        <div>
+                            <a href="${commitUrl}" target="_blank" class="btn btn-secondary" style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">View Commit</a>
+                        </div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #999; margin-top: 0.25rem;">
+                        ${new Date().toLocaleString()}
+                    </div>
+                `;
+
+                if (historyDiv.querySelector('p')) {
+                    historyDiv.innerHTML = '';
+                }
+
+                historyDiv.insertBefore(entry, historyDiv.firstChild);
+            }
+        };
+
+        // Initialize GitHub config
+        window.addEventListener('load', () => {
+            if (githubConfig.token && document.getElementById('github-token')) {
+                document.getElementById('github-token').value = githubConfig.token;
+            }
+            if (githubConfig.repo && document.getElementById('github-repo')) {
+                document.getElementById('github-repo').value = githubConfig.repo;
+            }
+            if (githubConfig.branch && document.getElementById('github-branch')) {
+                document.getElementById('github-branch').value = githubConfig.branch;
+            }
+        });
+
+        // Render the app
+        ReactDOM.render(<Dashboard />, document.getElementById('root'));
     </script>
 </body>
 </html>

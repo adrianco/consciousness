@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Consciousness Dashboard</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: #f5f7fa;
+            color: #2c3e50;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background: #ff5252;
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Navigation Styles */
+        .nav-tabs {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 2rem;
+            overflow-x: auto;
+        }
+
+        .nav-tabs-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-tab {
+            padding: 1rem 0;
+            border: none;
+            background: none;
+            color: #666;
+            font-size: 0.95rem;
+            cursor: pointer;
+            position: relative;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #667eea;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-danger {
+            background: #ff5252;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3838;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .alert-success {
+            background: #e8f5e9;
+            color: #388e3c;
+            border: 1px solid #c8e6c9;
+        }
+
+        .alert-warning {
+            background: #fff8e1;
+            color: #f57c00;
+            border: 1px solid #ffecb3;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #ffcdd2;
+        }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            font-weight: 600;
+            background: #f5f5f5;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .table tr:hover {
+            background: #f9f9f9;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #f5f5f5;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .badge-primary {
+            background: #e8eaf6;
+            color: #5e35b1;
+        }
+
+        .badge-success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-warning {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+
+        .badge-danger {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        /* Device Card Styles */
+        .device-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+
+        .device-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .device-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .device-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .device-controls {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .chat-bubble {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .chat-message.user .chat-bubble {
+            background: #667eea;
+            color: white;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+        }
+
+        /* Emotion Display */
+        .emotion-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .emotion-icon {
+            font-size: 3rem;
+        }
+
+        .emotion-details {
+            flex: 1;
+        }
+
+        .emotion-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .emotion-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        // API Configuration
+        const API_BASE_URL = '';
+        const WS_URL = 'ws://localhost:8000/api/v1/realtime';
+
+        // Utility Functions
+        const apiCall = async (endpoint, options = {}) => {
+            const token = localStorage.getItem('authToken');
+            const headers = {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` }),
+                ...options.headers
+            };
+
+            try {
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                    ...options,
+                    headers
+                });
+
+                if (response.status === 401) {
+                    localStorage.removeItem('authToken');
+                    window.location.reload();
+                }
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || `HTTP ${response.status}`);
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        };
+
+        // Components
+        const LoginForm = ({ onLogin }) => {
+            const [credentials, setCredentials] = useState({ username: 'admin', password: 'consciousness123' });
+            const [loading, setLoading] = useState(false);
+            const [error, setError] = useState('');
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                setError('');
+
+                try {
+                    const response = await apiCall('/api/v1/auth/login', {
+                        method: 'POST',
+                        body: JSON.stringify(credentials)
+                    });
+
+                    localStorage.setItem('authToken', response.access_token);
+                    onLogin(response.access_token);
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="card" style={{ maxWidth: '400px', margin: '4rem auto' }}>
+                    <h2>Login to House Consciousness</h2>
+                    <form onSubmit={handleSubmit}>
+                        {error && <div className="alert alert-error">{error}</div>}
+                        <div className="form-group">
+                            <label className="form-label">Username</label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                value={credentials.username}
+                                onChange={(e) => setCredentials({...credentials, username: e.target.value})}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Password</label>
+                            <input
+                                type="password"
+                                className="form-input"
+                                value={credentials.password}
+                                onChange={(e) => setCredentials({...credentials, password: e.target.value})}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
+                            {loading ? 'Logging in...' : 'Login'}
+                        </button>
+                    </form>
+                </div>
+            );
+        };
+
+        const ConsciousnessStatus = () => {
+            const [status, setStatus] = useState(null);
+            const [emotions, setEmotions] = useState(null);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const fetchData = async () => {
+                    try {
+                        const [statusData, emotionsData] = await Promise.all([
+                            apiCall('/api/v1/consciousness/status'),
+                            apiCall('/api/v1/consciousness/emotions')
+                        ]);
+                        setStatus(statusData);
+                        setEmotions(emotionsData);
+                    } catch (error) {
+                        console.error('Failed to fetch consciousness data:', error);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchData();
+                const interval = setInterval(fetchData, 10000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const getEmotionIcon = (emotion) => {
+                const icons = {
+                    happy: '😊',
+                    neutral: '😐',
+                    concerned: '😟',
+                    alert: '😮',
+                    calm: '😌',
+                    excited: '🤗'
+                };
+                return icons[emotion] || '🤔';
+            };
+
+            if (loading) return <div className="loading"><div className="spinner"></div>Loading consciousness data...</div>;
+
+            return (
+                <div>
+                    <div className="grid grid-2">
+                        <div className="card">
+                            <h2>System Status</h2>
+                            <div className="grid grid-2">
+                                <div>
+                                    <div className="emotion-display">
+                                        <div className="emotion-icon">
+                                            {status?.status === 'active' ? '✅' : '❌'}
+                                        </div>
+                                        <div className="emotion-details">
+                                            <div className="emotion-label">Status</div>
+                                            <div className="emotion-value">{status?.status || 'Unknown'}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="emotion-display">
+                                        <div className="emotion-icon">🧠</div>
+                                        <div className="emotion-details">
+                                            <div className="emotion-label">Awareness Level</div>
+                                            <div className="emotion-value">{(status?.awareness_level * 100).toFixed(0)}%</div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: `${status?.awareness_level * 100}%`}}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="emotion-display">
+                                        <div className="emotion-icon">📱</div>
+                                        <div className="emotion-details">
+                                            <div className="emotion-label">Active Devices</div>
+                                            <div className="emotion-value">{status?.active_devices || 0}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="emotion-display">
+                                        <div className="emotion-icon">🔄</div>
+                                        <div className="emotion-details">
+                                            <div className="emotion-label">SAFLA Loops</div>
+                                            <div className="emotion-value">{status?.safla_loops || 0}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="card">
+                            <h2>Emotional State</h2>
+                            {emotions && (
+                                <div>
+                                    <div className="emotion-display">
+                                        <div className="emotion-icon">
+                                            {getEmotionIcon(emotions.current?.primary_emotion)}
+                                        </div>
+                                        <div className="emotion-details">
+                                            <div className="emotion-label">Current Emotion</div>
+                                            <div className="emotion-value">{emotions.current?.primary_emotion || 'neutral'}</div>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-2" style={{marginTop: '1rem'}}>
+                                        <div>
+                                            <div className="emotion-label">Arousal</div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: `${(emotions.current?.arousal || 0) * 100}%`}}></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="emotion-label">Valence</div>
+                                            <div className="progress-bar">
+                                                <div className="progress-fill" style={{width: `${(emotions.current?.valence || 0) * 100}%`}}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <ConsciousnessChat />
+                </div>
+            );
+        };
+
+        const ConsciousnessChat = () => {
+            const [messages, setMessages] = useState([]);
+            const [input, setInput] = useState('');
+            const [loading, setLoading] = useState(false);
+            const messagesEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const sendMessage = async (e) => {
+                e.preventDefault();
+                if (!input.trim() || loading) return;
+
+                const userMessage = { type: 'user', content: input };
+                setMessages(prev => [...prev, userMessage]);
+                setInput('');
+                setLoading(true);
+
+                try {
+                    const response = await apiCall('/api/v1/consciousness/query', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            query: input,
+                            include_devices: true
+                        })
+                    });
+
+                    setMessages(prev => [...prev, {
+                        type: 'system',
+                        content: response.response || response.answer || 'I understand your query.'
+                    }]);
+                } catch (error) {
+                    setMessages(prev => [...prev, {
+                        type: 'system',
+                        content: `Error: ${error.message}`
+                    }]);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="card">
+                    <h2>Chat with Consciousness</h2>
+                    <div className="chat-container">
+                        <div className="chat-messages">
+                            {messages.length === 0 && (
+                                <div className="chat-message">
+                                    <div className="chat-bubble">
+                                        Hello! I'm your house consciousness. How can I help you today?
+                                    </div>
+                                </div>
+                            )}
+                            {messages.map((msg, idx) => (
+                                <div key={idx} className={`chat-message ${msg.type}`}>
+                                    <div className="chat-bubble">{msg.content}</div>
+                                </div>
+                            ))}
+                            {loading && (
+                                <div className="chat-message">
+                                    <div className="chat-bubble">Thinking...</div>
+                                </div>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+                        <form onSubmit={sendMessage} className="chat-input-container">
+                            <input
+                                type="text"
+                                className="form-input chat-input"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Ask me anything..."
+                                disabled={loading}
+                            />
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        const DeviceManager = () => {
+            const [devices, setDevices] = useState([]);
+            const [filters, setFilters] = useState({ status: '', location: '', device_type: '' });
+            const [loading, setLoading] = useState(true);
+            const [selectedDevices, setSelectedDevices] = useState([]);
+
+            const fetchDevices = async () => {
+                try {
+                    const params = new URLSearchParams();
+                    Object.entries(filters).forEach(([key, value]) => {
+                        if (value) params.append(key, value);
+                    });
+
+                    const data = await apiCall(`/api/v1/devices${params.toString() ? '?' + params : ''}`);
+                    setDevices(data.devices || []);
+                } catch (error) {
+                    console.error('Failed to fetch devices:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            useEffect(() => {
+                fetchDevices();
+            }, [filters]);
+
+            const controlDevice = async (deviceId, action, value) => {
+                try {
+                    await apiCall(`/api/v1/devices/${deviceId}/control`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ action, value })
+                    });
+                    fetchDevices();
+                } catch (error) {
+                    alert(`Failed to control device: ${error.message}`);
+                }
+            };
+
+            const batchControl = async (action) => {
+                if (selectedDevices.length === 0) {
+                    alert('Please select devices first');
+                    return;
+                }
+
+                try {
+                    const commands = selectedDevices.map(deviceId => ({
+                        device_id: deviceId,
+                        action: action,
+                        value: action === 'turn_on' ? true : action === 'turn_off' ? false : null
+                    }));
+
+                    await apiCall('/api/v1/devices/batch-control', {
+                        method: 'POST',
+                        body: JSON.stringify({ devices: commands })
+                    });
+
+                    setSelectedDevices([]);
+                    fetchDevices();
+                } catch (error) {
+                    alert(`Batch control failed: ${error.message}`);
+                }
+            };
+
+            if (loading) return <div className="loading"><div className="spinner"></div>Loading devices...</div>;
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2>Device Filters</h2>
+                        <div className="grid grid-3">
+                            <div className="form-group">
+                                <label className="form-label">Status</label>
+                                <select
+                                    className="form-select"
+                                    value={filters.status}
+                                    onChange={(e) => setFilters({...filters, status: e.target.value})}
+                                >
+                                    <option value="">All</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="error">Error</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Location</label>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    value={filters.location}
+                                    onChange={(e) => setFilters({...filters, location: e.target.value})}
+                                    placeholder="e.g., Living Room"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Device Type</label>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    value={filters.device_type}
+                                    onChange={(e) => setFilters({...filters, device_type: e.target.value})}
+                                    placeholder="e.g., light"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedDevices.length > 0 && (
+                        <div className="card">
+                            <h2>Batch Actions ({selectedDevices.length} devices selected)</h2>
+                            <div className="btn-group">
+                                <button className="btn btn-success" onClick={() => batchControl('turn_on')}>
+                                    Turn All On
+                                </button>
+                                <button className="btn btn-danger" onClick={() => batchControl('turn_off')}>
+                                    Turn All Off
+                                </button>
+                                <button className="btn btn-secondary" onClick={() => setSelectedDevices([])}>
+                                    Clear Selection
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="card">
+                        <h2>Devices ({devices.length})</h2>
+                        <div className="grid grid-3">
+                            {devices.map(device => (
+                                <div key={device.id} className="device-card">
+                                    <div className="device-header">
+                                        <div>
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedDevices.includes(device.id)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setSelectedDevices([...selectedDevices, device.id]);
+                                                    } else {
+                                                        setSelectedDevices(selectedDevices.filter(id => id !== device.id));
+                                                    }
+                                                }}
+                                                style={{marginRight: '0.5rem'}}
+                                            />
+                                            <span className="device-name">{device.name || device.id}</span>
+                                        </div>
+                                        <div className="device-status">
+                                            <span className={`badge badge-${device.status === 'active' ? 'success' : 'warning'}`}>
+                                                {device.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style={{fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem'}}>
+                                        {device.type} • {device.location || 'Unknown Location'}
+                                    </div>
+                                    <div className="device-controls">
+                                        <button
+                                            className="btn btn-primary"
+                                            style={{fontSize: '0.85rem', padding: '0.5rem 1rem'}}
+                                            onClick={() => controlDevice(device.id, 'turn_on', true)}
+                                        >
+                                            On
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary"
+                                            style={{fontSize: '0.85rem', padding: '0.5rem 1rem'}}
+                                            onClick={() => controlDevice(device.id, 'turn_off', false)}
+                                        >
+                                            Off
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const MemoryInterface = () => {
+            const [memories, setMemories] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [showAddForm, setShowAddForm] = useState(false);
+            const [newMemory, setNewMemory] = useState({ type: 'experience', content: '', context: {} });
+
+            const fetchMemories = async () => {
+                try {
+                    const data = await apiCall('/api/v1/memory?limit=20');
+                    setMemories(data.memories || []);
+                } catch (error) {
+                    console.error('Failed to fetch memories:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            useEffect(() => {
+                fetchMemories();
+            }, []);
+
+            const storeMemory = async (e) => {
+                e.preventDefault();
+                try {
+                    await apiCall('/api/v1/memory', {
+                        method: 'POST',
+                        body: JSON.stringify(newMemory)
+                    });
+                    setShowAddForm(false);
+                    setNewMemory({ type: 'experience', content: '', context: {} });
+                    fetchMemories();
+                } catch (error) {
+                    alert(`Failed to store memory: ${error.message}`);
+                }
+            };
+
+            if (loading) return <div className="loading"><div className="spinner"></div>Loading memories...</div>;
+
+            return (
+                <div>
+                    <div className="card">
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <h2>Memory Bank</h2>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setShowAddForm(!showAddForm)}
+                            >
+                                {showAddForm ? 'Cancel' : 'Add Memory'}
+                            </button>
+                        </div>
+
+                        {showAddForm && (
+                            <form onSubmit={storeMemory} style={{marginTop: '1rem'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Type</label>
+                                    <select
+                                        className="form-select"
+                                        value={newMemory.type}
+                                        onChange={(e) => setNewMemory({...newMemory, type: e.target.value})}
+                                    >
+                                        <option value="experience">Experience</option>
+                                        <option value="pattern">Pattern</option>
+                                        <option value="preference">Preference</option>
+                                        <option value="interaction">Interaction</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Content</label>
+                                    <textarea
+                                        className="form-textarea"
+                                        value={newMemory.content}
+                                        onChange={(e) => setNewMemory({...newMemory, content: e.target.value})}
+                                        placeholder="Describe the memory..."
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="btn btn-primary">Store Memory</button>
+                            </form>
+                        )}
+                    </div>
+
+                    <div className="card">
+                        <h2>Recent Memories</h2>
+                        <div className="table-wrapper">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Content</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {memories.map((memory, idx) => (
+                                        <tr key={idx}>
+                                            <td>
+                                                <span className={`badge badge-${memory.type === 'experience' ? 'primary' : 'secondary'}`}>
+                                                    {memory.type}
+                                                </span>
+                                            </td>
+                                            <td>{memory.content}</td>
+                                            <td>{new Date(memory.timestamp).toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const InterviewWizard = () => {
+            const [interview, setInterview] = useState(null);
+            const [message, setMessage] = useState('');
+            const [loading, setLoading] = useState(false);
+            const [history, setHistory] = useState([]);
+
+            const startInterview = async () => {
+                setLoading(true);
+                try {
+                    const data = await apiCall('/api/v1/interview/start', {
+                        method: 'POST',
+                        body: JSON.stringify({ house_id: 'house-001' })
+                    });
+                    setInterview(data);
+                    setHistory([{ type: 'ai', content: data.ai_message }]);
+                } catch (error) {
+                    alert(`Failed to start interview: ${error.message}`);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            const sendMessage = async (e) => {
+                e.preventDefault();
+                if (!message.trim() || !interview) return;
+
+                const userMessage = message;
+                setMessage('');
+                setHistory([...history, { type: 'user', content: userMessage }]);
+                setLoading(true);
+
+                try {
+                    const data = await apiCall(`/api/v1/interview/${interview.interview_id}/message`, {
+                        method: 'POST',
+                        body: JSON.stringify({ message: userMessage })
+                    });
+                    setHistory(prev => [...prev, { type: 'ai', content: data.ai_response }]);
+                } catch (error) {
+                    setHistory(prev => [...prev, { type: 'ai', content: `Error: ${error.message}` }]);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="card">
+                    <h2>Device Discovery Interview</h2>
+
+                    {!interview ? (
+                        <div style={{textAlign: 'center', padding: '2rem'}}>
+                            <p style={{marginBottom: '1rem'}}>
+                                Start a conversational interview to discover and set up your smart home devices.
+                            </p>
+                            <button
+                                className="btn btn-primary"
+                                onClick={startInterview}
+                                disabled={loading}
+                            >
+                                {loading ? 'Starting...' : 'Start Interview'}
+                            </button>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="chat-messages" style={{height: '400px'}}>
+                                {history.map((msg, idx) => (
+                                    <div key={idx} className={`chat-message ${msg.type === 'user' ? 'user' : ''}`}>
+                                        <div className="chat-bubble">{msg.content}</div>
+                                    </div>
+                                ))}
+                                {loading && (
+                                    <div className="chat-message">
+                                        <div className="chat-bubble">Processing...</div>
+                                    </div>
+                                )}
+                            </div>
+                            <form onSubmit={sendMessage} className="chat-input-container">
+                                <input
+                                    type="text"
+                                    className="form-input chat-input"
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    placeholder="Describe your devices..."
+                                    disabled={loading}
+                                />
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                    Send
+                                </button>
+                            </form>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const DiscoveryScanner = () => {
+            const [scanning, setScanning] = useState(false);
+            const [scanResults, setScanResults] = useState(null);
+            const [protocols, setProtocols] = useState(['mdns', 'upnp', 'bluetooth']);
+            const [currentScan, setCurrentScan] = useState(null);
+
+            const startScan = async () => {
+                setScanning(true);
+                setScanResults(null);
+
+                try {
+                    const data = await apiCall('/api/v1/discovery/scan', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            protocols: protocols,
+                            timeout_seconds: 30
+                        })
+                    });
+
+                    setCurrentScan(data.scan_id);
+
+                    // Poll for results
+                    const pollInterval = setInterval(async () => {
+                        try {
+                            const results = await apiCall(`/api/v1/discovery/scan/${data.scan_id}`);
+                            if (results.status === 'completed') {
+                                clearInterval(pollInterval);
+                                setScanResults(results);
+                                setScanning(false);
+                            }
+                        } catch (error) {
+                            clearInterval(pollInterval);
+                            setScanning(false);
+                        }
+                    }, 2000);
+
+                    // Stop polling after timeout
+                    setTimeout(() => {
+                        clearInterval(pollInterval);
+                        setScanning(false);
+                    }, 35000);
+
+                } catch (error) {
+                    alert(`Failed to start scan: ${error.message}`);
+                    setScanning(false);
+                }
+            };
+
+            return (
+                <div className="card">
+                    <h2>Device Discovery Scanner</h2>
+
+                    <div className="form-group">
+                        <label className="form-label">Discovery Protocols</label>
+                        <div style={{display: 'flex', gap: '1rem'}}>
+                            {['mdns', 'upnp', 'bluetooth', 'zigbee', 'zwave'].map(protocol => (
+                                <label key={protocol} style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                                    <input
+                                        type="checkbox"
+                                        checked={protocols.includes(protocol)}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setProtocols([...protocols, protocol]);
+                                            } else {
+                                                setProtocols(protocols.filter(p => p !== protocol));
+                                            }
+                                        }}
+                                        disabled={scanning}
+                                    />
+                                    {protocol.toUpperCase()}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button
+                        className="btn btn-primary"
+                        onClick={startScan}
+                        disabled={scanning || protocols.length === 0}
+                    >
+                        {scanning ? 'Scanning...' : 'Start Discovery Scan'}
+                    </button>
+
+                    {scanning && (
+                        <div className="alert alert-info" style={{marginTop: '1rem'}}>
+                            <div className="spinner" style={{width: '20px', height: '20px', marginRight: '0.5rem'}}></div>
+                            Scanning for devices... This may take up to 30 seconds.
+                        </div>
+                    )}
+
+                    {scanResults && (
+                        <div style={{marginTop: '1rem'}}>
+                            <h3>Scan Results</h3>
+                            <div className="alert alert-success">
+                                Found {scanResults.total_devices_found} devices
+                            </div>
+                            {Object.entries(scanResults.results).map(([protocol, devices]) => (
+                                <div key={protocol} style={{marginTop: '1rem'}}>
+                                    <h4>{protocol.toUpperCase()} ({devices.length} devices)</h4>
+                                    {devices.length > 0 ? (
+                                        <div className="table-wrapper">
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Type</th>
+                                                        <th>Address</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {devices.map((device, idx) => (
+                                                        <tr key={idx}>
+                                                            <td>{device.name}</td>
+                                                            <td>{device.type}</td>
+                                                            <td>{device.address}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    ) : (
+                                        <p style={{color: '#666'}}>No devices found via {protocol}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const SAFLAMonitor = () => {
+            const [saflaStatus, setSaflaStatus] = useState(null);
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const fetchStatus = async () => {
+                    try {
+                        const data = await apiCall('/api/v1/safla/status');
+                        setSaflaStatus(data);
+                    } catch (error) {
+                        console.error('Failed to fetch SAFLA status:', error);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchStatus();
+                const interval = setInterval(fetchStatus, 5000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const triggerLoop = async (loopId) => {
+                try {
+                    await apiCall('/api/v1/safla/trigger', {
+                        method: 'POST',
+                        body: JSON.stringify({ loop_id: loopId })
+                    });
+                    alert('SAFLA loop triggered successfully');
+                } catch (error) {
+                    alert(`Failed to trigger loop: ${error.message}`);
+                }
+            };
+
+            if (loading) return <div className="loading"><div className="spinner"></div>Loading SAFLA status...</div>;
+
+            return (
+                <div className="card">
+                    <h2>SAFLA Loop Monitor</h2>
+
+                    <div className="alert alert-info">
+                        <strong>Active Loops:</strong> {saflaStatus?.active_loops || 0}
+                    </div>
+
+                    {saflaStatus?.loops && saflaStatus.loops.length > 0 ? (
+                        <div className="table-wrapper">
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Loop ID</th>
+                                        <th>Type</th>
+                                        <th>Status</th>
+                                        <th>Last Run</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {saflaStatus.loops.map(loop => (
+                                        <tr key={loop.id}>
+                                            <td>{loop.id}</td>
+                                            <td>{loop.type}</td>
+                                            <td>
+                                                <span className={`badge badge-${loop.status === 'active' ? 'success' : 'warning'}`}>
+                                                    {loop.status}
+                                                </span>
+                                            </td>
+                                            <td>{new Date(loop.last_run).toLocaleString()}</td>
+                                            <td>
+                                                <button
+                                                    className="btn btn-primary"
+                                                    style={{fontSize: '0.85rem', padding: '0.5rem 1rem'}}
+                                                    onClick={() => triggerLoop(loop.id)}
+                                                >
+                                                    Trigger
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p style={{color: '#666', textAlign: 'center', padding: '2rem'}}>
+                            No SAFLA loops are currently active
+                        </p>
+                    )}
+                </div>
+            );
+        };
+
+        const DigitalTwinManager = () => {
+            const [twins, setTwins] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [showCreateForm, setShowCreateForm] = useState(false);
+            const [newTwin, setNewTwin] = useState({ device_id: '', fidelity_level: 'advanced', config: {} });
+
+            const fetchTwins = async () => {
+                try {
+                    const data = await apiCall('/api/v1/twins');
+                    setTwins(data.twins || []);
+                } catch (error) {
+                    console.error('Failed to fetch digital twins:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            useEffect(() => {
+                fetchTwins();
+            }, []);
+
+            const createTwin = async (e) => {
+                e.preventDefault();
+                try {
+                    await apiCall('/api/v1/twins', {
+                        method: 'POST',
+                        body: JSON.stringify(newTwin)
+                    });
+                    setShowCreateForm(false);
+                    setNewTwin({ device_id: '', fidelity_level: 'advanced', config: {} });
+                    fetchTwins();
+                } catch (error) {
+                    alert(`Failed to create digital twin: ${error.message}`);
+                }
+            };
+
+            if (loading) return <div className="loading"><div className="spinner"></div>Loading digital twins...</div>;
+
+            return (
+                <div>
+                    <div className="card">
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <h2>Digital Twin Manager</h2>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => setShowCreateForm(!showCreateForm)}
+                            >
+                                {showCreateForm ? 'Cancel' : 'Create Twin'}
+                            </button>
+                        </div>
+
+                        {showCreateForm && (
+                            <form onSubmit={createTwin} style={{marginTop: '1rem'}}>
+                                <div className="form-group">
+                                    <label className="form-label">Device ID</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={newTwin.device_id}
+                                        onChange={(e) => setNewTwin({...newTwin, device_id: e.target.value})}
+                                        placeholder="Enter device ID"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label className="form-label">Fidelity Level</label>
+                                    <select
+                                        className="form-select"
+                                        value={newTwin.fidelity_level}
+                                        onChange={(e) => setNewTwin({...newTwin, fidelity_level: e.target.value})}
+                                    >
+                                        <option value="basic">Basic</option>
+                                        <option value="advanced">Advanced</option>
+                                        <option value="expert">Expert</option>
+                                    </select>
+                                </div>
+                                <button type="submit" className="btn btn-primary">Create Digital Twin</button>
+                            </form>
+                        )}
+
+                        <div style={{marginTop: '1rem'}}>
+                            <div className="grid grid-2">
+                                <div className="status-item">
+                                    <div className="status-value">{twins.length}</div>
+                                    <div className="status-label">Total Twins</div>
+                                </div>
+                                <div className="status-item">
+                                    <div className="status-value" style={{color: '#4CAF50'}}>
+                                        {twins.filter(t => t.sync_status === 'synchronized').length}
+                                    </div>
+                                    <div className="status-label">Synchronized</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card">
+                        <h2>Digital Twins</h2>
+                        <div className="grid grid-2">
+                            {twins.map(twin => (
+                                <div key={twin.id} className="device-card">
+                                    <div className="device-header">
+                                        <div>
+                                            <div className="device-name">{twin.device_name || twin.device_id}</div>
+                                            <div style={{fontSize: '0.9rem', color: '#666'}}>
+                                                ID: {twin.id}
+                                            </div>
+                                        </div>
+                                        <span className={`badge badge-${twin.sync_status === 'synchronized' ? 'success' : 'warning'}`}>
+                                            {twin.sync_status}
+                                        </span>
+                                    </div>
+                                    <div style={{marginTop: '1rem'}}>
+                                        <div style={{fontSize: '0.9rem', marginBottom: '0.5rem'}}>
+                                            <strong>Fidelity:</strong> {twin.fidelity_level}
+                                        </div>
+                                        <div style={{fontSize: '0.9rem'}}>
+                                            <strong>Last Sync:</strong> {new Date(twin.last_sync).toLocaleString()}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const ScenarioBuilder = () => {
+            const [scenarios, setScenarios] = useState([]);
+            const [showCreateForm, setShowCreateForm] = useState(false);
+            const [whatIfForm, setWhatIfForm] = useState({
+                scenario: '',
+                changes: {},
+                duration: '1h',
+                metrics: ['energy_usage', 'comfort_level', 'security_score']
+            });
+            const [analysisResults, setAnalysisResults] = useState(null);
+
+            const createScenario = async (e) => {
+                e.preventDefault();
+                // Implementation for scenario creation
+                alert('Scenario creation would be implemented here');
+                setShowCreateForm(false);
+            };
+
+            const runWhatIfAnalysis = async (e) => {
+                e.preventDefault();
+                try {
+                    const results = await apiCall('/api/v1/predictions/what-if', {
+                        method: 'POST',
+                        body: JSON.stringify(whatIfForm)
+                    });
+                    setAnalysisResults(results);
+                } catch (error) {
+                    alert(`Failed to run analysis: ${error.message}`);
+                }
+            };
+
+            return (
+                <div>
+                    <div className="card">
+                        <h2>What-If Analysis</h2>
+                        <form onSubmit={runWhatIfAnalysis}>
+                            <div className="form-group">
+                                <label className="form-label">Scenario</label>
+                                <input
+                                    type="text"
+                                    className="form-input"
+                                    value={whatIfForm.scenario}
+                                    onChange={(e) => setWhatIfForm({...whatIfForm, scenario: e.target.value})}
+                                    placeholder="e.g., Summer heatwave"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Duration</label>
+                                <select
+                                    className="form-select"
+                                    value={whatIfForm.duration}
+                                    onChange={(e) => setWhatIfForm({...whatIfForm, duration: e.target.value})}
+                                >
+                                    <option value="1h">1 Hour</option>
+                                    <option value="6h">6 Hours</option>
+                                    <option value="1d">1 Day</option>
+                                    <option value="1w">1 Week</option>
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label className="form-label">Metrics to Analyze</label>
+                                <div style={{display: 'flex', flexDirection: 'column', gap: '0.5rem'}}>
+                                    {['energy_usage', 'comfort_level', 'security_score', 'cost_estimate'].map(metric => (
+                                        <label key={metric} style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+                                            <input
+                                                type="checkbox"
+                                                checked={whatIfForm.metrics.includes(metric)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setWhatIfForm({...whatIfForm, metrics: [...whatIfForm.metrics, metric]});
+                                                    } else {
+                                                        setWhatIfForm({...whatIfForm, metrics: whatIfForm.metrics.filter(m => m !== metric)});
+                                                    }
+                                                }}
+                                            />
+                                            {metric.replace('_', ' ').charAt(0).toUpperCase() + metric.slice(1).replace('_', ' ')}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            <button type="submit" className="btn btn-primary">Run Analysis</button>
+                        </form>
+
+                        {analysisResults && (
+                            <div style={{marginTop: '2rem'}}>
+                                <h3>Analysis Results</h3>
+                                <div className="alert alert-success">
+                                    Analysis completed successfully
+                                </div>
+                                <div className="grid grid-2">
+                                    {Object.entries(analysisResults.results || {}).map(([key, value]) => (
+                                        <div key={key} className="status-item">
+                                            <div className="status-value">{value}</div>
+                                            <div className="status-label">{key.replace('_', ' ')}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        // Main App Component
+        const App = () => {
+            const [isAuthenticated, setIsAuthenticated] = useState(false);
+            const [activeTab, setActiveTab] = useState('consciousness');
+            const [wsConnected, setWsConnected] = useState(false);
+            const wsRef = useRef(null);
+
+            useEffect(() => {
+                const token = localStorage.getItem('authToken');
+                if (token) {
+                    setIsAuthenticated(true);
+                    connectWebSocket();
+                }
+
+                return () => {
+                    if (wsRef.current) {
+                        wsRef.current.close();
+                    }
+                };
+            }, [isAuthenticated]);
+
+            const connectWebSocket = () => {
+                if (!isAuthenticated) return;
+
+                try {
+                    wsRef.current = new WebSocket(WS_URL);
+
+                    wsRef.current.onopen = () => {
+                        setWsConnected(true);
+                        wsRef.current.send(JSON.stringify({
+                            type: 'init',
+                            data: {
+                                subscriptions: ['consciousness', 'devices', 'interview']
+                            }
+                        }));
+                    };
+
+                    wsRef.current.onclose = () => {
+                        setWsConnected(false);
+                        setTimeout(connectWebSocket, 5000); // Reconnect after 5 seconds
+                    };
+
+                    wsRef.current.onerror = (error) => {
+                        console.error('WebSocket error:', error);
+                    };
+
+                    wsRef.current.onmessage = (event) => {
+                        const data = JSON.parse(event.data);
+                        console.log('WebSocket message:', data);
+                    };
+                } catch (error) {
+                    console.error('Failed to connect WebSocket:', error);
+                }
+            };
+
+            const handleLogout = () => {
+                localStorage.removeItem('authToken');
+                setIsAuthenticated(false);
+                if (wsRef.current) {
+                    wsRef.current.close();
+                }
+            };
+
+            if (!isAuthenticated) {
+                return <LoginForm onLogin={() => setIsAuthenticated(true)} />;
+            }
+
+            const tabs = [
+                { id: 'consciousness', label: 'Consciousness' },
+                { id: 'devices', label: 'Devices' },
+                { id: 'memory', label: 'Memory' },
+                { id: 'interview', label: 'Interview' },
+                { id: 'discovery', label: 'Discovery' },
+                { id: 'safla', label: 'SAFLA' },
+                { id: 'twins', label: 'Digital Twins' },
+                { id: 'scenarios', label: 'Scenarios' }
+            ];
+
+            return (
+                <div className="app-container">
+                    <header className="header">
+                        <div className="header-content">
+                            <h1>🏠 House Consciousness Dashboard</h1>
+                            <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <div className="connection-status">
+                                    <span className={`status-dot ${wsConnected ? '' : 'offline'}`}></span>
+                                    {wsConnected ? 'Connected' : 'Offline'}
+                                </div>
+                                <button className="btn btn-secondary" onClick={handleLogout}>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <nav className="nav-tabs">
+                        <div className="nav-tabs-content">
+                            {tabs.map(tab => (
+                                <button
+                                    key={tab.id}
+                                    className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+                    </nav>
+
+                    <main className="main-content">
+                        {activeTab === 'consciousness' && <ConsciousnessStatus />}
+                        {activeTab === 'devices' && <DeviceManager />}
+                        {activeTab === 'memory' && <MemoryInterface />}
+                        {activeTab === 'interview' && <InterviewWizard />}
+                        {activeTab === 'discovery' && <DiscoveryScanner />}
+                        {activeTab === 'safla' && <SAFLAMonitor />}
+                        {activeTab === 'twins' && <DigitalTwinManager />}
+                        {activeTab === 'scenarios' && <ScenarioBuilder />}
+                    </main>
+                </div>
+            );
+        };
+
+        // Render the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
