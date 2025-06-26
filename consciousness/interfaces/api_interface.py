@@ -385,6 +385,155 @@ class ConsciousnessAPI:
                 },
             }
 
+        # Demo endpoints (non-authenticated) for demo dashboard
+        @self.app.get("/api/status")
+        async def get_demo_status():
+            """Get system status for demo dashboard."""
+            consciousness_status = {}
+            if self.consciousness:
+                try:
+                    status = await self.consciousness.get_status()
+                    consciousness_status = {
+                        "active": self.consciousness.is_active,
+                        "emotional_state": status.get("emotional_state", "content"),
+                        "mood": status.get("mood", "stable"),
+                        "active_concerns": status.get("active_concerns", []),
+                        "last_activity": datetime.now().isoformat()
+                    }
+                except:
+                    consciousness_status = {"active": False}
+            
+            devices = {"total": 0, "active": 0, "types": {}}
+            if self.device_controller:
+                try:
+                    all_devices = await self.device_controller.get_devices()
+                    devices["total"] = len(all_devices)
+                    devices["active"] = len([d for d in all_devices if d.get("status") == "active"])
+                    for device in all_devices:
+                        device_type = device.get("type", "unknown")
+                        devices["types"][device_type] = devices["types"].get(device_type, 0) + 1
+                except:
+                    pass
+            
+            # Get available scenarios
+            scenarios = [
+                "smart_morning",
+                "security_alert", 
+                "energy_optimization",
+                "party_mode",
+                "vacation_mode"
+            ]
+            
+            running_scenario = None
+            if self.simulator_manager and hasattr(self.simulator_manager, 'current_scenario'):
+                try:
+                    running_scenario = self.simulator_manager.current_scenario
+                except:
+                    pass
+            
+            return {
+                "timestamp": datetime.now().isoformat(),
+                "consciousness_status": consciousness_status,
+                "devices": devices,
+                "scenarios": scenarios,
+                "running_scenario": running_scenario
+            }
+        
+        @self.app.get("/api/devices")
+        async def get_demo_devices():
+            """Get all devices for demo dashboard."""
+            if not self.device_controller:
+                return {"devices": []}
+            
+            try:
+                devices = await self.device_controller.get_devices()
+                return {"devices": devices}
+            except:
+                return {"devices": []}
+        
+        @self.app.post("/api/consciousness/query")
+        async def query_demo_consciousness(query: Dict[str, str]):
+            """Query consciousness for demo dashboard."""
+            if not self.consciousness or not hasattr(self.consciousness, 'process_query'):
+                return {"response": "Consciousness system is initializing..."}
+            
+            try:
+                response = await self.consciousness.process_query(query.get("question", ""))
+                return {"response": response}
+            except:
+                return {"response": "Unable to process query at this time."}
+        
+        @self.app.post("/api/devices/{device_id}/control")
+        async def control_demo_device(device_id: int, command: Dict[str, Any]):
+            """Control device for demo dashboard."""
+            if not self.device_controller:
+                return {"status": "error", "message": "Device controller not available"}
+            
+            try:
+                result = await self.device_controller.control_device(
+                    str(device_id),
+                    command.get("action", "update"),
+                    value=command.get("value"),
+                )
+                return {"status": "success", "device_id": device_id, "new_state": result}
+            except:
+                return {"status": "error", "message": f"Failed to control device {device_id}"}
+        
+        @self.app.post("/api/scenarios/{scenario_name}/run")
+        async def run_demo_scenario(scenario_name: str):
+            """Run a demo scenario."""
+            if self.simulator_manager and hasattr(self.simulator_manager, 'run_scenario'):
+                try:
+                    await self.simulator_manager.run_scenario(scenario_name)
+                    # Broadcast scenario start
+                    await self.connection_manager.broadcast(
+                        {
+                            "type": "scenario_start",
+                            "data": {
+                                "scenario": scenario_name,
+                                "timestamp": datetime.now().isoformat()
+                            }
+                        }
+                    )
+                    return {"status": "started", "scenario": scenario_name}
+                except Exception as e:
+                    return {"status": "error", "message": str(e)}
+            else:
+                # For demo purposes, just return success
+                await self.connection_manager.broadcast(
+                    {
+                        "type": "scenario_start",
+                        "data": {
+                            "scenario": scenario_name,
+                            "timestamp": datetime.now().isoformat()
+                        }
+                    }
+                )
+                # Simulate scenario completion after delay
+                async def simulate_scenario():
+                    await asyncio.sleep(5)
+                    await self.connection_manager.broadcast(
+                        {
+                            "type": "scenario_complete",
+                            "data": {
+                                "scenario": scenario_name,
+                                "timestamp": datetime.now().isoformat()
+                            }
+                        }
+                    )
+                asyncio.create_task(simulate_scenario())
+                return {"status": "started", "scenario": scenario_name}
+        
+        @self.app.post("/api/scenarios/stop")
+        async def stop_demo_scenarios():
+            """Stop all running scenarios."""
+            if self.simulator_manager and hasattr(self.simulator_manager, 'stop_all_scenarios'):
+                try:
+                    await self.simulator_manager.stop_all_scenarios()
+                except:
+                    pass
+            return {"status": "stopped"}
+
         # Authentication endpoints
         @self.app.post("/api/v1/auth/login")
         async def login(credentials: AuthCredentials):
@@ -1034,6 +1183,64 @@ class ConsciousnessAPI:
         async def websocket_endpoint(websocket: WebSocket):
             """WebSocket endpoint for real-time updates."""
             await self.connection_manager.connect(websocket)
+        
+        # Demo WebSocket endpoint (non-authenticated)
+        @self.app.websocket("/ws")
+        async def demo_websocket_endpoint(websocket: WebSocket):
+            """WebSocket endpoint for demo dashboard."""
+            await self.connection_manager.connect(websocket)
+            
+            try:
+                while True:
+                    # Send periodic status updates
+                    status = {
+                        "type": "status_update",
+                        "timestamp": datetime.now().isoformat(),
+                        "consciousness": {},
+                        "devices": {},
+                        "running_scenario": None,
+                        "device_states": {}
+                    }
+                    
+                    # Get consciousness status
+                    if self.consciousness:
+                        try:
+                            cs = await self.consciousness.get_status()
+                            status["consciousness"] = {
+                                "active": self.consciousness.is_active,
+                                "emotional_state": cs.get("emotional_state", "content"),
+                                "mood": cs.get("mood", "stable"),
+                                "active_concerns": cs.get("active_concerns", [])
+                            }
+                        except:
+                            status["consciousness"] = {"active": False}
+                    
+                    # Get device status
+                    if self.device_controller:
+                        try:
+                            devices = await self.device_controller.get_devices()
+                            status["devices"] = {
+                                "total": len(devices),
+                                "active": len([d for d in devices if d.get("status") == "active"])
+                            }
+                            # Include device states
+                            for idx, device in enumerate(devices):
+                                status["device_states"][str(idx)] = {
+                                    "status": device.get("status", "offline"),
+                                    "type": device.get("type", "unknown"),
+                                    "name": device.get("name", f"Device {idx}")
+                                }
+                        except:
+                            status["devices"] = {"total": 0, "active": 0}
+                    
+                    await websocket.send_json(status)
+                    await asyncio.sleep(2)  # Update every 2 seconds
+                    
+            except WebSocketDisconnect:
+                self.connection_manager.disconnect(websocket)
+            except Exception as e:
+                logger.error(f"Demo WebSocket error: {e}")
+                self.connection_manager.disconnect(websocket)
 
             try:
                 # Send initial status

@@ -333,9 +333,20 @@ async def metrics():
 @app.get("/api/devices")
 async def get_devices():
     """Get all discovered devices."""
+    devices = device_simulator.get_all_devices()
+    # Format devices for demo dashboard compatibility
+    formatted_devices = []
+    for device in devices:
+        formatted_devices.append({
+            "id": device.get("id"),
+            "name": device.get("name", f"Device {device.get('id')}"),
+            "type": device.get("type", "unknown"),
+            "location": device.get("location", "unknown"),
+            "state": device.get("properties", {}),
+            "running": device.get("status") == "active"
+        })
     return {
-        "devices": device_simulator.get_all_devices(),
-        "summary": device_simulator.get_device_summary(),
+        "devices": formatted_devices
     }
 
 
@@ -434,6 +445,445 @@ async def get_discovery_status():
         "discovery_methods": ["bluetooth", "mdns", "upnp", "zigbee"],
         "last_scan": datetime.now().isoformat(),
     }
+
+
+# Demo Dashboard endpoints
+@app.get("/api/status")
+async def get_demo_status():
+    """Get system status for demo dashboard."""
+    devices = device_simulator.get_all_devices()
+    device_types = {}
+    for device in devices:
+        device_type = device.get("type", "unknown")
+        device_types[device_type] = device_types.get(device_type, 0) + 1
+    
+    return {
+        "timestamp": datetime.now().isoformat(),
+        "consciousness_status": {
+            "active": True,
+            "emotional_state": "content",
+            "mood": "stable",
+            "active_concerns": [],
+            "last_activity": datetime.now().isoformat()
+        },
+        "devices": {
+            "total": len(devices),
+            "active": len([d for d in devices if d.get("status") == "active"]),
+            "types": device_types
+        },
+        "scenarios": [
+            "smart_morning",
+            "security_alert",
+            "energy_optimization",
+            "party_mode",
+            "vacation_mode"
+        ],
+        "running_scenario": None
+    }
+
+
+@app.post("/api/consciousness/query")
+async def query_demo_consciousness(query_data: dict):
+    """Query consciousness for demo dashboard."""
+    question = query_data.get("question", "")
+    return {
+        "response": f"I understand your query: '{question}'. I'm monitoring your smart home and everything is running smoothly."
+    }
+
+
+@app.get("/api/devices/{device_id}")
+async def get_demo_device(device_id: str):
+    """Get specific device details for demo dashboard."""
+    device = device_simulator.get_device(device_id)
+    if not device:
+        raise HTTPException(status_code=404, detail=f"Device {device_id} not found")
+    return device
+
+
+@app.post("/api/devices/{device_id}/control")
+async def control_demo_device(device_id: str, command: dict):
+    """Control device for demo dashboard."""
+    device = device_simulator.get_device(device_id)
+    if not device:
+        return {"status": "error", "message": f"Device {device_id} not found"}
+    
+    # Update device state
+    update_data = command.copy()
+    update_data["last_update"] = datetime.now().isoformat()
+    
+    updated_device = device_simulator.update_device(device_id, update_data)
+    return {
+        "status": "success",
+        "device_id": device_id,
+        "new_state": updated_device.get("properties", {})
+    }
+
+
+@app.post("/api/scenarios/{scenario_name}/run")
+async def run_demo_scenario(scenario_name: str):
+    """Run a demo scenario."""
+    # Simulate scenario execution
+    return {"status": "started", "scenario": scenario_name}
+
+
+@app.post("/api/scenarios/stop")
+async def stop_demo_scenarios():
+    """Stop all running scenarios."""
+    return {"status": "stopped"}
+
+
+# Additional demo endpoints for API test UI
+@app.get("/api/consciousness/status")
+async def get_consciousness_status():
+    """Get consciousness status (demo)."""
+    return {
+        "status": "active",
+        "emotional_state": {
+            "primary": "content",
+            "secondary": "curious",
+            "intensity": 0.7
+        },
+        "awareness_level": 0.85,
+        "active_concerns": [],
+        "last_activity": datetime.now().isoformat()
+    }
+
+
+@app.get("/api/consciousness/emotions")
+async def get_consciousness_emotions(time_range: str = "1h", include_history: bool = True):
+    """Get consciousness emotions (demo)."""
+    return {
+        "current_emotion": {
+            "primary": "content",
+            "secondary": "curious",
+            "intensity": 0.7,
+            "timestamp": datetime.now().isoformat()
+        },
+        "history": [
+            {
+                "emotion": "happy",
+                "intensity": 0.8,
+                "timestamp": (datetime.now() - timedelta(hours=1)).isoformat(),
+                "trigger": "user_interaction"
+            }
+        ] if include_history else [],
+        "time_range": time_range
+    }
+
+
+@app.post("/api/devices/batch-control")
+async def batch_control_devices(batch_data: dict):
+    """Batch control multiple devices (demo)."""
+    results = []
+    for command in batch_data.get("devices", []):
+        device_id = command.get("device_id")
+        action = command.get("action")
+        results.append({
+            "device_id": device_id,
+            "action": action,
+            "status": "success",
+            "timestamp": datetime.now().isoformat()
+        })
+    return {"results": results, "total": len(results)}
+
+
+@app.get("/api/memory")
+async def get_memory(memory_type: str = None, time_range: str = "7d", limit: int = 10):
+    """Get memory entries (demo)."""
+    return {
+        "memories": [
+            {
+                "id": "mem_001",
+                "type": memory_type or "interaction",
+                "content": "User adjusted thermostat to 72°F",
+                "timestamp": datetime.now().isoformat(),
+                "context": {"device": "thermostat", "room": "living_room"}
+            }
+        ],
+        "total": 1,
+        "time_range": time_range,
+        "limit": limit
+    }
+
+
+@app.post("/api/memory")
+async def store_memory(memory_data: dict):
+    """Store memory entry (demo)."""
+    return {
+        "id": f"mem_{datetime.now().timestamp()}",
+        "type": memory_data.get("type", "general"),
+        "content": memory_data.get("content", ""),
+        "timestamp": datetime.now().isoformat(),
+        "stored": True
+    }
+
+
+@app.post("/api/interview/start")
+async def start_interview(interview_data: dict):
+    """Start interview session (demo)."""
+    return {
+        "interview_id": f"interview_{datetime.now().timestamp()}",
+        "house_id": interview_data.get("house_id"),
+        "status": "active",
+        "current_question": "Tell me about your smart home devices."
+    }
+
+
+@app.post("/api/interview/{interview_id}/message")
+async def send_interview_message(interview_id: str, message_data: dict):
+    """Send message in interview (demo)."""
+    return {
+        "interview_id": interview_id,
+        "response": "I understand. Let me learn more about your preferences.",
+        "next_question": "What times do you typically wake up and go to bed?",
+        "progress": 0.3
+    }
+
+
+@app.get("/api/interview/{interview_id}/status")
+async def get_interview_status(interview_id: str):
+    """Get interview status (demo)."""
+    return {
+        "interview_id": interview_id,
+        "status": "active",
+        "progress": 0.3,
+        "questions_asked": 3,
+        "estimated_completion": "5 minutes"
+    }
+
+
+@app.get("/api/discovery/scan/{scan_id}")
+async def get_scan_results(scan_id: str):
+    """Get discovery scan results (demo)."""
+    return {
+        "scan_id": scan_id,
+        "status": "completed",
+        "devices_found": [
+            {
+                "name": "Smart Bulb",
+                "type": "light",
+                "manufacturer": "Philips",
+                "model": "Hue Color"
+            }
+        ],
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.get("/api/integrations/templates")
+async def get_integration_templates(brand: str = None, device_class: str = None):
+    """Get integration templates (demo)."""
+    templates = [
+        {
+            "id": "tpl_001",
+            "brand": "philips",
+            "device_class": "light",
+            "name": "Philips Hue Light",
+            "configuration": {"bridge_required": True}
+        },
+        {
+            "id": "tpl_002",
+            "brand": "nest",
+            "device_class": "thermostat",
+            "name": "Nest Thermostat",
+            "configuration": {"oauth_required": True}
+        }
+    ]
+    
+    if brand:
+        templates = [t for t in templates if t["brand"] == brand.lower()]
+    if device_class:
+        templates = [t for t in templates if t["device_class"] == device_class.lower()]
+    
+    return {"templates": templates, "total": len(templates)}
+
+
+@app.post("/api/integrations/classify")
+async def classify_device(classification_data: dict):
+    """Classify device based on description (demo)."""
+    description = classification_data.get("description", "").lower()
+    
+    # Simple classification logic
+    device_type = "unknown"
+    if "light" in description or "bulb" in description:
+        device_type = "light"
+    elif "thermostat" in description or "temperature" in description:
+        device_type = "thermostat"
+    elif "camera" in description:
+        device_type = "camera"
+    elif "sensor" in description:
+        device_type = "sensor"
+    
+    return {
+        "classification": {
+            "device_type": device_type,
+            "confidence": 0.85,
+            "suggested_template": "tpl_001" if device_type == "light" else "tpl_generic"
+        },
+        "description": classification_data.get("description")
+    }
+
+
+@app.get("/api/safla/status")
+async def get_safla_status():
+    """Get SAFLA loop status (demo)."""
+    return {
+        "active_loops": [
+            {
+                "id": "main_loop",
+                "status": "running",
+                "iterations": 42,
+                "last_run": datetime.now().isoformat()
+            }
+        ],
+        "total_iterations": 42,
+        "system_status": "optimal"
+    }
+
+
+@app.post("/api/safla/trigger")
+async def trigger_safla(safla_data: dict):
+    """Trigger SAFLA loop (demo)."""
+    return {
+        "loop_id": safla_data.get("loop_id", "main_loop"),
+        "status": "triggered",
+        "execution_id": f"exec_{datetime.now().timestamp()}",
+        "estimated_duration": "30 seconds"
+    }
+
+
+@app.get("/api/twins")
+async def get_digital_twins(device_id: str = None, sync_status: str = None, fidelity_level: str = None):
+    """Get digital twins (demo)."""
+    twins = [
+        {
+            "twin_id": "twin_001",
+            "device_id": "device_001",
+            "fidelity_level": "advanced",
+            "sync_status": "synchronized",
+            "last_sync": datetime.now().isoformat()
+        }
+    ]
+    
+    if device_id:
+        twins = [t for t in twins if t["device_id"] == device_id]
+    if sync_status:
+        twins = [t for t in twins if t["sync_status"] == sync_status]
+    if fidelity_level:
+        twins = [t for t in twins if t["fidelity_level"] == fidelity_level]
+    
+    return {"twins": twins, "total": len(twins)}
+
+
+@app.post("/api/twins")
+async def create_digital_twin(twin_data: dict):
+    """Create digital twin (demo)."""
+    return {
+        "twin_id": f"twin_{datetime.now().timestamp()}",
+        "device_id": twin_data.get("device_id"),
+        "fidelity_level": twin_data.get("fidelity_level", "standard"),
+        "status": "created",
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.post("/api/scenarios")
+async def create_scenario(scenario_data: dict):
+    """Create scenario (demo)."""
+    return {
+        "scenario_id": f"scenario_{datetime.now().timestamp()}",
+        "name": scenario_data.get("name"),
+        "description": scenario_data.get("description"),
+        "duration": scenario_data.get("duration", 300),
+        "status": "created",
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@app.post("/api/predictions/what-if")
+async def what_if_analysis(prediction_data: dict):
+    """What-if analysis (demo)."""
+    return {
+        "analysis_id": f"analysis_{datetime.now().timestamp()}",
+        "scenario": prediction_data.get("scenario"),
+        "predictions": {
+            "energy_consumption": {"change": "-15%", "confidence": 0.82},
+            "comfort_level": {"change": "+5%", "confidence": 0.75},
+            "cost": {"change": "-12%", "confidence": 0.88}
+        },
+        "recommendations": [
+            "Consider implementing this scenario during peak hours",
+            "Monitor comfort levels for the first week"
+        ],
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+# WebSocket endpoint for demo dashboard
+from fastapi import WebSocket, WebSocketDisconnect
+import asyncio
+
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: list[WebSocket] = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: dict):
+        for connection in self.active_connections:
+            try:
+                await connection.send_json(message)
+            except:
+                pass
+
+
+manager = ConnectionManager()
+
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    """WebSocket endpoint for demo dashboard."""
+    await manager.connect(websocket)
+    try:
+        while True:
+            # Send periodic status updates
+            devices = device_simulator.get_all_devices()
+            device_states = {}
+            for idx, device in enumerate(devices):
+                device_states[str(idx)] = {
+                    "status": device.get("status", "offline"),
+                    "type": device.get("type", "unknown"),
+                    "name": device.get("name", f"Device {idx}")
+                }
+            
+            status = {
+                "type": "status_update",
+                "timestamp": datetime.now().isoformat(),
+                "consciousness": {
+                    "active": True,
+                    "emotional_state": "content",
+                    "mood": "stable",
+                    "active_concerns": []
+                },
+                "devices": {
+                    "total": len(devices),
+                    "active": len([d for d in devices if d.get("status") == "active"])
+                },
+                "running_scenario": None,
+                "device_states": device_states
+            }
+            
+            await websocket.send_json(status)
+            await asyncio.sleep(2)  # Update every 2 seconds
+            
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
 
 
 # Include additional routers when they're implemented

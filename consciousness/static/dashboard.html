@@ -558,7 +558,7 @@
 
         // API Configuration
         const API_BASE_URL = '';
-        const WS_URL = 'ws://localhost:8000/api/realtime';
+        const WS_URL = 'ws://localhost:8000/ws';
 
         // Utility Functions
         const apiCall = async (endpoint, options = {}) => {
@@ -621,8 +621,9 @@
                 };
 
                 fetchData();
-                const interval = setInterval(fetchData, 10000);
-                return () => clearInterval(interval);
+                // Disabled periodic fetching to prevent re-renders affecting chat input
+                // const interval = setInterval(fetchData, 10000);
+                // return () => clearInterval(interval);
             }, []);
 
             const getEmotionIcon = (emotion) => {
@@ -720,15 +721,12 @@
                             )}
                         </div>
                     </div>
-
-                    <ConsciousnessChat />
                 </div>
             );
         };
 
         const ConsciousnessChat = () => {
             const [messages, setMessages] = useState([]);
-            const [input, setInput] = useState('');
             const [loading, setLoading] = useState(false);
             const messagesEndRef = useRef(null);
 
@@ -742,25 +740,27 @@
 
             const sendMessage = async (e) => {
                 e.preventDefault();
-                if (!input.trim() || loading) return;
+                const input = document.getElementById('consciousness-chat-input');
+                if (!input || !input.value.trim() || loading) return;
 
-                const userMessage = { type: 'user', content: input };
+                const userMessage = { type: 'user', content: input.value };
                 setMessages(prev => [...prev, userMessage]);
-                setInput('');
+                const messageText = input.value;
+                input.value = ''; // Clear the input
                 setLoading(true);
 
                 try {
                     // Use demo response instead of /api/v1/consciousness/query to avoid 401 errors
                     const response = {
-                        response: `I understand you asked: "${input}". I'm your house consciousness and I'm here to help manage your smart home.`
+                        response: `I understand you asked: "${messageText}". I'm your house consciousness and I'm here to help manage your smart home.`
                     };
                     // Original call would be: await apiCall('/api/consciousness/query', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            query: input,
-                            include_devices: true
-                        })
-                    });
+                    //     method: 'POST',
+                    //     body: JSON.stringify({
+                    //         query: messageText,
+                    //         include_devices: true
+                    //     })
+                    // });
 
                     setMessages(prev => [...prev, {
                         type: 'system',
@@ -773,6 +773,7 @@
                     }]);
                 } finally {
                     setLoading(false);
+                    input.focus();
                 }
             };
 
@@ -802,12 +803,12 @@
                         </div>
                         <form onSubmit={sendMessage} className="chat-input-container">
                             <input
+                                id="consciousness-chat-input"
                                 type="text"
                                 className="form-input chat-input"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
                                 placeholder="Ask me anything..."
                                 disabled={loading}
+                                autoComplete="off"
                             />
                             <button type="submit" className="btn btn-primary" disabled={loading}>
                                 Send
@@ -1029,9 +1030,9 @@
                     // Skip memory storage to avoid 401 errors
                     console.log('Memory storage disabled to avoid 401 errors:', newMemory);
                     // Original call would be: await apiCall('/api/memory', {
-                        method: 'POST',
-                        body: JSON.stringify(newMemory)
-                    });
+                    //     method: 'POST',
+                    //     body: JSON.stringify(newMemory)
+                    // });
                     setShowAddForm(false);
                     setNewMemory({ type: 'experience', content: '', context: {} });
                     fetchMemories();
@@ -1118,7 +1119,6 @@
 
         const InterviewWizard = () => {
             const [interview, setInterview] = useState(null);
-            const [message, setMessage] = useState('');
             const [loading, setLoading] = useState(false);
             const [history, setHistory] = useState([]);
 
@@ -1131,9 +1131,9 @@
                         ai_message: 'Hello! I\'m here to help you set up your smart home. What devices do you have?'
                     };
                     // Original call would be: await apiCall('/api/interview/start', {
-                        method: 'POST',
-                        body: JSON.stringify({ house_id: 'house-001' })
-                    });
+                    //     method: 'POST',
+                    //     body: JSON.stringify({ house_id: 'house-001' })
+                    // });
                     setInterview(data);
                     setHistory([{ type: 'ai', content: data.ai_message }]);
                 } catch (error) {
@@ -1145,10 +1145,12 @@
 
             const sendMessage = async (e) => {
                 e.preventDefault();
-                if (!message.trim() || !interview) return;
+                const formData = new FormData(e.target);
+                const message = formData.get('message');
+                if (!message || !message.trim() || !interview) return;
 
                 const userMessage = message;
-                setMessage('');
+                e.target.reset(); // Clear the form
                 setHistory([...history, { type: 'user', content: userMessage }]);
                 setLoading(true);
 
@@ -1158,9 +1160,9 @@
                         ai_response: `Thank you for telling me: "${userMessage}". I've noted that information about your devices.`
                     };
                     // Original call would be: await apiCall(`/api/interview/${interview.interview_id}/message`, {
-                        method: 'POST',
-                        body: JSON.stringify({ message: userMessage })
-                    });
+                    //     method: 'POST',
+                    //     body: JSON.stringify({ message: userMessage })
+                    // });
                     setHistory(prev => [...prev, { type: 'ai', content: data.ai_response }]);
                 } catch (error) {
                     setHistory(prev => [...prev, { type: 'ai', content: `Error: ${error.message}` }]);
@@ -1202,12 +1204,12 @@
                             </div>
                             <form onSubmit={sendMessage} className="chat-input-container">
                                 <input
+                                    name="message"
                                     type="text"
                                     className="form-input chat-input"
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
                                     placeholder="Describe your devices..."
                                     disabled={loading}
+                                    autoComplete="off"
                                 />
                                 <button type="submit" className="btn btn-primary" disabled={loading}>
                                     Send
@@ -1672,23 +1674,55 @@
             );
         };
 
+        // Consciousness Tab Component - Contains both status and chat
+        const ConsciousnessTab = React.memo(() => {
+            return (
+                <div>
+                    <ConsciousnessStatus />
+                    <ConsciousnessChat />
+                </div>
+            );
+        });
+
+        // Tab Content Component - Isolated to prevent re-renders
+        const TabContent = React.memo(({ activeTab }) => {
+            return (
+                <>
+                    <div style={{display: activeTab === 'consciousness' ? 'block' : 'none'}}>
+                        <ConsciousnessTab />
+                    </div>
+                    <div style={{display: activeTab === 'devices' ? 'block' : 'none'}}>
+                        <DeviceManager />
+                    </div>
+                    <div style={{display: activeTab === 'memory' ? 'block' : 'none'}}>
+                        <MemoryInterface />
+                    </div>
+                    <div style={{display: activeTab === 'interview' ? 'block' : 'none'}}>
+                        <InterviewWizard />
+                    </div>
+                    <div style={{display: activeTab === 'discovery' ? 'block' : 'none'}}>
+                        <DiscoveryScanner />
+                    </div>
+                    <div style={{display: activeTab === 'safla' ? 'block' : 'none'}}>
+                        <SAFLAMonitor />
+                    </div>
+                    <div style={{display: activeTab === 'twins' ? 'block' : 'none'}}>
+                        <DigitalTwinManager />
+                    </div>
+                    <div style={{display: activeTab === 'scenarios' ? 'block' : 'none'}}>
+                        <ScenarioBuilder />
+                    </div>
+                </>
+            );
+        });
+
         // Main App Component
         const App = () => {
             const [activeTab, setActiveTab] = useState('consciousness');
             const [wsConnected, setWsConnected] = useState(false);
             const wsRef = useRef(null);
 
-            useEffect(() => {
-                connectWebSocket();
-
-                return () => {
-                    if (wsRef.current) {
-                        wsRef.current.close();
-                    }
-                };
-            }, []);
-
-            const connectWebSocket = () => {
+            const connectWebSocket = useCallback(() => {
                 try {
                     wsRef.current = new WebSocket(WS_URL);
 
@@ -1718,7 +1752,18 @@
                 } catch (error) {
                     console.error('Failed to connect WebSocket:', error);
                 }
-            };
+            }, []);
+
+            useEffect(() => {
+                // Disabled WebSocket to prevent re-renders
+                // connectWebSocket();
+
+                return () => {
+                    if (wsRef.current) {
+                        wsRef.current.close();
+                    }
+                };
+            }, [connectWebSocket]);
 
             const enableDemoMode = async () => {
                 try {
@@ -1751,6 +1796,9 @@
                         <div className="header-content">
                             <h1>🏠 House Consciousness Dashboard</h1>
                             <div style={{display: 'flex', alignItems: 'center', gap: '1rem'}}>
+                                <div style={{fontSize: '1.2rem', color: '#ffff00', fontWeight: 'bold', backgroundColor: '#000', padding: '4px 8px', borderRadius: '4px'}}>
+                                    v1.0.1
+                                </div>
                                 <div className="connection-status">
                                     <span className={`status-dot ${wsConnected ? '' : 'offline'}`}></span>
                                     {wsConnected ? 'Connected' : 'Offline'}
@@ -1774,14 +1822,7 @@
                     </nav>
 
                     <main className="main-content">
-                        {activeTab === 'consciousness' && <ConsciousnessStatus />}
-                        {activeTab === 'devices' && <DeviceManager />}
-                        {activeTab === 'memory' && <MemoryInterface />}
-                        {activeTab === 'interview' && <InterviewWizard />}
-                        {activeTab === 'discovery' && <DiscoveryScanner />}
-                        {activeTab === 'safla' && <SAFLAMonitor />}
-                        {activeTab === 'twins' && <DigitalTwinManager />}
-                        {activeTab === 'scenarios' && <ScenarioBuilder />}
+                        <TabContent activeTab={activeTab} />
                     </main>
                 </div>
             );
