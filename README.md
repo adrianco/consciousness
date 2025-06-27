@@ -9,6 +9,8 @@ June 24, 2025 - Modified plans to include digital twin and simulator. Told claud
 
 June 25, 2025 - Asked claude-flow to create a web UI that excercises every API call, as the initual UI was very bare bones. It created a more sophisticated UI with authentication that I didn't want at this stage, so spent some time removing and simplifying things. Got a bit more functionality tested, but was mostly fussing with the UI and API and git stuff I don't understand.
 
+june 26, 2025 - Started a new Codespace, fixed the API and uodated UI, this version works as a rough demo with functionality missing. 
+
 ![second-webui-screenshot](./references/second-webui-screenshot.png)
 
 ## Quick Installation
