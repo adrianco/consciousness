@@ -1,0 +1,81 @@
+{
+  "step": "API Usage Analysis",
+  "timestamp": "2025-06-26T20:52:57.186570",
+  "objective": "Identify /v1 authenticated API usage in dashboard",
+  "findings": {
+    "files": [
+      "/workspaces/consciousness/consciousness/static/dashboard.html",
+      "/workspaces/consciousness/consciousness/static/api-client.js",
+      "/workspaces/consciousness/consciousness/static/enhanced-api-client.js",
+      "/workspaces/consciousness/consciousness/interfaces/api_interface.py",
+      "/workspaces/consciousness/consciousness/interfaces/openapi_config.py",
+      "/workspaces/consciousness/consciousness/static/api_test_ui.html"
+    ],
+    "endpoints": [
+      "/api/v1/auth/login",
+      "/api/v1/consciousness/status",
+      "/api/v1/consciousness/emotions",
+      "/api/v1/consciousness/query",
+      "/api/v1/devices",
+      "/api/v1/devices/{device_id}",
+      "/api/v1/devices/{device_id}/control",
+      "/api/v1/devices/batch-control",
+      "/api/v1/memory",
+      "/api/v1/interview/start",
+      "/api/v1/interview/{interview_id}/message",
+      "/api/v1/interview/{interview_id}/status",
+      "/api/v1/interview/{interview_id}/confirm",
+      "/api/v1/discovery/scan",
+      "/api/v1/discovery/scan/{scan_id}",
+      "/api/v1/integrations/templates",
+      "/api/v1/integrations/classify",
+      "/api/v1/safla/status",
+      "/api/v1/safla/trigger",
+      "/api/v1/twins",
+      "/api/v1/twins/{twin_id}",
+      "/api/v1/twins/{twin_id}/sync",
+      "/api/v1/scenarios",
+      "/api/v1/scenarios/{scenario_id}",
+      "/api/v1/scenarios/{scenario_id}/run",
+      "/api/v1/predictions/what-if",
+      "/api/v1/predictions",
+      "/api/v1/realtime"
+    ],
+    "authentication": "JWT Bearer token authentication via Authorization header. All /v1 endpoints require authentication except /api/v1/auth/login",
+    "codeSnippets": {
+      "dashboard_html_auth_bypass": {
+        "file": "dashboard.html",
+        "lines": "599-614",
+        "description": "Commented out /api/v1/consciousness/status and emotions calls to avoid 401 errors, using demo data instead",
+        "code": "// Use demo data instead of /api/v1/ endpoints to avoid 401 errors\nconst [statusData, emotionsData] = await Promise.all([\n    Promise.resolve({\n        status: 'active',\n        awareness_level: 0.8,\n        active_devices: 12,\n        safla_loops: 4\n    }),\n    Promise.resolve({\n        current: {\n            primary_emotion: 'calm',\n            arousal: 0.3,\n            valence: 0.7\n        }\n    })\n]);"
+      },
+      "api_client_auth_header": {
+        "file": "api-client.js",
+        "lines": "17-25",
+        "description": "API client includes JWT token in Authorization header",
+        "code": "getHeaders() {\n    const headers = {\n        'Content-Type': 'application/json',\n    };\n    if (this.authToken) {\n        headers['Authorization'] = ;\n    }\n    return headers;\n}"
+      },
+      "api_interface_auth_dependency": {
+        "file": "api_interface.py",
+        "lines": "411-414",
+        "description": "All /v1 endpoints require authentication via Depends injection",
+        "code": "@self.app.get(\"/api/v1/consciousness/status\")\nasync def get_consciousness_status(\n    current_user: str = Depends(self.get_current_user),\n):"
+      },
+      "jwt_validation": {
+        "file": "api_interface.py",
+        "lines": "348-365",
+        "description": "JWT token validation method",
+        "code": "async def get_current_user(\n    self,\n    credentials: HTTPAuthorizationCredentials = Security(\n        HTTPBearer(auto_error=False)\n    ),\n):\n    if not credentials:\n        raise HTTPException(\n            status_code=status.HTTP_401_UNAUTHORIZED,\n            detail=\"Authentication required\",\n            headers={\"WWW-Authenticate\": \"Bearer\"},\n        )\n    try:\n        payload = verify_jwt_token(credentials.credentials)\n        return payload.get(\"sub\")\n    except Exception as e:\n        raise HTTPException(\n            status_code=status.HTTP_401_UNAUTHORIZED,\n            detail=\"Invalid authentication credentials\",\n            headers={\"WWW-Authenticate\": \"Bearer\"},\n        )"
+      }
+    }
+  },
+  "recommendations": [
+    "Remove all /v1 authenticated endpoints from the dashboard or implement proper authentication flow",
+    "Update dashboard.html to use existing non-authenticated endpoints (e.g., /api/devices instead of /api/v1/devices)",
+    "Implement a login flow in the dashboard if authenticated endpoints are required",
+    "Consider creating separate public endpoints for dashboard use that dont require authentication",
+    "Update api-client.js to handle both authenticated and non-authenticated endpoints",
+    "Document which endpoints require authentication and which are public"
+  ],
+  "progress": "analysis complete"
+}

@@ -1,0 +1,347 @@
+{
+  "timestamp": "2025-06-26T20:54:17.159924",
+  "static_analysis": {
+    "dashboard_endpoints_found": [
+      {
+        "line": 389,
+        "endpoint": "@self.app.get(\"/api/status\")",
+        "requires_auth": false
+      },
+      {
+        "line": 442,
+        "endpoint": "@self.app.get(\"/api/devices\")",
+        "requires_auth": false
+      },
+      {
+        "line": 454,
+        "endpoint": "@self.app.post(\"/api/consciousness/query\")",
+        "requires_auth": false
+      },
+      {
+        "line": 466,
+        "endpoint": "@self.app.post(\"/api/devices/{device_id}/control\")",
+        "requires_auth": false
+      },
+      {
+        "line": 482,
+        "endpoint": "@self.app.post(\"/api/scenarios/{scenario_name}/run\")",
+        "requires_auth": false
+      },
+      {
+        "line": 527,
+        "endpoint": "@self.app.post(\"/api/scenarios/stop\")",
+        "requires_auth": false
+      }
+    ],
+    "v1_endpoints_found": [
+      {
+        "line": 538,
+        "endpoint": "@self.app.post(\"/api/v1/auth/login\")"
+      },
+      {
+        "line": 560,
+        "endpoint": "@self.app.get(\"/api/v1/consciousness/status\")"
+      },
+      {
+        "line": 586,
+        "endpoint": "@self.app.get(\"/api/v1/consciousness/emotions\")"
+      },
+      {
+        "line": 627,
+        "endpoint": "@self.app.post(\"/api/v1/consciousness/query\")"
+      },
+      {
+        "line": 664,
+        "endpoint": "@self.app.get(\"/api/v1/devices\")"
+      },
+      {
+        "line": 695,
+        "endpoint": "@self.app.get(\"/api/v1/devices/{device_id}\")"
+      },
+      {
+        "line": 721,
+        "endpoint": "@self.app.put(\"/api/v1/devices/{device_id}/control\")"
+      },
+      {
+        "line": 762,
+        "endpoint": "@self.app.post(\"/api/v1/devices/batch-control\")"
+      },
+      {
+        "line": 801,
+        "endpoint": "@self.app.get(\"/api/v1/memory\")"
+      },
+      {
+        "line": 824,
+        "endpoint": "@self.app.post(\"/api/v1/memory\")"
+      },
+      {
+        "line": 851,
+        "endpoint": "@self.app.post(\"/api/v1/interview/start\")"
+      },
+      {
+        "line": 875,
+        "endpoint": "@self.app.post(\"/api/v1/interview/{interview_id}/message\")"
+      },
+      {
+        "line": 912,
+        "endpoint": "@self.app.get(\"/api/v1/interview/{interview_id}/status\")"
+      },
+      {
+        "line": 938,
+        "endpoint": "@self.app.post(\"/api/v1/discovery/scan\")"
+      },
+      {
+        "line": 962,
+        "endpoint": "@self.app.get(\"/api/v1/discovery/scan/{scan_id}\")"
+      },
+      {
+        "line": 981,
+        "endpoint": "@self.app.get(\"/api/v1/integrations/templates\")"
+      },
+      {
+        "line": 999,
+        "endpoint": "@self.app.post(\"/api/v1/integrations/classify\")"
+      },
+      {
+        "line": 1017,
+        "endpoint": "@self.app.get(\"/api/v1/safla/status\")"
+      },
+      {
+        "line": 1035,
+        "endpoint": "@self.app.post(\"/api/v1/safla/trigger\")"
+      },
+      {
+        "line": 1056,
+        "endpoint": "@self.app.get(\"/api/v1/twins\")"
+      },
+      {
+        "line": 1090,
+        "endpoint": "@self.app.post(\"/api/v1/twins\")"
+      },
+      {
+        "line": 1115,
+        "endpoint": "@self.app.post(\"/api/v1/scenarios\")"
+      },
+      {
+        "line": 1150,
+        "endpoint": "@self.app.post(\"/api/v1/predictions/what-if\")"
+      },
+      {
+        "line": 1182,
+        "endpoint": "@self.app.websocket(\"/api/v1/realtime\")"
+      }
+    ],
+    "auth_checks_found": [
+      {
+        "line": 26,
+        "context": "from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer"
+      },
+      {
+        "line": 279,
+        "context": "self.security = HTTPBearer(auto_error=False)"
+      },
+      {
+        "line": 343,
+        "context": "async def get_current_user("
+      },
+      {
+        "line": 346,
+        "context": "HTTPBearer(auto_error=False)"
+      },
+      {
+        "line": 562,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 590,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 630,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 669,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 697,
+        "context": "device_id: str, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 725,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 765,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 806,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 826,
+        "context": "memory: MemoryEntry, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 853,
+        "context": "request: InterviewStart, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 879,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 914,
+        "context": "interview_id: str, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 941,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 964,
+        "context": "scan_id: str, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 985,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 1002,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 1018,
+        "context": "async def get_safla_status(current_user: str = Depends(self.get_current_user)):"
+      },
+      {
+        "line": 1038,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 1061,
+        "context": "current_user: str = Depends(self.get_current_user),"
+      },
+      {
+        "line": 1092,
+        "context": "twin_request: TwinCreate, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 1117,
+        "context": "scenario: ScenarioCreate, current_user: str = Depends(self.get_current_user)"
+      },
+      {
+        "line": 1152,
+        "context": "analysis: WhatIfAnalysis, current_user: str = Depends(self.get_current_user)"
+      }
+    ],
+    "issues": []
+  },
+  "live_testing": {
+    "tests_run": 10,
+    "tests_passed": 7,
+    "tests_failed": 3,
+    "demo_endpoints": [
+      {
+        "url": "http://localhost:8000/api/status",
+        "method": "GET",
+        "status_code": 404,
+        "success": false,
+        "requires_auth": false,
+        "response_time": 0.001427,
+        "response_body": "{\"detail\":\"Not Found\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/devices",
+        "method": "GET",
+        "status_code": 200,
+        "success": true,
+        "requires_auth": false,
+        "response_time": 0.001987,
+        "response_body": "{\"devices\":[{\"id\":\"thermostat-main\",\"name\":\"Main Thermostat\",\"type\":\"thermostat\",\"status\":\"online\",\"location\":\"living_room\",\"properties\":{\"current_temp\":72,\"target_temp\":72,\"mode\":\"auto\",\"humidity\":45"
+      },
+      {
+        "url": "http://localhost:8000/api/consciousness/query",
+        "method": "POST",
+        "status_code": 404,
+        "success": false,
+        "requires_auth": false,
+        "response_time": 0.001485,
+        "response_body": "{\"detail\":\"Not Found\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/devices/1/control",
+        "method": "POST",
+        "status_code": 404,
+        "success": false,
+        "requires_auth": false,
+        "response_time": 0.00112,
+        "response_body": "{\"detail\":\"Not Found\"}"
+      }
+    ],
+    "v1_endpoints": [
+      {
+        "url": "http://localhost:8000/api/v1/consciousness/status",
+        "method": "GET",
+        "status_code": 401,
+        "success": true,
+        "requires_auth": false,
+        "response_time": 0.001513,
+        "response_body": "{\"detail\":\"Authentication required\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/v1/devices",
+        "method": "GET",
+        "status_code": 401,
+        "success": true,
+        "requires_auth": false,
+        "response_time": 0.001002,
+        "response_body": "{\"detail\":\"Authentication required\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/v1/memory",
+        "method": "GET",
+        "status_code": 401,
+        "success": true,
+        "requires_auth": false,
+        "response_time": 0.001053,
+        "response_body": "{\"detail\":\"Authentication required\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/v1/consciousness/status",
+        "method": "GET",
+        "status_code": 401,
+        "success": true,
+        "requires_auth": true,
+        "response_time": 0.001049,
+        "response_body": "{\"detail\":\"Invalid token\"}"
+      },
+      {
+        "url": "http://localhost:8000/api/v1/devices",
+        "method": "GET",
+        "status_code": 401,
+        "success": true,
+        "requires_auth": true,
+        "response_time": 0.001065,
+        "response_body": "{\"detail\":\"Invalid token\"}"
+      }
+    ],
+    "errors": [
+      {
+        "test": "GET http://localhost:8000/api/status",
+        "error": "Expected status 200, got 404"
+      },
+      {
+        "test": "POST http://localhost:8000/api/consciousness/query",
+        "error": "Expected status 200, got 404"
+      },
+      {
+        "test": "POST http://localhost:8000/api/devices/1/control",
+        "error": "Expected status 200, got 404"
+      }
+    ]
+  },
+  "overall_pass": false
+}

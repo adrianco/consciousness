@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-25T15:59:30.328Z",
+  "timestamp": "2025-06-26T20:54:20.205Z",
   "version": "1.0",
   "entries": [
     {
@@ -183,7 +183,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T01:58:34.406Z",
       "updatedAt": "2025-06-24T01:58:34.406Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-25T18:00:14.473Z",
       "version": 1,
       "size": 2758,
       "compressed": true,
@@ -203,7 +203,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T16:53:17.189Z",
       "updatedAt": "2025-06-24T16:53:17.189Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-25T18:00:14.473Z",
       "version": 1,
       "size": 8487,
       "compressed": true,
@@ -223,7 +223,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T16:53:21.345Z",
       "updatedAt": "2025-06-24T16:53:21.345Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 6376,
       "compressed": true,
@@ -545,7 +545,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T16:54:49.680Z",
       "updatedAt": "2025-06-24T16:54:49.680Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 10018,
       "compressed": true,
@@ -749,7 +749,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:32:17.405Z",
       "updatedAt": "2025-06-24T17:32:17.405Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 5936,
       "compressed": true,
@@ -769,7 +769,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:52:40.779Z",
       "updatedAt": "2025-06-24T17:52:40.779Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 1161,
       "compressed": true,
@@ -813,7 +813,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:06.922Z",
       "updatedAt": "2025-06-24T17:53:06.922Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 514,
       "compressed": false,
@@ -861,7 +861,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:58.718Z",
       "updatedAt": "2025-06-24T17:53:58.718Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 1040,
       "compressed": false,
@@ -894,7 +894,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:01:50.411Z",
       "updatedAt": "2025-06-24T22:01:50.411Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 435,
       "compressed": false,
@@ -914,7 +914,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:03:30.730Z",
       "updatedAt": "2025-06-24T22:03:30.730Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 477,
       "compressed": false,
@@ -934,7 +934,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:06.514Z",
       "updatedAt": "2025-06-24T22:06:06.514Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 564,
       "compressed": false,
@@ -954,7 +954,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:50.237Z",
       "updatedAt": "2025-06-24T22:06:50.237Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 488,
       "compressed": false,
@@ -974,7 +974,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:13:05.690Z",
       "updatedAt": "2025-06-24T22:13:05.690Z",
-      "lastAccessedAt": "2025-06-25T14:59:59.007Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 3611,
       "compressed": true,
@@ -994,7 +994,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:02:23.337Z",
       "updatedAt": "2025-06-25T15:02:23.337Z",
-      "lastAccessedAt": "2025-06-25T15:02:23.337Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 10817,
       "compressed": true,
@@ -1014,7 +1014,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:05:32.728Z",
       "updatedAt": "2025-06-25T15:05:32.728Z",
-      "lastAccessedAt": "2025-06-25T15:05:32.728Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 2986,
       "compressed": true,
@@ -1034,7 +1034,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:39:57.423Z",
       "updatedAt": "2025-06-25T15:39:57.423Z",
-      "lastAccessedAt": "2025-06-25T15:39:57.423Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 4223,
       "compressed": true,
@@ -1054,7 +1054,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:15.661Z",
       "updatedAt": "2025-06-25T15:59:15.661Z",
-      "lastAccessedAt": "2025-06-25T15:59:15.661Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 1346,
       "compressed": true,
@@ -1074,30 +1074,171 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:30.325Z",
       "updatedAt": "2025-06-25T15:59:30.325Z",
-      "lastAccessedAt": "2025-06-25T15:59:30.325Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
       "version": 1,
       "size": 1782,
       "compressed": true,
       "checksum": "667f90ebad8b7a33dbe4797392ac6791136b6553ebfb38189097ad313661aa9a",
       "references": [],
       "dependencies": []
+    },
+    {
+      "id": "entry_mcc547ac_hwheh6xya",
+      "key": "swarm-auto-centralized-1750867027621/architect/implementation",
+      "value": "{\"timestamp\":\"2025-06-25T15:59:46+00:00\",\"implementation_plan\":{\"phase_1_core_extensions\":{\"duration\":\"1-2 days\",\"deliverables\":[\"Enhanced dashboard.html with API Testing tab\",\"API Test Manager component\",\"Extended UI State Manager\",\"Basic test execution capabilities\"],\"priority\":\"High\"},\"phase_2_github_integration\":{\"duration\":\"1 day\",\"deliverables\":[\"GitHub API client\",\"Repository management interface\",\"Authentication handling\",\"File upload/commit capabilities\"],\"priority\":\"High\"},\"phase_3_advanced_features\":{\"duration\":\"1-2 days\",\"deliverables\":[\"Test result analytics\",\"Automated test scheduling\",\"Performance monitoring\",\"Export capabilities (JSON/CSV/HTML)\"],\"priority\":\"Medium\"}},\"technical_specifications\":{\"file_structure\":{\"existing_files_to_modify\":[\"consciousness/static/dashboard.html (add API Testing tab and components)\",\"consciousness/static/ui-state.js (extend with testing state management)\"],\"new_files_to_create\":[\"consciousness/static/api-test-manager.js (comprehensive test execution)\",\"consciousness/static/github-client.js (GitHub integration)\",\"consciousness/static/test-storage.js (result management)\",\"consciousness/static/test-analytics.js (performance analysis)\"]},\"api_integration\":{\"base_url\":\"Local API server (port 8000)\",\"authentication\":\"JWT tokens (existing implementation)\",\"real_time\":\"WebSocket connections for live testing feedback\",\"github_api\":\"GitHub REST API v4 for repository operations\"},\"user_workflows\":{\"basic_testing\":[\"1. Navigate to API Testing tab in dashboard\",\"2. Select test suite or individual endpoints\",\"3. Configure test parameters\",\"4. Execute tests with real-time feedback\",\"5. Review results and export if needed\"],\"github_integration\":[\"1. Configure GitHub repository and authentication\",\"2. Run comprehensive test suite\",\"3. Generate test report\",\"4. Push results to GitHub repository\",\"5. Share results via GitHub URL\"],\"continuous_testing\":[\"1. Set up automated test schedules\",\"2. Configure result notifications\",\"3. Monitor test performance over time\",\"4. Automatic GitHub commits for significant changes\"]}}}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-25T15:59:46.404Z",
+      "updatedAt": "2025-06-25T15:59:46.404Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "version": 1,
+      "size": 2254,
+      "compressed": true,
+      "checksum": "3535829aadf6971ddc6af013eed4c49061870a93443a0d151f5d45e1095fcf92",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcc54k8r_isep0jes3",
+      "key": "swarm-auto-centralized-1750867027621/architect/github_integration",
+      "value": "{\"timestamp\":\"2025-06-25T16:00:03+00:00\",\"github_integration_architecture\":{\"authentication_methods\":{\"personal_access_token\":{\"scope\":\"repo, workflow, write:packages\",\"storage\":\"Secure local storage with encryption\",\"validation\":\"Token scope verification on connection\"},\"oauth_app\":{\"flow\":\"OAuth 2.0 Authorization Code with PKCE\",\"scopes\":[\"repo\",\"workflow\"],\"fallback\":\"Personal Access Token for development\"}},\"repository_operations\":{\"file_management\":[\"Create/update test result files\",\"Manage test configuration files\",\"Store performance analytics\",\"Maintain test history logs\"],\"commit_strategy\":{\"automated_commits\":\"Test results with timestamps\",\"manual_commits\":\"User-initiated result sharing\",\"commit_message_format\":\"[API-Test] {timestamp} - {test_summary} - {status}\"},\"branch_management\":{\"default_branch\":\"api-test-results\",\"feature_branches\":\"User-defined for specific test campaigns\",\"merge_strategy\":\"Direct commits to designated branch\"}},\"result_sharing\":{\"file_formats\":{\"json\":\"Raw test data with full details\",\"html\":\"Formatted test report with visualizations\",\"csv\":\"Tabular data for analytics tools\",\"markdown\":\"Human-readable summary reports\"},\"repository_structure\":{\"test-results/\":\"Main results directory\",\"test-results/daily/\":\"Daily test summaries\",\"test-results/performance/\":\"Performance metrics over time\",\"test-results/reports/\":\"Generated HTML reports\",\"test-configs/\":\"Test configuration files\"}},\"collaboration_features\":{\"pull_requests\":\"For sharing significant test findings\",\"issues\":\"Automatic issue creation for test failures\",\"discussions\":\"Team collaboration on test strategies\",\"releases\":\"Milestone-based test report publishing\"}}}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-25T16:00:03.195Z",
+      "updatedAt": "2025-06-25T16:00:03.195Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "version": 1,
+      "size": 1848,
+      "compressed": true,
+      "checksum": "cb270ed594316e91cdaef3b8d3e28c48c46e6e5595949816c0ef083c39c8ec42",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcc9gvj2_kb8cjyu20",
+      "key": "swarm-auto-centralized-1750874351904/git-analyzer/status",
+      "value": "{\"agent\":\"git-analyzer\",\"timestamp\":\"2025-06-25T18:19:43.000Z\",\"objective\":\"analyze git status for push\",\"findings\":{\"stagedFiles\":[\"README.md\",\"consciousness/static/README.md\",\"consciousness/static/api-client.js\",\"consciousness/static/api_test_checklist.md\",\"consciousness/static/api_test_ui.html\",\"consciousness/static/dashboard.html\",\"consciousness/static/index.html\",\"consciousness/static/ui-state.js\",\"memory/data/entries.json\",\"reports/swarm-auto-centralized-1750804281867.json\",\"IMPLEMENTATION_SUMMARY.md\",\"QA_FINAL_VALIDATION_REPORT.md\",\"comprehensive_qa_report.json\",\"consciousness/static/enhanced-api-client.js\",\"consciousness/static/implementation-README.md\",\"memory/backups/backup-2025-06-25T15-59-46-408Z.json\",\"memory/backups/backup-2025-06-25T16-00-03-199Z.json\",\"memory/backups/backup-2025-06-25T18-00-14-492Z.json\",\"memory/data/swarm-auto-centralized-1750867027621-coordinator-implementation-plan.json\",\"memory/data/swarm-auto-centralized-1750867027621-coordinator-status.json\",\"memory/data/swarm-auto-centralized-1750867027621-coordinator-ui-analysis.json\",\"memory/data/swarm-auto-centralized-1750867027621-qa-test-results.json\",\"memory/data/swarm-auto-centralized-1750867027621-qa-validation.json\",\"qa_comprehensive_test.js\",\"reports/swarm-auto-centralized-1750863513188.json\"],\"unstagedFiles\":[],\"untrackedFiles\":[\"test-install-env/\"],\"sensitiveDataFound\":false,\"readyToPush\":true},\"recommendations\":[\"Add memory_key.txt to .gitignore for security\",\"The .env file is properly ignored\",\"All files staged are safe to push\"],\"nextSteps\":[\"Add memory_key.txt to .gitignore\",\"Proceed with git commit and push\"]}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-25T18:01:36.158Z",
+      "updatedAt": "2025-06-25T18:01:36.158Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "version": 1,
+      "size": 1746,
+      "compressed": true,
+      "checksum": "3f36d86806297998f91eac887dba21998cbc9301ed00e73ef94e20f47cd512ab",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcc9in5u_gqtqsuwrv",
+      "key": "swarm-auto-centralized-1750874351904/git-executor/push-results",
+      "value": "{\"agent\":\"git-executor\",\"timestamp\":\"2025-06-25T18:02:58+00:00\",\"objective\":\"commit and push changes\",\"actions\":{\"filesStaged\":[\"README.md\",\"consciousness/static/api-client.js\",\"consciousness/static/dashboard.html\",\"consciousness/static/api_test_ui.html\",\"consciousness/static/api_test_checklist.md\",\"consciousness/static/enhanced-api-client.js\",\"consciousness/static/implementation-README.md\",\"IMPLEMENTATION_SUMMARY.md\",\"QA_FINAL_VALIDATION_REPORT.md\",\"comprehensive_qa_report.json\",\"qa_comprehensive_test.js\",\"test-install-env/\",\"memory/data/\",\"memory/backups/\",\"reports/swarm-auto-centralized-1750863513188.json\",\"and 64 other files\"],\"commitMessage\":\"Add comprehensive web interface enhancements and testing infrastructure\",\"pushSuccessful\":true,\"remoteUrl\":\"https://github.com/adrianco/consciousness\",\"commitHash\":\"6474a0d\",\"totalFilesChanged\":69,\"insertions\":15740,\"deletions\":3538},\"errors\":[],\"success\":true,\"details\":{\"preCommitHooksRan\":true,\"mergeConflictResolved\":true,\"rebaseSuccessful\":true,\"branchName\":\"main\",\"remoteBranch\":\"origin/main\"}}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-25T18:02:58.626Z",
+      "updatedAt": "2025-06-25T18:02:58.626Z",
+      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "version": 1,
+      "size": 1174,
+      "compressed": true,
+      "checksum": "3cd9ccf9f5cfc8f977d6846ca88e013da590a4586b7851801fd89e06e5cc1037",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcdv2sb7_cs4y9lf1w",
+      "key": "swarm-auto-centralized-1750970971343/architect/solution-design",
+      "value": "{\"step\":\"Solution Design\",\"timestamp\":\"2025-06-26T20:54:16.316Z\",\"objective\":\"Design fix for API dashboard authentication\",\"design\":{\"endpointMappings\":{\"/api/v1/consciousness/status\":\"/api/consciousness/status\",\"/api/v1/consciousness/emotions\":\"/api/consciousness/emotions\",\"/api/v1/devices\":\"/api/devices\",\"/api/v1/devices/{device_id}/control\":\"/api/devices/{device_id}/control\",\"/api/v1/devices/batch-control\":\"/api/devices/batch-control\",\"/api/v1/memory\":\"/api/memory\",\"/api/v1/interview/start\":\"/api/interview/start\",\"/api/v1/interview/{interview_id}/message\":\"/api/interview/{interview_id}/message\",\"/api/v1/discovery/scan\":\"/api/discovery/scan\",\"/api/v1/safla/status\":\"/api/safla/status\",\"/api/v1/twins\":\"/api/twins\",\"/api/v1/predictions/what-if\":\"/api/predictions/what-if\"},\"authStrategy\":\"Create unauthenticated /api/* endpoints that mirror /api/v1/* functionality for dashboard usage. Keep /api/v1/* endpoints for authenticated external API access.\",\"codeChanges\":{\"consciousness/interfaces/api_interface.py\":\"Add unauthenticated /api/* endpoint implementations for all missing routes\",\"consciousness/static/dashboard.html\":\"No changes needed - dashboard already uses correct /api/* paths\"},\"risks\":[\"Exposing unauthenticated endpoints could be security risk if not properly restricted\",\"Need to ensure unauthenticated endpoints are only accessible from localhost/trusted sources\",\"May need rate limiting on unauthenticated endpoints\"]},\"implementation\":{\"priority\":[\"1. Add missing /api/* endpoints in api_interface.py\",\"2. Copy logic from /api/v1/* endpoints but remove authentication dependency\",\"3. Add security middleware to restrict /api/* to localhost only\",\"4. Test all dashboard functionality\",\"5. Add rate limiting to prevent abuse\"],\"estimatedImpact\":\"medium\"},\"progress\":\"design complete\"}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-26T20:54:16.531Z",
+      "updatedAt": "2025-06-26T20:54:16.531Z",
+      "lastAccessedAt": "2025-06-26T20:54:16.531Z",
+      "version": 1,
+      "size": 1949,
+      "compressed": true,
+      "checksum": "e1078beec31fc482464b82763458a5b94c814c1cbb346df4cef3844c19ff2d86",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcdv2v51_k8m1k8tbq",
+      "key": "swarm-auto-centralized-1750970971343/operator/server-status",
+      "value": {
+        "step": "Server Operation",
+        "timestamp": "2025-06-26T20:54:20.020Z",
+        "objective": "Start and verify server",
+        "server": {
+          "command": "python scripts/dev.py",
+          "port": "8000",
+          "status": "running",
+          "logs": "INFO: Uvicorn running on http://0.0.0.0:8000 - Application startup complete"
+        },
+        "endpoints": {
+          "tested": [
+            "/api",
+            "/api/devices",
+            "/docs",
+            "/openapi.json"
+          ],
+          "accessible": true
+        },
+        "issues": [],
+        "progress": "server running"
+      },
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-26T20:54:20.197Z",
+      "updatedAt": "2025-06-26T20:54:20.197Z",
+      "lastAccessedAt": "2025-06-26T20:54:20.197Z",
+      "version": 1,
+      "size": 425,
+      "compressed": false,
+      "checksum": "19a93391dc3df2852154546f7c29270e3defbea8318767dc534b0a9e0392e81d",
+      "references": [],
+      "dependencies": []
     }
   ],
   "statistics": {
     "overview": {
-      "totalEntries": 27,
+      "totalEntries": 33,
       "totalSize": null,
-      "compressedEntries": 17,
+      "compressedEntries": 22,
       "compressionRatio": 0,
       "indexSize": 900,
-      "memoryUsage": 10868848,
+      "memoryUsage": 10751472,
       "diskUsage": 0
     },
     "distribution": {
       "byNamespace": {
         "default": {
-          "count": 26,
-          "size": 112436
+          "count": 32,
+          "size": 121832
         },
         "undefined": {
           "count": 1,
@@ -1106,8 +1247,8 @@
       },
       "byType": {
         "object": {
-          "count": 14,
-          "size": 51883
+          "count": 20,
+          "size": 61279
         },
         "string": {
           "count": 12,
@@ -1120,8 +1261,8 @@
       },
       "byOwner": {
         "system": {
-          "count": 26,
-          "size": 112436
+          "count": 32,
+          "size": 121832
         },
         "undefined": {
           "count": 1,
@@ -1130,8 +1271,8 @@
       },
       "byAccessLevel": {
         "shared": {
-          "count": 26,
-          "size": 112436
+          "count": 32,
+          "size": 121832
         },
         "undefined": {
           "count": 1,
@@ -1140,15 +1281,15 @@
       }
     },
     "temporal": {
-      "entriesCreatedLast24h": 17,
-      "entriesUpdatedLast24h": 17,
-      "entriesAccessedLast24h": 27,
+      "entriesCreatedLast24h": 2,
+      "entriesUpdatedLast24h": 2,
+      "entriesAccessedLast24h": 22,
       "oldestEntry": "1970-01-01T00:00:00.000Z",
-      "newestEntry": "2025-06-25T15:59:30.325Z"
+      "newestEntry": "2025-06-26T20:54:20.197Z"
     },
     "performance": {
       "averageQueryTime": 0,
-      "averageWriteTime": 0,
+      "averageWriteTime": 3,
       "cacheHitRatio": 0,
       "indexEfficiency": 0.95
     },

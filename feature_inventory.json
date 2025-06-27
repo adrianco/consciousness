@@ -1,0 +1,586 @@
+{
+  "system_name": "House Consciousness System",
+  "version": "1.0.2",
+  "description": "AI-powered smart home platform with emotional intelligence and natural language interaction",
+  "feature_categories": {
+    "consciousness_emotional_intelligence": {
+      "name": "Consciousness & Emotional Intelligence",
+      "features": [
+        {
+          "id": "emotion_processing",
+          "name": "Emotional State Processing",
+          "description": "Multi-factor emotional state assessment with transitions",
+          "complexity": "advanced",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "Emotion types (happiness, worry, boredom, excitement, stress, content)",
+            "Emotion calculation engine",
+            "State transition system with decay rates",
+            "Primary emotion detection with intensity",
+            "Emotional reasoning generation",
+            "Emotional history tracking"
+          ]
+        },
+        {
+          "id": "consciousness_status",
+          "name": "Consciousness Status Monitoring",
+          "description": "Real-time tracking of system awareness and health",
+          "complexity": "intermediate",
+          "user_types": ["homeowner", "administrator"],
+          "sub_features": [
+            "Awareness level tracking (0-100%)",
+            "Active device monitoring",
+            "SAFLA loop integration",
+            "System health assessment",
+            "Emotional state display"
+          ]
+        },
+        {
+          "id": "emotion_factors",
+          "name": "Emotion Influencing Factors",
+          "description": "Multiple factors that affect emotional state",
+          "complexity": "advanced",
+          "user_types": ["developer"],
+          "sub_features": [
+            "System health factor",
+            "User interaction factor",
+            "Environmental factors",
+            "Task completion factor",
+            "Learning progress factor"
+          ]
+        }
+      ]
+    },
+    "conversational_interaction": {
+      "name": "Conversational & Interaction",
+      "features": [
+        {
+          "id": "chat_interface",
+          "name": "Natural Language Chat",
+          "description": "Real-time conversation with house consciousness",
+          "complexity": "basic",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "WebSocket-based real-time chat",
+            "Context-aware responses",
+            "Multi-turn conversations",
+            "Emotional expression in responses",
+            "Natural language query processing"
+          ]
+        },
+        {
+          "id": "device_interview",
+          "name": "Conversational Device Interview",
+          "description": "Guided device discovery through natural conversation",
+          "complexity": "intermediate",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Multi-phase interview flow",
+            "Device mention extraction",
+            "Brand and model detection",
+            "Confidence scoring",
+            "Interview progress tracking",
+            "Session management"
+          ]
+        },
+        {
+          "id": "question_generation",
+          "name": "Intelligent Question Generation",
+          "description": "Context-aware questioning for device discovery",
+          "complexity": "intermediate",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Room-based questions",
+            "Function-based questions",
+            "Clarification prompts",
+            "Context-aware adaptation"
+          ]
+        }
+      ]
+    },
+    "device_management": {
+      "name": "Device Management",
+      "features": [
+        {
+          "id": "device_discovery",
+          "name": "Multi-Protocol Device Discovery",
+          "description": "Automatic discovery across multiple protocols",
+          "complexity": "advanced",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "Bluetooth/BLE scanning",
+            "mDNS/Bonjour discovery",
+            "UPnP detection",
+            "DHCP network scanning",
+            "Zigbee discovery",
+            "Z-Wave detection",
+            "Matter/Thread support"
+          ]
+        },
+        {
+          "id": "device_control",
+          "name": "Device Control & Management",
+          "description": "Individual and batch device control",
+          "complexity": "basic",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Individual device control",
+            "Batch control operations",
+            "Device status monitoring",
+            "Device filtering",
+            "Multi-device selection",
+            "Control action execution",
+            "Device health monitoring"
+          ]
+        },
+        {
+          "id": "device_integration",
+          "name": "Device Integration Patterns",
+          "description": "Support for various device integration methods",
+          "complexity": "advanced",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Cloud API integrations",
+            "Local device integrations",
+            "OAuth flow management",
+            "Popular brand integrations",
+            "Custom protocol support"
+          ]
+        }
+      ]
+    },
+    "digital_twin": {
+      "name": "Digital Twin",
+      "features": [
+        {
+          "id": "twin_creation",
+          "name": "Digital Twin Creation",
+          "description": "Create virtual representations of physical devices",
+          "complexity": "advanced",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "Automatic twin generation",
+            "Multiple fidelity levels",
+            "Configuration options",
+            "Physics modeling support",
+            "Learning capabilities"
+          ]
+        },
+        {
+          "id": "twin_synchronization",
+          "name": "Twin Synchronization",
+          "description": "Keep digital twins in sync with real devices",
+          "complexity": "advanced",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Bidirectional sync",
+            "Conflict resolution",
+            "Divergence monitoring",
+            "Sync status tracking",
+            "Performance optimization"
+          ]
+        },
+        {
+          "id": "twin_simulation",
+          "name": "Twin-based Simulation",
+          "description": "Safe testing and prediction using digital twins",
+          "complexity": "advanced",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "Safe testing environment",
+            "Predictive analytics",
+            "Scenario testing",
+            "Failure prediction",
+            "Energy usage simulation",
+            "Multi-device interaction"
+          ]
+        }
+      ]
+    },
+    "memory_learning": {
+      "name": "Memory & Learning",
+      "features": [
+        {
+          "id": "memory_system",
+          "name": "Memory System",
+          "description": "Persistent memory storage and retrieval",
+          "complexity": "intermediate",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "Multiple memory types",
+            "Persistent storage",
+            "Context-based retrieval",
+            "Automatic memory formation",
+            "Memory search capabilities"
+          ]
+        },
+        {
+          "id": "learning_engine",
+          "name": "Learning Engine",
+          "description": "Continuous learning from patterns and preferences",
+          "complexity": "advanced",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Pattern recognition",
+            "Preference learning",
+            "Behavioral adaptation",
+            "Improvement tracking",
+            "Federated learning"
+          ]
+        },
+        {
+          "id": "insights_generation",
+          "name": "Insights Generation",
+          "description": "Generate actionable insights from data",
+          "complexity": "intermediate",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Energy insights",
+            "Security insights",
+            "Comfort insights",
+            "Usage analytics"
+          ]
+        }
+      ]
+    },
+    "automation_intelligence": {
+      "name": "Automation & Intelligence",
+      "features": [
+        {
+          "id": "safla_loop",
+          "name": "SAFLA Loop Implementation",
+          "description": "Self-Aware Feedback Loop Algorithm",
+          "complexity": "advanced",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Sense module",
+            "Analyze module",
+            "Feedback module",
+            "Learn module",
+            "Act module",
+            "Loop monitoring",
+            "Manual triggering"
+          ]
+        },
+        {
+          "id": "scenario_management",
+          "name": "Scenario Management",
+          "description": "Pre-built and custom automation scenarios",
+          "complexity": "intermediate",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Pre-built scenarios",
+            "Custom scenario creation",
+            "Scenario testing",
+            "Scenario execution",
+            "Scenario scheduling"
+          ]
+        },
+        {
+          "id": "predictive_features",
+          "name": "Predictive Features",
+          "description": "What-if analysis and predictions",
+          "complexity": "advanced",
+          "user_types": ["homeowner", "developer"],
+          "sub_features": [
+            "What-if analysis",
+            "Energy consumption prediction",
+            "Comfort level prediction",
+            "Cost estimation",
+            "Maintenance prediction"
+          ]
+        }
+      ]
+    },
+    "monitoring_health": {
+      "name": "Monitoring & Health",
+      "features": [
+        {
+          "id": "system_health",
+          "name": "System Health Monitoring",
+          "description": "Comprehensive system health tracking",
+          "complexity": "intermediate",
+          "user_types": ["administrator"],
+          "sub_features": [
+            "Component health checks",
+            "Performance metrics",
+            "Error tracking",
+            "Uptime monitoring",
+            "Prometheus metrics export"
+          ]
+        },
+        {
+          "id": "realtime_monitoring",
+          "name": "Real-time Monitoring",
+          "description": "Live system status and updates",
+          "complexity": "intermediate",
+          "user_types": ["homeowner", "administrator"],
+          "sub_features": [
+            "WebSocket updates",
+            "Device state changes",
+            "Event streaming",
+            "Dashboard refresh",
+            "Alert notifications"
+          ]
+        },
+        {
+          "id": "diagnostic_features",
+          "name": "Diagnostic Features",
+          "description": "System troubleshooting and diagnosis",
+          "complexity": "advanced",
+          "user_types": ["administrator", "developer"],
+          "sub_features": [
+            "Health check endpoints",
+            "Performance analysis",
+            "Error diagnosis",
+            "System logs",
+            "Debug interfaces"
+          ]
+        }
+      ]
+    },
+    "user_interface": {
+      "name": "User Interface",
+      "features": [
+        {
+          "id": "web_dashboard",
+          "name": "Web Dashboard",
+          "description": "Main web interface for system control",
+          "complexity": "basic",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Responsive design",
+            "Tab-based navigation",
+            "Real-time updates",
+            "Version display",
+            "Connection status"
+          ]
+        },
+        {
+          "id": "dashboard_components",
+          "name": "Dashboard Components",
+          "description": "Individual UI components",
+          "complexity": "intermediate",
+          "user_types": ["homeowner"],
+          "sub_features": [
+            "Consciousness status card",
+            "Device manager",
+            "Memory interface",
+            "Interview wizard",
+            "Discovery scanner",
+            "SAFLA monitor",
+            "Digital twin manager",
+            "Scenario builder"
+          ]
+        },
+        {
+          "id": "api_testing_ui",
+          "name": "API Testing Interface",
+          "description": "Comprehensive API testing tool",
+          "complexity": "intermediate",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Endpoint testing",
+            "Batch test runner",
+            "Response visualization",
+            "Coverage tracking",
+            "WebSocket testing"
+          ]
+        }
+      ]
+    },
+    "api_integration": {
+      "name": "API & Integration",
+      "features": [
+        {
+          "id": "rest_api",
+          "name": "RESTful API",
+          "description": "Comprehensive REST API endpoints",
+          "complexity": "intermediate",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Authentication endpoints",
+            "Consciousness endpoints",
+            "Device management endpoints",
+            "Memory endpoints",
+            "Interview endpoints",
+            "Discovery endpoints",
+            "Digital twin endpoints",
+            "Scenario endpoints",
+            "SAFLA endpoints",
+            "Health endpoints"
+          ]
+        },
+        {
+          "id": "websocket_api",
+          "name": "WebSocket Features",
+          "description": "Real-time bidirectional communication",
+          "complexity": "intermediate",
+          "user_types": ["developer"],
+          "sub_features": [
+            "Real-time status updates",
+            "Device state changes",
+            "Emotional state updates",
+            "Event notifications",
+            "Bidirectional communication"
+          ]
+        }
+      ]
+    },
+    "security_privacy": {
+      "name": "Security & Privacy",
+      "features": [
+        {
+          "id": "authentication",
+          "name": "Authentication & Authorization",
+          "description": "User authentication and access control",
+          "complexity": "intermediate",
+          "user_types": ["administrator"],
+          "sub_features": [
+            "JWT-like token authentication",
+            "User session management",
+            "API key management",
+            "OAuth integration support"
+          ]
+        },
+        {
+          "id": "data_security",
+          "name": "Data Security",
+          "description": "Secure data handling and storage",
+          "complexity": "intermediate",
+          "user_types": ["administrator"],
+          "sub_features": [
+            "Encrypted credential storage",
+            "Local data processing",
+            "No cloud dependencies",
+            "Anonymized logging",
+            "Secure device communication"
+          ]
+        },
+        {
+          "id": "privacy_features",
+          "name": "Privacy Features",
+          "description": "Privacy-preserving architecture",
+          "complexity": "intermediate",
+          "user_types": ["homeowner", "administrator"],
+          "sub_features": [
+            "Local-first architecture",
+            "User consent management",
+            "Data retention policies",
+            "Privacy-preserving learning"
+          ]
+        }
+      ]
+    }
+  },
+  "integration_points": {
+    "device_protocols": [
+      "Bluetooth/BLE",
+      "mDNS/Bonjour",
+      "UPnP/SSDP",
+      "DHCP",
+      "Zigbee",
+      "Z-Wave",
+      "Matter/Thread",
+      "MQTT",
+      "HTTP/HTTPS",
+      "WebSocket"
+    ],
+    "supported_brands": [
+      "Philips Hue",
+      "Google Nest",
+      "Ring",
+      "Tesla",
+      "Samsung SmartThings",
+      "Ecobee",
+      "LIFX",
+      "TP-Link Kasa",
+      "Sonos",
+      "Roku",
+      "Apple HomeKit",
+      "Amazon Alexa"
+    ],
+    "api_standards": [
+      "REST",
+      "WebSocket",
+      "OAuth 2.0",
+      "JWT",
+      "Prometheus metrics"
+    ]
+  },
+  "user_personas": {
+    "homeowner": {
+      "name": "Homeowner",
+      "description": "Primary user who lives in the smart home",
+      "primary_features": [
+        "Natural language chat",
+        "Device control",
+        "Scenario execution",
+        "Energy insights",
+        "Security alerts"
+      ]
+    },
+    "developer": {
+      "name": "Developer",
+      "description": "Technical user extending or integrating the system",
+      "primary_features": [
+        "API documentation",
+        "Testing interfaces",
+        "Extension framework",
+        "Debug tools",
+        "Integration templates"
+      ]
+    },
+    "administrator": {
+      "name": "Administrator",
+      "description": "System administrator managing deployment",
+      "primary_features": [
+        "Health monitoring",
+        "User management",
+        "Configuration tools",
+        "Security auditing",
+        "Backup/restore"
+      ]
+    }
+  },
+  "unique_differentiators": [
+    "Consciousness-driven architecture with emotional states",
+    "Conversational device setup through natural language",
+    "Digital twin integration for safe testing",
+    "SAFLA loop implementation for self-improvement",
+    "Multi-protocol device discovery",
+    "What-if scenario analysis",
+    "Local-first privacy architecture",
+    "Federated learning capabilities"
+  ],
+  "technical_stack": {
+    "backend": {
+      "language": "Python 3.11+",
+      "framework": "FastAPI",
+      "database": "SQLAlchemy with PostgreSQL/SQLite",
+      "package_manager": "UV"
+    },
+    "frontend": {
+      "framework": "React",
+      "ui_library": "Custom CSS",
+      "real_time": "WebSocket"
+    },
+    "ai_integration": {
+      "llm": "OpenAI GPT-4/Claude API",
+      "local_processing": "Custom emotion and learning engines"
+    },
+    "deployment": {
+      "containerization": "Docker",
+      "service_management": "SystemD",
+      "monitoring": "Prometheus compatible"
+    }
+  },
+  "metadata": {
+    "total_features": 156,
+    "api_endpoints": 42,
+    "ui_components": 23,
+    "integration_protocols": 10,
+    "supported_scenarios": 5,
+    "emotion_types": 6
+  }
+}
