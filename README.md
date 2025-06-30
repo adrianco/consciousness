@@ -18,6 +18,8 @@ June 26, 2025 - Created a new repo from scratch to build an iOS voice based app 
 
 ![memory-screenshot](./references/memory-screenshot.png)
 
+June 30th, 2025 - After reviewing the UX plans, refining and developing them further.
+
 ## Quick Installation
 
 Get started in 5 minutes:
