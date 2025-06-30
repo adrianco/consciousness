@@ -50,11 +50,13 @@ Based on the system analysis, here are the main features requiring UX flows:
 - **Goals**: Full control, optimization, experimentation
 - **Pain Points**: Complex setups, lack of integration
 - **Tech Level**: High
+- **Environment**: Development in Codespaces
 
 ### 2. Non-Technical Family Member
 - **Goals**: Simple control, basic understanding
 - **Pain Points**: Technical complexity, fear of breaking things
 - **Tech Level**: Low to Medium
+- **Access**: Through unified conversation interface
 
 ### 3. Guest User
 - **Goals**: Limited access, basic controls
@@ -65,60 +67,40 @@ Based on the system analysis, here are the main features requiring UX flows:
 - **Goals**: Maintenance, monitoring, troubleshooting
 - **Pain Points**: System complexity, multiple failure points
 - **Tech Level**: Very High
+- **Tools**: House simulator for testing
 
-### 5. Developer/Integrator
-- **Goals**: API access, custom integrations, testing
-- **Pain Points**: Documentation, API limitations
-- **Tech Level**: Expert
+
+
+**Note**: Professional Installer persona removed - intelligent discovery conversations provide self-service installation
 
 ## Core Feature Flows
 
 ### 1. Device Discovery & Interview Flow
 
 #### Entry Points
-- Dashboard → Devices Tab → Discovery Button
-- Dashboard → Discovery Tab
-- System Auto-Discovery on startup
+- Initial conversation on startup
+- When the user asks to spend some time on setup and configuration of rooms and devices
 
 #### Flow Steps
 
-**Automatic Discovery Path:**
-1. System continuously scans for new devices
-2. User receives notification: "New device detected: [Device Name]"
-3. User clicks notification → Opens device interview modal
-4. System displays device preview:
-   - Device type (auto-detected)
-   - Connection protocol
-   - Basic capabilities
-5. User chooses action:
-   - **Interview Now** → Proceed to step 6
-   - **Skip** → Device added to "Uninterviewed" list
-   - **Ignore** → Device added to ignore list
-
-**Manual Discovery Path:**
-1. User clicks "Scan for Devices" button
-2. System shows scanning progress:
-   - "Scanning Bluetooth LE..." (with spinner)
-   - "Scanning mDNS/Bonjour..."
-   - "Scanning UPnP..."
-   - etc.
-3. Results displayed in categorized list
-4. User selects device → Opens device interview modal
-
-**Interview Process:**
-6. Interview wizard begins:
-   - Step 1: "What would you like to call this device?"
-   - Step 2: "Where is this device located?" (dropdown + custom)
-   - Step 3: "What should this device do?" (capability checklist)
-   - Step 4: "When should this device be active?" (schedule builder)
-7. System processes responses and suggests:
-   - Integration template
-   - Recommended settings
-   - Compatible automations
-8. User reviews and confirms
-9. System attempts connection:
-   - Success → "Device successfully added!"
-   - Failure → Error recovery flow
+**Conversational Discovery Process:**
+1. System guides through discovery steps:
+   - Step 0: "Let me set up your House Model to remember everything"
+   - Step 1: "What's your house address?" (or use location)
+   - Step 2: "I'll find your local weather forecast"
+   - Step 3: "Do you have Apple HomeKit?" (auto-import if yes)
+   - Step 4: "Let's explore your house room by room"
+   - Step 5: "Tell me about devices in this room"
+   - Step 6: "Any outdoor devices like weather stations?"
+   - Step 7: "What about HVAC or whole-house systems?"
+2. System categorizes discovered devices:
+   - Known devices (already integrated)
+   - Well-known devices (need auth setup)
+   - Novel devices (creates GitHub issue)
+3. User reviews device list and adds details and authentication
+9. System creates devices:
+   - Success → "Device is now setup, this is it's current status"
+   - Novel device → "I'll research this and update the system later"
 
 #### Success State
 - Device appears in active device list
@@ -127,16 +109,14 @@ Based on the system analysis, here are the main features requiring UX flows:
 
 #### Error States
 - Connection failure → Retry options with troubleshooting guide
-- Unknown device type → Manual configuration flow
-- Network issues → Diagnostic tools offered
 
-### 2. Natural Language Chat Flow
+### 2. Unified Conversational Interface Flow
 
-#### Entry Points
-- Dashboard → Chat Tab
+#### Entry Points (Single Interface)
+- Dashboard → Conversation Tab (Primary)
 - Floating chat button (always visible)
-- Voice activation: "Hey House"
-- Mobile app chat interface
+- Voice activation: "Hey House" (Future mobile)
+- All setup, installation, and operation through same interface
 
 #### Flow Steps
 
@@ -175,11 +155,10 @@ Based on the system analysis, here are the main features requiring UX flows:
 - "Set party mode" → Scenario confirmation and execution
 - "Is everything secure?" → Security status report
 
-### 3. Digital Twin Management Flow
+### 3. Device Management Flow
 
 #### Entry Points
-- Dashboard → Devices → Device Details → "Digital Twin"
-- Dashboard → Digital Twins Tab
+- Dashboard → Devices → Device Details
 - API endpoint for developers
 
 #### Flow Steps
@@ -187,24 +166,28 @@ Based on the system analysis, here are the main features requiring UX flows:
 **Twin Creation (Automatic):**
 1. Device successfully interviewed
 2. System creates twin automatically
-3. User notified: "Digital twin created for [Device]"
-4. Twin appears in twins dashboard
+3. User notified: "Device setup"
+4. Device appears in  dashboard
 
-**Twin Interaction:**
-1. User selects device twin
-2. Twin visualization opens:
-   - 3D model or schematic (if available)
-   - Current state indicators
-   - Historical data graphs
-   - Simulation controls
+**IoT Device Interaction:**
+1. User selects device (twin always available)
+2. Twin status display shows:
+   - Last known device state
+   - Time since last sync
+   - Pending changes queue
+   - Offline/Online indicator
 3. User can:
+   - View/modify twin state (changes queued if device offline)
+   - Force synchronization attempt
+   - View divergence warnings
+   - Test changes in simulator first
    - **View Mode**: Monitor real-time state
    - **Simulate Mode**: Test scenarios
    - **Configure Mode**: Adjust twin parameters
 
-**Simulation Mode:**
-1. User clicks "Simulate" button
-2. System shows simulation controls:
+**Simulator Mode**
+1. Separate process with its own WebUI exposes simulated device API endpoints, simulator mode startup command line option connects devices to the simulator API
+2. simulation controls:
    - Time controls (speed up/slow down)
    - Parameter sliders
    - Scenario dropdown
@@ -213,10 +196,7 @@ Based on the system analysis, here are the main features requiring UX flows:
    - Energy usage graph
    - State changes timeline
    - Impact on other devices
-5. User can:
-   - Save simulation as scenario
-   - Apply changes to real device
-   - Export simulation data
+
 
 ### 4. Scenario Execution Flow
 
@@ -228,45 +208,12 @@ Based on the system analysis, here are the main features requiring UX flows:
 
 #### Flow Steps
 
-**Pre-built Scenario Selection:**
-1. User browses scenario library:
+**Pre-built and Custom Scenario Selection:**
+User browses scenario library:
    - Categories: Daily, Security, Energy, Entertainment, Seasonal
    - Each shows: Name, description, affected devices, duration
-2. User clicks scenario card
-3. System shows scenario preview:
-   - Step-by-step breakdown
-   - Affected devices highlighted
-   - Estimated completion time
-4. User clicks "Run Scenario"
-5. Confirmation dialog:
-   - "Run [Scenario Name]?"
-   - Shows first 3 actions
-   - Options: Run Now / Schedule / Customize
-6. Execution begins:
-   - Progress bar shows overall progress
-   - Current step highlighted
-   - Real-time device state updates
-7. Completion notification:
-   - Summary of actions taken
-   - Energy/cost impact
-   - Option to save as favorite
+   - Voice based conversatonal interaction
 
-**Custom Scenario Builder:**
-1. User clicks "Create Custom Scenario"
-2. Scenario builder opens:
-   - Name and description fields
-   - Drag-and-drop action builder
-   - Device selector sidebar
-3. User builds scenario:
-   - Drags devices to timeline
-   - Sets actions and parameters
-   - Adds delays and conditions
-4. User tests scenario:
-   - Simulation mode runs virtually
-   - Shows predicted outcomes
-5. User saves scenario:
-   - Added to personal library
-   - Can share with household
 
 ### 5. API Testing Flow (Developer Feature)
 
@@ -307,66 +254,9 @@ Based on the system analysis, here are the main features requiring UX flows:
 
 ## Key User Journey Flows
 
-### 1. First-Time Setup and Onboarding
-
-**Goal**: Get new user from zero to functional smart home in <30 minutes
-
-#### Flow Steps
-
-1. **Welcome Screen**
-   - "Welcome to your Conscious House!"
-   - Brief animation showing house "waking up"
-   - "Let's get started" button
-
-2. **Basic Setup**
-   - Set house nickname (optional)
-   - Set location (for weather/sunrise)
-   - Choose communication style:
-     - Friendly & Chatty
-     - Professional & Concise
-     - Minimal & Technical
-
-3. **Initial Discovery**
-   - "Let me look around for devices..."
-   - Animated discovery process
-   - Shows devices as found
-   - "I found X devices! Let's set them up."
-
-4. **Guided Device Setup**
-   - Prioritized list (lights first, then climate, security, etc.)
-   - For each device:
-     - Simple naming ("Living Room Light")
-     - Room assignment
-     - Skip option
-   - Progress indicator
-
-5. **First Interaction**
-   - "Try talking to me!"
-   - Suggested first commands:
-     - "How are you feeling?"
-     - "Turn on the living room lights"
-     - "What can you do?"
-
-6. **Quick Win Scenario**
-   - "Would you like me to set up a morning routine?"
-   - Shows simple scenario builder
-   - Pre-filled with discovered devices
-   - One-click activation
-
-7. **Completion**
-   - "Your house is now conscious!"
-   - Dashboard tour highlights
-   - Links to learn more
-   - First achievement unlocked
-
-### 2. Daily Device Control Routine
-
-**Personas**: All users
-**Frequency**: Multiple times daily
-
 #### Morning Routine Flow
 
-1. **Trigger**: 
+1. **Trigger**:
    - Scheduled time OR
    - Motion sensor in bedroom OR
    - "Good morning" voice command
@@ -453,40 +343,6 @@ Based on the system analysis, here are the main features requiring UX flows:
    - Dashboard → Automations → Create New
    - OR: "I want to automate..." in chat
 
-2. **Automation Type Selection**:
-   - Templates gallery:
-     - Time-based
-     - Sensor-triggered
-     - Location-based
-     - Device state
-     - Complex conditions
-
-3. **Builder Interface**:
-   - **When** (Triggers):
-     - Drag trigger types
-     - Configure parameters
-     - Add multiple with AND/OR
-   - **If** (Conditions):
-     - Optional conditions
-     - State checks
-     - Time windows
-   - **Then** (Actions):
-     - Device actions
-     - Scenarios
-     - Notifications
-     - Delays
-
-4. **Testing**:
-   - Simulate trigger
-   - Watch execution preview
-   - Verify all devices respond
-   - Adjust timing
-
-5. **Activation**:
-   - Name automation
-   - Set active times/days
-   - Enable/disable toggle
-   - Notification preferences
 
 ### 5. Emergency Situations
 
@@ -640,6 +496,6 @@ Based on the system analysis, here are the main features requiring UX flows:
 2. **Consistent Patterns**: Same interactions across features
 3. **Contextual Help**: Right information at right time
 4. **Personality**: Let house consciousness show through
-5. **Delight Moments**: Small animations and responses that make the house feel alive
+5. **Conversation based**: Don't build complex UIs
 
 This UX flow design provides a comprehensive blueprint for creating an intuitive, powerful, and delightful experience for all users of the House Consciousness System.

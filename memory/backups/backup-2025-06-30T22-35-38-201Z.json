@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-26T20:54:20.205Z",
+  "timestamp": "2025-06-30T22:35:38.201Z",
   "version": "1.0",
   "entries": [
     {
@@ -813,7 +813,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:06.922Z",
       "updatedAt": "2025-06-24T17:53:06.922Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 514,
       "compressed": false,
@@ -861,7 +861,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:58.718Z",
       "updatedAt": "2025-06-24T17:53:58.718Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1040,
       "compressed": false,
@@ -894,7 +894,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:01:50.411Z",
       "updatedAt": "2025-06-24T22:01:50.411Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 435,
       "compressed": false,
@@ -914,7 +914,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:03:30.730Z",
       "updatedAt": "2025-06-24T22:03:30.730Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 477,
       "compressed": false,
@@ -934,7 +934,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:06.514Z",
       "updatedAt": "2025-06-24T22:06:06.514Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 564,
       "compressed": false,
@@ -954,7 +954,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:50.237Z",
       "updatedAt": "2025-06-24T22:06:50.237Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 488,
       "compressed": false,
@@ -974,7 +974,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:13:05.690Z",
       "updatedAt": "2025-06-24T22:13:05.690Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 3611,
       "compressed": true,
@@ -994,7 +994,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:02:23.337Z",
       "updatedAt": "2025-06-25T15:02:23.337Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 10817,
       "compressed": true,
@@ -1014,7 +1014,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:05:32.728Z",
       "updatedAt": "2025-06-25T15:05:32.728Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 2986,
       "compressed": true,
@@ -1034,7 +1034,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:39:57.423Z",
       "updatedAt": "2025-06-25T15:39:57.423Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 4223,
       "compressed": true,
@@ -1054,7 +1054,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:15.661Z",
       "updatedAt": "2025-06-25T15:59:15.661Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1346,
       "compressed": true,
@@ -1074,7 +1074,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:30.325Z",
       "updatedAt": "2025-06-25T15:59:30.325Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1782,
       "compressed": true,
@@ -1094,7 +1094,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:46.404Z",
       "updatedAt": "2025-06-25T15:59:46.404Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 2254,
       "compressed": true,
@@ -1114,7 +1114,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T16:00:03.195Z",
       "updatedAt": "2025-06-25T16:00:03.195Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1848,
       "compressed": true,
@@ -1134,7 +1134,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T18:01:36.158Z",
       "updatedAt": "2025-06-25T18:01:36.158Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1746,
       "compressed": true,
@@ -1154,7 +1154,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T18:02:58.626Z",
       "updatedAt": "2025-06-25T18:02:58.626Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1174,
       "compressed": true,
@@ -1174,7 +1174,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-26T20:54:16.531Z",
       "updatedAt": "2025-06-26T20:54:16.531Z",
-      "lastAccessedAt": "2025-06-26T20:54:16.531Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1949,
       "compressed": true,
@@ -1215,30 +1215,137 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-26T20:54:20.197Z",
       "updatedAt": "2025-06-26T20:54:20.197Z",
-      "lastAccessedAt": "2025-06-26T20:54:20.197Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 425,
       "compressed": false,
       "checksum": "19a93391dc3df2852154546f7c29270e3defbea8318767dc534b0a9e0392e81d",
       "references": [],
       "dependencies": []
+    },
+    {
+      "id": "entry_mcdv3s9i_f9eop0dfk",
+      "key": "swarm-auto-centralized-1750970971343/qa/test-results",
+      "value": "{\"step\":\"Quality Assurance\",\"timestamp\":\"2025-06-26T20:55:02.985233\",\"objective\":\"Verify API dashboard fixes\",\"tests\":{\"command\":\"python test_api_endpoints.py\",\"passed\":7,\"failed\":3,\"details\":{\"static_analysis\":{\"demo_endpoints_found\":6,\"v1_endpoints_found\":24,\"demo_endpoints_require_no_auth\":true,\"endpoint_separation\":true},\"live_testing\":{\"health_check\":\"PASS\",\"demo_endpoints\":{\"/api/status\":\"FAIL - 404 Not Found\",\"/api/devices\":\"PASS\",\"/api/consciousness/query\":\"FAIL - 404 Not Found\",\"/api/devices/{device_id}/control\":\"FAIL - 404 Not Found\"},\"v1_authentication\":{\"endpoints_protected\":true,\"auth_required\":\"All v1 endpoints return 401 without auth\"}}}},\"validation\":{\"dashboardFixed\":false,\"noAuthEndpoints\":true,\"serverStable\":true},\"conclusion\":\"PARTIAL SUCCESS - The authentication separation is correct (demo endpoints don't require auth, v1 endpoints do), but the running server (main.py) is missing several demo endpoints that exist in api_interface.py. The running server needs to be updated to use the api_interface.py implementation.\",\"progress\":\"testing complete\",\"recommendations\":[\"The api_interface.py file has the correct endpoint implementation\",\"The running server (main.py) needs to be replaced with api_interface.py\",\"Authentication separation is properly implemented\",\"No calls to authenticated /v1 endpoints from demo dashboard\"]}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-26T20:55:03.126Z",
+      "updatedAt": "2025-06-26T20:55:03.126Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
+      "version": 1,
+      "size": 1481,
+      "compressed": true,
+      "checksum": "77f96c85aad8b09e0a074e9f9d86f1c196ae1be26874ef631919c9547031eb2a",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcdv70xw_ww14q9tpf",
+      "key": "swarm-auto-centralized-1750970971343/qa/final-validation",
+      "value": {
+        "step": "Quality Assurance - Final Validation",
+        "timestamp": "2025-06-26T20:57:34+00:00",
+        "objective": "Verify API dashboard fixes",
+        "tests": {
+          "command": "Quick API verification test",
+          "passed": 5,
+          "failed": 0,
+          "details": {
+            "demo_endpoints": {
+              "/api/status": "PASS - 200 OK",
+              "/api/devices": "PASS - 200 OK",
+              "/api/consciousness/query": "PASS - 200 OK",
+              "/api/devices/{device_id}/control": "PASS - 200 OK"
+            },
+            "v1_authentication": {
+              "/api/v1/consciousness/status": "PASS - 401 Unauthorized (properly protected)"
+            }
+          }
+        },
+        "validation": {
+          "dashboardFixed": true,
+          "noAuthEndpoints": true,
+          "serverStable": true
+        },
+        "conclusion": "SUCCESS - All objectives achieved. Dashboard endpoints work without authentication, V1 endpoints are properly protected, and no authenticated calls remain in the dashboard.",
+        "progress": "testing complete - objective achieved"
+      },
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-26T20:57:34.340Z",
+      "updatedAt": "2025-06-26T20:57:34.340Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
+      "version": 1,
+      "size": 834,
+      "compressed": false,
+      "checksum": "81e46d294d103c252f5f02c8d0424b331e63372bf5bfde429c31ac171a049e98",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcjoe75h_s5z3dz5ny",
+      "key": "swarm-auto-centralized-1751322743191/feedback-analyst/analysis",
+      "value": "{\"step\":\"Feedback Analysis\",\"timestamp\":\"2025-01-30T15:12:43.000Z\",\"feedbackPoints\":[\"Digital Twin functionality is completely wrong - should represent last recorded state and pending changes of devices\",\"Professional Installer persona Jordan should be replaced by intelligent discovery conversation features\",\"Multiple conversation places need to be combined into single conversational interface\",\"Mobile app should provide single channel voice interface for all system control\",\"Three different user experiences need consideration: development, test deployment, and production deployment\",\"Discovery process should be incremental - start with minimal working system\",\"House Model Context Protocol server needed for configuration persistence\",\"Local vault required for authentication and credentials storage\",\"House exploration should feel like Zork adventure game with graph connections\",\"Devices fall into three categories: known integrated, well-known needing auth, and novel needing development\",\"GitHub issues for novel device development should track token counts for cost estimates\",\"Simulator needs to be separate Python application with own webUI on different port\"],\"categories\":{\"Architecture\":[\"Digital Twin pattern needs complete redesign\",\"House Model Context Protocol server implementation\",\"Local vault for credentials\",\"Devices Model Context Protocol server\",\"Simulator as separate application\"],\"User Experience\":[\"Combine all conversations into single interface\",\"Mobile app voice interface\",\"Replace Professional Installer persona\",\"Zork-like exploration experience\",\"Incremental discovery process\"],\"Development Process\":[\"Three deployment environments\",\"Focus on development experience first\",\"GitHub issues for novel devices\",\"Token count tracking for cost estimates\"],\"Integration\":[\"Apple HomeKit connection\",\"Weather forecast integration\",\"Home Assistant driver leverage\",\"Device categorization system\"]},\"priorities\":[\"Fix Digital Twin implementation to follow IoT pattern\",\"Unify conversation interfaces into single system\",\"Implement incremental discovery process\",\"Create separate simulator application\",\"Set up MCP servers for House and Devices models\"],\"keyThemes\":[\"Incremental Discovery - Start small and expand gradually\",\"Unified Experience - Single conversation interface for all interactions\",\"Proper Digital Twin Pattern - Software representation with periodic sync\",\"Clear Device Categorization - Known, auth-needed, and novel devices\",\"Cost Transparency - Track token usage for development estimates\"],\"recommendations\":[\"Research existing Python frameworks for Digital Twin IoT pattern\",\"Design unified conversational interface architecture\",\"Create detailed discovery process flow diagram\",\"Separate simulator into standalone Python project\",\"Implement MCP servers for House and Device models\",\"Design authentication/credential vault system\",\"Plan for gradual room-by-room house exploration\",\"Consider Home Assistant integration strategy\",\"Set up token usage tracking system\",\"Focus on development experience before production\"]}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-30T22:33:48.725Z",
+      "updatedAt": "2025-06-30T22:33:48.725Z",
+      "lastAccessedAt": "2025-06-30T22:33:48.725Z",
+      "version": 1,
+      "size": 3229,
+      "compressed": true,
+      "checksum": "156c406f6b9216df9af44664e9b26fc14889f2261f106ccf21466e05842bd763",
+      "references": [],
+      "dependencies": []
+    },
+    {
+      "id": "entry_mcjogjmd_9ykraeigj",
+      "key": "swarm-auto-centralized-1751322743191/gap-analyzer/gaps",
+      "value": "{\"step\":\"Gap Analysis\",\"timestamp\":\"2025-06-30T22:35:38.054Z\",\"gaps\":[{\"category\":\"Consciousness & Emotional Intelligence\",\"gap\":\"Limited emotional state transitions\",\"current\":\"Basic emotion calculation exists\",\"planned\":\"Complex state transitions with decay rates and multi-factor assessment\",\"priority\":\"high\",\"effort\":\"medium\"},{\"category\":\"Conversational Features\",\"gap\":\"Interview system lacks resume capability\",\"current\":\"Basic interview flow implemented\",\"planned\":\"Session management with ability to resume interrupted interviews\",\"priority\":\"medium\",\"effort\":\"medium\"},{\"category\":\"Digital Twin System\",\"gap\":\"Physics-based modeling not implemented\",\"current\":\"Basic twin structure and synchronization\",\"planned\":\"Advanced physics models for realistic behavior simulation\",\"priority\":\"high\",\"effort\":\"high\"},{\"category\":\"Device Discovery\",\"gap\":\"Limited protocol support\",\"current\":\"Basic network scanning and DHCP\",\"planned\":\"Full multi-protocol discovery (Zigbee, Z-Wave, Matter/Thread)\",\"priority\":\"high\",\"effort\":\"high\"},{\"category\":\"Memory & Learning\",\"gap\":\"No federated learning implementation\",\"current\":\"Basic memory storage\",\"planned\":\"Cross-house learning with privacy preservation\",\"priority\":\"low\",\"effort\":\"high\"},{\"category\":\"UI/Dashboard\",\"gap\":\"Missing digital twin management interface\",\"current\":\"Basic dashboard with device control\",\"planned\":\"Full twin creation and management UI\",\"priority\":\"high\",\"effort\":\"medium\"},{\"category\":\"API Features\",\"gap\":\"Incomplete scenario and prediction endpoints\",\"current\":\"Basic CRUD operations\",\"planned\":\"Full what-if analysis and scenario execution APIs\",\"priority\":\"medium\",\"effort\":\"medium\"},{\"category\":\"Security\",\"gap\":\"No OAuth integration support\",\"current\":\"Basic JWT-like authentication\",\"planned\":\"Full OAuth flows for third-party integrations\",\"priority\":\"medium\",\"effort\":\"high\"},{\"category\":\"Testing\",\"gap\":\"Limited E2E test coverage\",\"current\":\"Unit and some integration tests\",\"planned\":\"Comprehensive E2E scenarios including interview flows\",\"priority\":\"high\",\"effort\":\"medium\"},{\"category\":\"Mobile Support\",\"gap\":\"No mobile application\",\"current\":\"Responsive web dashboard only\",\"planned\":\"Native iOS/Android apps or React Native\",\"priority\":\"low\",\"effort\":\"high\"}],\"missingFeatures\":[\"Scenario scheduling and time-based activation\",\"Predictive maintenance alerts\",\"AR/VR interface support\",\"Energy grid integration\",\"Multi-property management\",\"Voice assistant integration (Siri, Alexa, Google)\",\"Advanced analytics dashboard\",\"Backup and restore functionality\",\"Plugin architecture for extensions\",\"Community features for neighborhood optimization\"],\"outdatedSections\":[{\"section\":\"Device type system\",\"issue\":\"Still using fixed device types in some places\",\"recommendation\":\"Complete migration to dynamic device classification\"},{\"section\":\"Memory system\",\"issue\":\"Current memory has persistence issues (TypeError in forEach)\",\"recommendation\":\"Fix memory persistence and implement advanced features\"},{\"section\":\"Documentation\",\"issue\":\"Some guides reference outdated architecture\",\"recommendation\":\"Update all documentation to reflect current implementation\"}],\"newRequirements\":[{\"requirement\":\"Environmental context integration\",\"source\":\"Digital twin recommendations\",\"description\":\"Integrate weather, occupancy, and time context into simulations\"},{\"requirement\":\"Divergence monitoring\",\"source\":\"Twin synchronization needs\",\"description\":\"Track accuracy between digital twins and physical devices\"},{\"requirement\":\"Interview confidence scoring\",\"source\":\"Device classification enhancement\",\"description\":\"Add ML-based confidence scoring to device identification\"},{\"requirement\":\"Batch device operations UI\",\"source\":\"User experience improvement\",\"description\":\"Enable multi-device selection and control in dashboard\"}],\"updatePriorities\":[{\"priority\":1,\"area\":\"Digital Twin Physics Modeling\",\"reason\":\"Core differentiator, enables predictive capabilities\",\"dependencies\":[\"Twin manager enhancement\",\"Simulator framework\"]},{\"priority\":2,\"area\":\"Multi-Protocol Device Discovery\",\"reason\":\"Expands device compatibility significantly\",\"dependencies\":[\"Protocol adapters\",\"Discovery framework\"]},{\"priority\":3,\"area\":\"Dashboard Twin Management UI\",\"reason\":\"User-facing feature for key functionality\",\"dependencies\":[\"API endpoints\",\"WebSocket updates\"]},{\"priority\":4,\"area\":\"E2E Testing Suite\",\"reason\":\"Quality assurance for production readiness\",\"dependencies\":[\"Test infrastructure\",\"Mock services\"]},{\"priority\":5,\"area\":\"Memory System Fix\",\"reason\":\"Core functionality broken\",\"dependencies\":[\"Database schema\",\"Persistence layer\"]},{\"priority\":6,\"area\":\"Interview Resume Capability\",\"reason\":\"Improves user experience for complex setups\",\"dependencies\":[\"Session management\",\"State persistence\"]},{\"priority\":7,\"area\":\"Scenario Execution Engine\",\"reason\":\"Enables automation and what-if analysis\",\"dependencies\":[\"Digital twins\",\"Prediction engine\"]},{\"priority\":8,\"area\":\"OAuth Integration\",\"reason\":\"Required for cloud device integrations\",\"dependencies\":[\"Security framework\",\"Token management\"]},{\"priority\":9,\"area\":\"Advanced Emotional Transitions\",\"reason\":\"Enhances consciousness realism\",\"dependencies\":[\"State machine\",\"Factor calculation\"]},{\"priority\":10,\"area\":\"Mobile Application\",\"reason\":\"Nice-to-have for broader accessibility\",\"dependencies\":[\"API stability\",\"Design system\"]}],\"recommendations\":[\"Focus on completing core digital twin physics modeling first\",\"Fix memory persistence issue before adding new memory features\",\"Prioritize user-facing features like dashboard enhancements\",\"Complete migration to fully dynamic device system\",\"Implement comprehensive E2E tests before production deployment\",\"Consider phased approach for protocol support (start with Zigbee/Z-Wave)\",\"Update documentation in parallel with feature development\"]}",
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-30T22:35:38.197Z",
+      "updatedAt": "2025-06-30T22:35:38.197Z",
+      "lastAccessedAt": "2025-06-30T22:35:38.197Z",
+      "version": 1,
+      "size": 6427,
+      "compressed": true,
+      "checksum": "c8f8e0fc579ca6d25ba67f4f8f06a1aa3105cdb7ebe47391ebcf1b270b1f2c43",
+      "references": [],
+      "dependencies": []
     }
   ],
   "statistics": {
     "overview": {
-      "totalEntries": 33,
+      "totalEntries": 37,
       "totalSize": null,
-      "compressedEntries": 22,
+      "compressedEntries": 25,
       "compressionRatio": 0,
       "indexSize": 900,
-      "memoryUsage": 10751472,
+      "memoryUsage": 11048152,
       "diskUsage": 0
     },
     "distribution": {
       "byNamespace": {
         "default": {
-          "count": 32,
-          "size": 121832
+          "count": 36,
+          "size": 133803
         },
         "undefined": {
           "count": 1,
@@ -1247,8 +1354,8 @@
       },
       "byType": {
         "object": {
-          "count": 20,
-          "size": 61279
+          "count": 24,
+          "size": 73250
         },
         "string": {
           "count": 12,
@@ -1261,8 +1368,8 @@
       },
       "byOwner": {
         "system": {
-          "count": 32,
-          "size": 121832
+          "count": 36,
+          "size": 133803
         },
         "undefined": {
           "count": 1,
@@ -1271,8 +1378,8 @@
       },
       "byAccessLevel": {
         "shared": {
-          "count": 32,
-          "size": 121832
+          "count": 36,
+          "size": 133803
         },
         "undefined": {
           "count": 1,
@@ -1285,11 +1392,11 @@
       "entriesUpdatedLast24h": 2,
       "entriesAccessedLast24h": 22,
       "oldestEntry": "1970-01-01T00:00:00.000Z",
-      "newestEntry": "2025-06-26T20:54:20.197Z"
+      "newestEntry": "2025-06-30T22:35:38.197Z"
     },
     "performance": {
       "averageQueryTime": 0,
-      "averageWriteTime": 3,
+      "averageWriteTime": 1,
       "cacheHitRatio": 0,
       "indexEfficiency": 0.95
     },

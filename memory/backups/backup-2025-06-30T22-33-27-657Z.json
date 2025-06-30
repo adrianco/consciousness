@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-26T20:55:03.131Z",
+  "timestamp": "2025-06-30T22:33:27.657Z",
   "version": "1.0",
   "entries": [
     {
@@ -813,7 +813,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:06.922Z",
       "updatedAt": "2025-06-24T17:53:06.922Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 514,
       "compressed": false,
@@ -861,7 +861,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T17:53:58.718Z",
       "updatedAt": "2025-06-24T17:53:58.718Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1040,
       "compressed": false,
@@ -894,7 +894,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:01:50.411Z",
       "updatedAt": "2025-06-24T22:01:50.411Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 435,
       "compressed": false,
@@ -914,7 +914,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:03:30.730Z",
       "updatedAt": "2025-06-24T22:03:30.730Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 477,
       "compressed": false,
@@ -934,7 +934,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:06.514Z",
       "updatedAt": "2025-06-24T22:06:06.514Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 564,
       "compressed": false,
@@ -954,7 +954,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:06:50.237Z",
       "updatedAt": "2025-06-24T22:06:50.237Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 488,
       "compressed": false,
@@ -974,7 +974,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-24T22:13:05.690Z",
       "updatedAt": "2025-06-24T22:13:05.690Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 3611,
       "compressed": true,
@@ -994,7 +994,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:02:23.337Z",
       "updatedAt": "2025-06-25T15:02:23.337Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 10817,
       "compressed": true,
@@ -1014,7 +1014,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:05:32.728Z",
       "updatedAt": "2025-06-25T15:05:32.728Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 2986,
       "compressed": true,
@@ -1034,7 +1034,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:39:57.423Z",
       "updatedAt": "2025-06-25T15:39:57.423Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 4223,
       "compressed": true,
@@ -1054,7 +1054,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:15.661Z",
       "updatedAt": "2025-06-25T15:59:15.661Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1346,
       "compressed": true,
@@ -1074,7 +1074,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:30.325Z",
       "updatedAt": "2025-06-25T15:59:30.325Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1782,
       "compressed": true,
@@ -1094,7 +1094,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T15:59:46.404Z",
       "updatedAt": "2025-06-25T15:59:46.404Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 2254,
       "compressed": true,
@@ -1114,7 +1114,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T16:00:03.195Z",
       "updatedAt": "2025-06-25T16:00:03.195Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1848,
       "compressed": true,
@@ -1134,7 +1134,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T18:01:36.158Z",
       "updatedAt": "2025-06-25T18:01:36.158Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1746,
       "compressed": true,
@@ -1154,7 +1154,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-25T18:02:58.626Z",
       "updatedAt": "2025-06-25T18:02:58.626Z",
-      "lastAccessedAt": "2025-06-26T20:51:09.817Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1174,
       "compressed": true,
@@ -1174,7 +1174,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-26T20:54:16.531Z",
       "updatedAt": "2025-06-26T20:54:16.531Z",
-      "lastAccessedAt": "2025-06-26T20:54:16.531Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1949,
       "compressed": true,
@@ -1215,7 +1215,7 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-26T20:54:20.197Z",
       "updatedAt": "2025-06-26T20:54:20.197Z",
-      "lastAccessedAt": "2025-06-26T20:54:20.197Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 425,
       "compressed": false,
@@ -1235,30 +1235,77 @@
       "accessLevel": "shared",
       "createdAt": "2025-06-26T20:55:03.126Z",
       "updatedAt": "2025-06-26T20:55:03.126Z",
-      "lastAccessedAt": "2025-06-26T20:55:03.126Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
       "version": 1,
       "size": 1481,
       "compressed": true,
       "checksum": "77f96c85aad8b09e0a074e9f9d86f1c196ae1be26874ef631919c9547031eb2a",
       "references": [],
       "dependencies": []
+    },
+    {
+      "id": "entry_mcdv70xw_ww14q9tpf",
+      "key": "swarm-auto-centralized-1750970971343/qa/final-validation",
+      "value": {
+        "step": "Quality Assurance - Final Validation",
+        "timestamp": "2025-06-26T20:57:34+00:00",
+        "objective": "Verify API dashboard fixes",
+        "tests": {
+          "command": "Quick API verification test",
+          "passed": 5,
+          "failed": 0,
+          "details": {
+            "demo_endpoints": {
+              "/api/status": "PASS - 200 OK",
+              "/api/devices": "PASS - 200 OK",
+              "/api/consciousness/query": "PASS - 200 OK",
+              "/api/devices/{device_id}/control": "PASS - 200 OK"
+            },
+            "v1_authentication": {
+              "/api/v1/consciousness/status": "PASS - 401 Unauthorized (properly protected)"
+            }
+          }
+        },
+        "validation": {
+          "dashboardFixed": true,
+          "noAuthEndpoints": true,
+          "serverStable": true
+        },
+        "conclusion": "SUCCESS - All objectives achieved. Dashboard endpoints work without authentication, V1 endpoints are properly protected, and no authenticated calls remain in the dashboard.",
+        "progress": "testing complete - objective achieved"
+      },
+      "type": "object",
+      "namespace": "default",
+      "tags": [],
+      "metadata": {},
+      "owner": "system",
+      "accessLevel": "shared",
+      "createdAt": "2025-06-26T20:57:34.340Z",
+      "updatedAt": "2025-06-26T20:57:34.340Z",
+      "lastAccessedAt": "2025-06-30T22:33:27.630Z",
+      "version": 1,
+      "size": 834,
+      "compressed": false,
+      "checksum": "81e46d294d103c252f5f02c8d0424b331e63372bf5bfde429c31ac171a049e98",
+      "references": [],
+      "dependencies": []
     }
   ],
   "statistics": {
     "overview": {
-      "totalEntries": 34,
+      "totalEntries": 35,
       "totalSize": null,
       "compressedEntries": 23,
       "compressionRatio": 0,
-      "indexSize": 900,
-      "memoryUsage": 10794344,
+      "indexSize": 850,
+      "memoryUsage": 10888232,
       "diskUsage": 0
     },
     "distribution": {
       "byNamespace": {
         "default": {
-          "count": 33,
-          "size": 123313
+          "count": 34,
+          "size": 124147
         },
         "undefined": {
           "count": 1,
@@ -1267,8 +1314,8 @@
       },
       "byType": {
         "object": {
-          "count": 21,
-          "size": 62760
+          "count": 22,
+          "size": 63594
         },
         "string": {
           "count": 12,
@@ -1281,8 +1328,8 @@
       },
       "byOwner": {
         "system": {
-          "count": 33,
-          "size": 123313
+          "count": 34,
+          "size": 124147
         },
         "undefined": {
           "count": 1,
@@ -1291,8 +1338,8 @@
       },
       "byAccessLevel": {
         "shared": {
-          "count": 33,
-          "size": 123313
+          "count": 34,
+          "size": 124147
         },
         "undefined": {
           "count": 1,
@@ -1301,15 +1348,15 @@
       }
     },
     "temporal": {
-      "entriesCreatedLast24h": 3,
-      "entriesUpdatedLast24h": 3,
-      "entriesAccessedLast24h": 23,
+      "entriesCreatedLast24h": 0,
+      "entriesUpdatedLast24h": 0,
+      "entriesAccessedLast24h": 20,
       "oldestEntry": "1970-01-01T00:00:00.000Z",
-      "newestEntry": "2025-06-26T20:55:03.126Z"
+      "newestEntry": "2025-06-26T20:57:34.340Z"
     },
     "performance": {
       "averageQueryTime": 0,
-      "averageWriteTime": 2,
+      "averageWriteTime": 0,
       "cacheHitRatio": 0,
       "indexEfficiency": 0.95
     },

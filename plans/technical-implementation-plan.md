@@ -122,11 +122,6 @@ class IntegrationTemplate(Base):
 - [ ] Implement Home Assistant integration knowledge base
 - [ ] Create device classification engine using LLM
 - [ ] Build conversational interview system
-- [ ] Implement multi-protocol automatic discovery:
-  - Network scanning (DHCP, mDNS, SSDP/UPnP)
-  - Bluetooth/BLE discovery
-  - HomeKit device discovery
-  - MQTT broker discovery
 - [ ] Create device candidate matching system
 - [ ] Build credential management for discovered devices
 - [ ] Design interview-guided configuration flows
@@ -134,29 +129,28 @@ class IntegrationTemplate(Base):
 **Deliverables**:
 - Conversational device interview engine
 - Home Assistant integration template database
-- Multi-protocol discovery system
 - Device classification and matching algorithms
 - Dynamic configuration wizard based on device type
 
-## Phase 2: Consciousness Engine & Digital Twin Foundation (Weeks 5-8)
+## Phase 2: Consciousness Engine & Device Foundation (Weeks 5-8)
 
-### Milestone 2.1: State Modeling System with Twin Support
+### Milestone 2.1: State Modeling System
 **Duration**: Week 5
 
 **Core Components**:
-1. **State Monitor**: Continuous device state collection with twin synchronization
-2. **Pattern Recognition**: Identify normal vs abnormal patterns using twin data
+1. **State Monitor**: Continuous device state collection with device synchronization
+2. **Pattern Recognition**: Identify normal vs abnormal patterns using device data
 3. **Context Builder**: Aggregate environmental context from physical and virtual devices
 4. **Memory System**: Store experiences and learnings from both real and simulated scenarios
-5. **Digital Twin Manager**: Create and manage virtual device representations
+5. **Digital Device Manager**: Create and manage virtual device representations
 
 **Tasks**:
-- [ ] Implement real-time state collection engine with twin integration
-- [ ] Build pattern recognition algorithms using twin predictions
+- [ ] Implement real-time state collection engine with device integration
+- [ ] Build pattern recognition algorithms using device predictions
 - [ ] Create contextual aggregation system combining physical and virtual data
 - [ ] Design memory formation and retrieval system with scenario storage
-- [ ] Implement digital twin manager and synchronization engine
-- [ ] Create basic device twin templates for common device types
+- [ ] Implement digital device manager and synchronization engine
+- [ ] Create basic device device templates for common device types
 
 ### Milestone 2.2: Emotional Intelligence
 **Duration**: Week 6
@@ -189,16 +183,16 @@ class IntegrationTemplate(Base):
 **Duration**: Week 8
 
 **Tasks**:
-- [ ] Implement experience learning system enhanced with twin data
+- [ ] Implement experience learning system enhanced with device data
 - [ ] Create behavioral adaptation algorithms using scenario testing
-- [ ] Build preference learning from user interactions and twin experiments
-- [ ] Design predictive modeling capabilities with digital twin insights
+- [ ] Build preference learning from user interactions and device experiments
+- [ ] Design predictive modeling capabilities with digital device insights
 - [ ] Implement scenario-based learning engine
-- [ ] Create safe action validation through twin testing
+- [ ] Create safe action validation through device testing
 
-## Phase 3: Enhanced Device Integration & Digital Twin Creation (Weeks 9-12)
+## Phase 3: Enhanced Device Integration & Digital Device Creation (Weeks 9-12)
 
-### Milestone 3.1: Interview-Driven Device Onboarding with Twin Creation
+### Milestone 3.1: Interview-Driven Device Onboarding with Device Creation
 **Duration**: Week 9
 
 **Core Components**:
@@ -207,49 +201,27 @@ class IntegrationTemplate(Base):
    - Context-aware question generation
    - Natural language processing for device descriptions
    - Integration with LLM for intelligent responses
-   - Digital twin creation options and configuration
+   - Digital device creation options and configuration
 
-2. **Device Classification & Twin Specification System**:
+2. **Device Classification & Device Specification System**:
    - Brand and model detection from user descriptions
    - Capability inference from natural language
    - Integration matching using Home Assistant patterns
    - Confidence scoring for device identification
-   - Automatic twin specification generation based on device type
+   - Automatic device specification generation based on device type
 
 **Tasks**:
-- [ ] Implement conversational interview flow with twin creation dialogs
-- [ ] Build device description parser and classifier with twin capability detection
+- [ ] Implement conversational interview flow with device creation dialogs
+- [ ] Build device description parser and classifier with device capability detection
 - [ ] Create Home Assistant integration matching engine
-- [ ] Develop dynamic question generation system including twin preferences
-- [ ] Implement conversation state management with twin configuration tracking
-- [ ] Build device candidate ranking system with twin creation scoring
-- [ ] Create twin fidelity level selection system (Basic/Advanced/Expert)
+- [ ] Develop dynamic question generation system including device preferences
+- [ ] Implement conversation state management with device configuration tracking
+- [ ] Build device candidate ranking system with device creation scoring
+- [ ] Create device fidelity level selection system (Basic/Advanced/Expert)
 
-### Milestone 3.2: Automatic Discovery Integration
-**Duration**: Week 10
 
-**Discovery Methods**:
-1. **Network-Based Discovery**:
-   - DHCP lease scanning for IP devices
-   - mDNS/Zeroconf service discovery
-   - SSDP/UPnP device detection
-   - Network port scanning for known device services
 
-2. **Protocol-Specific Discovery**:
-   - Bluetooth/BLE device scanning
-   - Zigbee device discovery (via coordinators)
-   - Z-Wave device detection
-   - Matter/Thread device discovery
-
-**Tasks**:
-- [ ] Implement parallel discovery across all protocols
-- [ ] Build discovery result correlation with interview data
-- [ ] Create device fingerprinting for identification
-- [ ] Develop discovery confidence scoring
-- [ ] Implement discovery result caching and optimization
-- [ ] Build discovery scheduling and automation
-
-### Milestone 3.3: Dynamic Integration with Twin Factory
+### Milestone 3.3: Dynamic Integration with Device Factory
 **Duration**: Week 11-12
 
 **Integration Patterns**:
@@ -266,16 +238,16 @@ class IntegrationTemplate(Base):
    - Local push/pull data synchronization
 
 **Tasks**:
-- [ ] Build dynamic integration factory pattern with twin creation
-- [ ] Implement common integration base classes with twin synchronization
+- [ ] Build dynamic integration factory pattern with device creation
+- [ ] Implement common integration base classes with device synchronization
 - [ ] Create OAuth and API key management system
-- [ ] Build integration health monitoring with twin divergence tracking
-- [ ] Implement integration-specific error handling and twin fallback
-- [ ] Create integration testing framework with twin validation
+- [ ] Build integration health monitoring with device divergence tracking
+- [ ] Implement integration-specific error handling and device fallback
+- [ ] Create integration testing framework with device validation
 - [ ] Build integration update and maintenance system
-- [ ] Implement device-specific twin templates (Hue, Nest, Ring, etc.)
+- [ ] Implement device-specific device templates (Hue, Nest, Ring, etc.)
 - [ ] Create bidirectional synchronization with conflict resolution
-- [ ] Build twin-to-device safety validation system
+- [ ] Build device-to-device safety validation system
 
 **Popular Integration Examples**:
 - Philips Hue (local bridge API)
@@ -289,34 +261,34 @@ class IntegrationTemplate(Base):
 - Sonos (local API)
 - Roku (local API)
 
-## Phase 4: User Interfaces & Twin Visualization (Weeks 13-16)
+## Phase 4: User Interfaces & Device Visualization (Weeks 13-16)
 
 ### Milestone 4.1: Web Application
 **Duration**: Week 13-14
 
 **Features**:
-- Real-time system dashboard with twin status
+- Real-time system dashboard with device status
 - Conversation interface with prediction insights
-- Device management console with twin controls
-- System configuration including twin settings
-- Emotional state visualization enhanced with twin data
-- Digital twin visualization and scenario testing interface
+- Device management console with device controls
+- System configuration including device settings
+- Emotional state visualization enhanced with device data
+- Digital device visualization and scenario testing interface
 
 **Tasks**:
-- [ ] Build React/Next.js Progressive Web App with twin support
-- [ ] Implement real-time WebSocket connections for twin synchronization
-- [ ] Create responsive dashboard design with twin status indicators
+- [ ] Build Web App with device support
+- [ ] Implement real-time WebSocket connections for device synchronization
+- [ ] Create responsive dashboard design with device status indicators
 - [ ] Build conversation interface with prediction capabilities
-- [ ] Add device management UI with twin controls and scenario testing
-- [ ] Create digital twin visualization components
-- [ ] Implement twin vs device state comparison views
+- [ ] Add device management UI with device controls and scenario testing
+- [ ] Create digital device visualization components
+- [ ] Implement device vs device state comparison views
 - [ ] Build scenario testing interface for what-if analysis
 
 ### Milestone 4.2: Mobile Application
 **Duration**: Week 15
 
 **Tasks**:
-- [ ] Develop React Native mobile app
+- [ ] Develop iOS native app
 - [ ] Implement push notifications
 - [ ] Add voice interface integration
 - [ ] Create location-aware features
@@ -327,86 +299,63 @@ class IntegrationTemplate(Base):
 
 **Tasks**:
 - [ ] Integrate with Siri Shortcuts (iOS)
-- [ ] Build Alexa skill for voice interaction
 - [ ] Implement speech-to-text processing
 - [ ] Create voice response generation
 - [ ] Add voice command recognition
 
-## Phase 5: Advanced Twin Features & Intelligence (Weeks 17-20)
+## Phase 5: Advanced Device Features & Intelligence (Weeks 17-20)
 
-### Milestone 5.1: Advanced Predictive Analytics with Twins
+### Milestone 5.1: Advanced Predictive Analytics with Devices
 **Duration**: Week 17
 
 **Tasks**:
-- [ ] Implement energy usage prediction using twin simulation
-- [ ] Build maintenance scheduling system with twin wear modeling
-- [ ] Create weather impact modeling with environmental twins
-- [ ] Design occupancy prediction algorithms using twin behavior patterns
-- [ ] Implement physics-based modeling for advanced twins
+- [ ] Implement energy usage prediction using device simulation
+- [ ] Build maintenance scheduling system with device wear modeling
+- [ ] Create weather impact modeling with environmental Devices
+- [ ] Design occupancy prediction algorithms using device behavior patterns
+- [ ] Implement physics-based modeling for advanced Devices
 - [ ] Create multi-device interaction prediction
-- [ ] Build failure prediction using twin degradation models
+- [ ] Build failure prediction using device degradation models
 
-### Milestone 5.2: Twin-Enhanced Automation Engine
+### Milestone 5.2: Device-Enhanced Automation Engine
 **Duration**: Week 18
 
 **Tasks**:
-- [ ] Build rule-based automation system with twin validation
-- [ ] Implement learning-based automation using twin experiments
-- [ ] Create scenario-based control with twin testing
-- [ ] Design emergency response protocols with twin simulation
-- [ ] Implement twin-based optimization algorithms
-- [ ] Create adaptive automation learning from twin scenarios
+- [ ] Build rule-based automation system with device validation
+- [ ] Implement learning-based automation using device experiments
+- [ ] Design emergency response protocols with device simulation
+- [ ] Implement device-based optimization algorithms
+- [ ] Create adaptive automation learning from device scenarios
 - [ ] Build complex multi-device automation with interaction modeling
 
-### Milestone 5.3: Multi-House Support with Federated Learning
-**Duration**: Week 19
 
-**Tasks**:
-- [ ] Extend architecture for multiple houses with independent twins
-- [ ] Implement user access control with twin permissions
-- [ ] Build house-to-house communication for scenario sharing
-- [ ] Create centralized management console with cross-house analytics
-- [ ] Implement federated learning across house twins
-- [ ] Create privacy-preserving twin model sharing
-- [ ] Build cross-house scenario benchmarking
 
-### Milestone 5.4: Twin System Integration Testing and Optimization
-**Duration**: Week 20
 
-**Tasks**:
-- [ ] Comprehensive integration testing with twin synchronization validation
-- [ ] Performance optimization for twin simulation performance
-- [ ] Security audit including twin data protection
-- [ ] Load testing with high-fidelity twin scenarios
-- [ ] Twin accuracy validation against real device behavior
-- [ ] Scenario testing comprehensive coverage analysis
-- [ ] Twin divergence monitoring and correction system testing
+## Development Workflow (Codespaces Environment)
 
-## Development Workflow
-
-### Environment Setup with UV
+### Environment Setup with UV in Codespaces
 ```bash
-# Initialize project
+# Initialize project in Codespaces
 uv init consciousness-system
 cd consciousness-system
 
-# Install dependencies
+# Install core dependencies
 uv add fastapi sqlalchemy alembic pydantic
 uv add --dev pytest black isort mypy
 uv add openai anthropic
 uv add psycopg2-binary redis celery
 
-# Device discovery and interview system
-uv add aiohttp httpx  # For device API calls
-uv add zeroconf upnp_client  # Network discovery
-uv add bleak  # Bluetooth discovery
-uv add pydantic-settings  # Configuration management
+
+# House Simulator dependencies
+uv add --dev flask plotly  # For simulator WebUI
+uv add --dev faker  # For generating plausible fake data
 
 # Development workflow
 uv run pytest  # Run tests
 uv run black . # Format code
 uv run mypy .  # Type checking
-uv run python -m interview_system.test_discovery  # Test device discovery
+uv run python -m simulator.app --port 8001  # Run house simulator
+uv run python -m consciousness.app  # Run main service
 ```
 
 ### Database Management
@@ -428,17 +377,48 @@ uv run gunicorn app:app --workers 4
 uv run celery worker -A app.celery
 ```
 
+## Phase 5: House Simulator Development
+
+### Milestone 1: House Simulator Application
+
+**Simulator Architecture**:
+```python
+# Separate Python application with WebUI
+class HouseSimulator:
+    def __init__(self):
+        self.mcp_client = HouseMCPClient()
+        self.devices = SimulatedDeviceFactory()
+        self.scenario_engine = ScenarioEngine()
+
+    def generate_device_data(self, device_id: str) -> dict:
+        """Generate plausible fake data for device"""
+        pass
+
+    def manipulate_scenario(self, scenario: str) -> None:
+        """Create test scenarios for development"""
+        pass
+```
+
+**Tasks**:
+- [ ] Create standalone simulator application
+- [ ] Implement WebUI on separate port (8001)
+- [ ] Build API for digital device layer interaction
+- [ ] Generate plausible fake device data
+- [ ] Create scenario manipulation interface
+- [ ] Integrate with House MCP and Drivers MCP
+- [ ] Build test scenario library
+
 ## Risk Assessment and Mitigation
 
 ### High-Risk Areas
 1. **Device API Reliability**: APIs may change or become unavailable
    - *Mitigation*: Implement robust error handling and fallback mechanisms
-   
+
 2. **Security Vulnerabilities**: Stored credentials and device access
-   - *Mitigation*: Use industry-standard encryption and security practices
-   
+   - *Mitigation*: Use local vault with industry-standard encryption
+
 3. **LLM API Costs**: High usage could lead to expensive API calls
-   - *Mitigation*: Implement caching, rate limiting, and cost monitoring
+   - *Mitigation*: Track token usage, implement caching, cost monitoring
 
 4. **Privacy Concerns**: Extensive data collection about home activities
    - *Mitigation*: Local processing, data encryption, and user consent
@@ -446,7 +426,7 @@ uv run celery worker -A app.celery
 ### Medium-Risk Areas
 1. **Device Compatibility**: Wide variety of IoT devices and protocols
    - *Mitigation*: Modular architecture with plugin system
-   
+
 2. **Performance**: Real-time processing of multiple data streams
    - *Mitigation*: Async processing, caching, and optimization
 
@@ -501,10 +481,32 @@ uv run celery worker -A app.celery
    - Establish CI/CD pipeline
    - Create development and testing procedures
 
-3. **Interview System Development**:
-   - Build conversational flow engine
-   - Implement device classification using LLM
-   - Create automatic discovery correlation system
-   - Test with various device types and user descriptions
+3. **Discovery Process Implementation**:
+   - Build step-by-step discovery process (0-7):
+     0. Create House Model MCP server instance
+     1. Locate house via address/location services
+     2. Lookup weather forecast source
+     3. Connect to Apple HomeKit if available
+     4. Explore house room by room (Zork-like experience)
+     5. Refine notes until device-ready
+     6. Add untethered devices (weather stations, etc)
+     7. Add multi-room devices (HVAC systems)
+   - Support three device categories:
+     a. Known devices - already integrated
+     b. Well-known devices - need auth setup
+     c. Novel devices - create GitHub issues
+   - Track token usage for cost estimation
 
-This implementation plan provides a comprehensive roadmap for building the House Consciousness System with dynamic device discovery through conversational interviews. The approach leverages Home Assistant's extensive integration knowledge while providing a natural, user-friendly setup experience that can adapt to any combination of smart home devices.
+4. **Single Conversational Interface**:
+   - Consolidate all conversations into one interface
+   - Support setup, installation, and operation
+   - Plan for future mobile voice-only channel
+   - Remove duplicate conversation points
+
+5. **Development Environment Focus**:
+   - All documentation for Codespaces development
+   - House simulator for testing
+   - WebUI for dialog during development
+   - Defer production deployment planning
+
+This implementation plan provides a comprehensive roadmap for building the House Consciousness System with proper IoT digital device patterns, unified conversational interface, and development-focused approach. The system leverages MCP servers for configuration persistence and includes a house simulator for safe development testing.
