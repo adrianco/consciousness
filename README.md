@@ -21,7 +21,7 @@ June 26, 2025 - Created a new repo from scratch to build an iOS voice based app 
 June 30th, 2025 - After reviewing the UX plans, refining and developing them further.
 
 July 12th, 2025
-Took some time off over the holiday weekend, and resumed work on the iOS front end, which is now providing a chat based text or voice driven interface that works as I want it to for gathering information about the house. Work will resume on this Python back end when I have got the front end done and know what APIs and capabilities I want to have that is shared by the users and running on a server in the house. For now the code here is mostly throw-away, but the components and structure were a good start.
+Took some time off over the holiday weekend, and resumed work on the iOS front end, which is now providing a chat based text or voice driven interface that works as I want it to for gathering information about the house. Work will resume on this Python back end when I have got the front end done and know what APIs and capabilities I want to have that is shared by the users and running on a server in the house. For now the code here is mostly throw-away, but the components and structure were a good start. 
 
 ## Quick Installation
 
